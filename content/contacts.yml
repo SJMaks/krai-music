@@ -1,0 +1,8 @@
+email: hello@krai-music.com
+phone: '+1 555 0123'
+address: Brooklyn, NY
+socials:
+  - label: Instagram
+    url: https://instagram.com
+  - label: SoundCloud
+    url: https://soundcloud.com

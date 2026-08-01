@@ -1,0 +1,86 @@
+backend:
+  name: github
+  repo: your-username/your-repo
+  branch: main
+  auth_endpoint: /api/auth
+
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: artists
+    label: Artists
+    folder: content/artists
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: 'Nickname', name: nickname, widget: string }
+      - { label: 'Slug', name: slug, widget: string }
+      - { label: 'Avatar', name: avatar, widget: image }
+      - { label: 'Biography', name: biography, widget: text }
+      - { label: 'Socials', name: socials, widget: list, field: { label: 'Social', name: social, widget: object, fields: [{ label: 'Label', name: label, widget: string }, { label: 'URL', name: url, widget: string }] } }
+      - { label: 'Videos', name: videos, widget: list, field: { label: 'Video', name: video, widget: object, fields: [{ label: 'Title', name: title, widget: string }, { label: 'URL', name: url, widget: string }, { label: 'Thumbnail', name: thumbnail, widget: image }] } }
+      - { label: 'Featured Image', name: featuredImage, widget: image }
+  - name: tracks
+    label: Tracks
+    folder: content/tracks
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: 'Title', name: title, widget: string }
+      - { label: 'Artist', name: artist, widget: string }
+      - { label: 'Artist Slug', name: artistSlug, widget: string }
+      - { label: 'Cover', name: cover, widget: image }
+      - { label: 'Audio', name: audio, widget: file }
+      - { label: 'Release Date', name: releaseDate, widget: datetime, format: 'YYYY-MM-DD' }
+      - { label: 'Duration', name: duration, widget: string }
+  - name: events
+    label: Events
+    folder: content/events
+    create: true
+    fields:
+      - { label: 'Title', name: title, widget: string }
+      - { label: 'Image', name: image, widget: image }
+      - { label: 'Description', name: description, widget: text }
+      - { label: 'Date', name: date, widget: string }
+      - { label: 'Location', name: location, widget: string }
+      - { label: 'External Links', name: externalLinks, widget: list, field: { label: 'Link', name: link, widget: object, fields: [{ label: 'Label', name: label, widget: string }, { label: 'URL', name: url, widget: string }] } }
+  - name: services
+    label: Services
+    folder: content/services
+    create: true
+    fields:
+      - { label: 'Title', name: title, widget: string }
+      - { label: 'Image', name: image, widget: image }
+      - { label: 'Description', name: description, widget: text }
+      - { label: 'CTA Label', name: ctaLabel, widget: string }
+  - name: homepage
+    label: Homepage
+    files:
+      - file: content/homepage.yml
+        name: homepage
+        label: Homepage
+        fields:
+          - { label: 'Hero Title', name: heroTitle, widget: string }
+          - { label: 'Hero Subtitle', name: heroSubtitle, widget: text }
+          - { label: 'Hero Image', name: heroImage, widget: image }
+  - name: contacts
+    label: Contacts
+    files:
+      - file: content/contacts.yml
+        name: contacts
+        label: Contacts
+        fields:
+          - { label: 'Email', name: email, widget: string }
+          - { label: 'Phone', name: phone, widget: string }
+          - { label: 'Address', name: address, widget: string }
+          - { label: 'Socials', name: socials, widget: list, field: { label: 'Social', name: social, widget: object, fields: [{ label: 'Label', name: label, widget: string }, { label: 'URL', name: url, widget: string }] } }
+  - name: radio
+    label: Radio
+    files:
+      - file: content/radio.yml
+        name: radio
+        label: Radio
+        fields:
+          - { label: 'Ordered Tracks', name: orderedTracks, widget: list, field: { label: 'Track', name: track, widget: string } }
+          - { label: 'Artist Filters', name: artistFilters, widget: list, field: { label: 'Artist', name: artist, widget: string } }

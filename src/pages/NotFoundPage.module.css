@@ -1,0 +1,19 @@
+.page {
+  display: grid;
+  gap: 1rem;
+  padding: 5rem 0;
+  justify-items: start;
+}
+
+.eyebrow {
+  color: #c71d1b;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 0.8rem;
+}
+
+.link {
+  color: #cfcbcb;
+  text-decoration: none;
+  border-bottom: 1px solid #c71d1b;
+}

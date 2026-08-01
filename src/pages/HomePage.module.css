@@ -1,0 +1,133 @@
+.page {
+  display: grid;
+  gap: 3rem;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5rem 0 2rem;
+}
+
+.eyebrow {
+  color: #c71d1b;
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  color: #c71d1b;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
+
+.subtitle {
+  max-width: 620px;
+  color: rgba(207, 203, 203, 0.78);
+  margin: 1rem 0 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+  border: 2px dashed #555;
+  border-radius: 0 3rem 0 3rem;
+  padding: 3rem;
+}
+
+.primaryLink,
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.2rem;
+  border: 1px solid #c71d1b;
+  color: #cfcbcb;
+  text-decoration: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.heroImage,
+.image {
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 4 / 5;
+}
+
+.section {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.swiper {
+  width: 100%;
+  padding-bottom: 2.5rem;
+}
+
+.swiperSlide {
+  height: auto;
+  padding-bottom: 0.5rem;
+}
+
+.swiper :global(.swiper-button-next),
+.swiper :global(.swiper-button-prev) {
+  color: #c71d1b;
+  width: 2.2rem;
+  height: 2.2rem;
+  stroke-width: 2.5;
+}
+
+.swiper :global(.swiper-button-next)::after,
+.swiper :global(.swiper-button-prev)::after {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.swiper :global(.swiper-pagination-bullet) {
+  background: #c71d1b;
+  opacity: 0.5;
+}
+
+.swiper :global(.swiper-pagination-bullet-active) {
+  background: #c71d1b;
+  opacity: 1;
+}
+
+.swiper :global(.swiper-pagination) {
+  bottom: 0.25rem;
+}
+
+.card {
+  border: 1px solid rgba(207, 203, 203, 0.12);
+  padding: 1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

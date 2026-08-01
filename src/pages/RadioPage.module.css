@@ -1,0 +1,76 @@
+.page {
+  display: grid;
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.hero {
+  display: grid;
+  gap: 1rem;
+}
+
+.eyebrow {
+  color: #c71d1b;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.filters button {
+  background: transparent;
+  color: #cfcbcb;
+  border: 1px solid rgba(207, 203, 203, 0.16);
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+.filters button.active {
+  border-color: #c71d1b;
+  color: #c71d1b;
+}
+
+.list {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid rgba(207, 203, 203, 0.12);
+  padding: 1rem;
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.playButton {
+  background: transparent;
+  color: #cfcbcb;
+  border: 1px solid #c71d1b;
+  padding: 0.75rem 1rem;
+  width: fit-content;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .card {
+    grid-template-columns: 5rem 1fr auto;
+    align-items: center;
+  }
+
+  .image {
+    width: 5rem;
+    height: 5rem;
+  }
+}

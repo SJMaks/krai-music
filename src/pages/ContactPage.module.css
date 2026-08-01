@@ -1,0 +1,35 @@
+.page {
+  display: grid;
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.eyebrow {
+  color: #c71d1b;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  border: 1px solid rgba(207, 203, 203, 0.12);
+  padding: 1rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.card a {
+  color: #cfcbcb;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

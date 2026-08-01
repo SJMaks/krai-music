@@ -1,0 +1,161 @@
+.player {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(960px, calc(100% - 2rem));
+  z-index: 80;
+  background: #181818;
+  border: 1px solid rgba(207, 203, 203, 0.12);
+  padding: 1rem;
+  display: grid;
+  gap: 0.9rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+.playerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.trackInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cover {
+  width: 3rem;
+  height: 3rem;
+  object-fit: cover;
+}
+
+.title {
+  color: #cfcbcb;
+  font-weight: 600;
+}
+
+.artist {
+  color: rgba(207, 203, 203, 0.7);
+  font-size: 0.95rem;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex: 1 1 100%;
+  order: 3;
+}
+
+.closeButton,
+.iconButton,
+.playButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(207, 203, 203, 0.16);
+  color: #cfcbcb;
+  cursor: pointer;
+}
+
+.closeButton {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+}
+
+.iconButton {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.playButton {
+  width: 2.8rem;
+  height: 2.8rem;
+  background: #c71d1b;
+  border-color: #c71d1b;
+}
+
+.timelineWrap,
+.volumeWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(207, 203, 203, 0.7);
+  font-size: 0.8rem;
+}
+
+.volumeWrap {
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.range {
+  flex: 1;
+  accent-color: #c71d1b;
+}
+
+.progressBar {
+  height: 0.2rem;
+  background: rgba(207, 203, 203, 0.14);
+  overflow: hidden;
+}
+
+.progressBar > div {
+  height: 100%;
+  background: #c71d1b;
+}
+
+@media (min-width: 768px) {
+  .player {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .playerHeader {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .trackInfo {
+    justify-self: start;
+  }
+
+  .controls {
+    justify-self: center;
+    flex: 0 0 auto;
+    order: 0;
+  }
+
+  .closeButton {
+    justify-self: end;
+  }
+
+  .timelineWrap {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .playerHeader {
+    justify-content: space-between;
+  }
+
+  .controls {
+    width: 100%;
+  }
+
+  .timelineWrap {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "track-1",
+    "title": "Midnight Bloom",
+    "artist": "YuKoRoLeVa",
+    "artistSlug": "yukoroleva",
+    "cover": "https://i.pinimg.com/originals/2c/30/a7/2c30a76f9f8ec9833f915aa97d2df278.jpg",
+    "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    "releaseDate": "2026-02-14",
+    "duration": "03:41"
+  },
+  {
+    "id": "track-2",
+    "title": "Quiet Signal",
+    "artist": "ALINK",
+    "artistSlug": "alink",
+    "cover": "https://avatars.yandex.net/get-music-content/17722696/f9df6944.a.42294811-1/m1000x1000",
+    "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    "releaseDate": "2026-06-01",
+    "duration": "04:12"
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "alink",
+    "nickname": "ALINK",
+    "slug": "alink",
+    "avatar": "https://sun9-82.vkuserphoto.ru/impg/08H7MJpiGsMEVyp0w6o0RnG98GhJT6ZTn_vPTw/APJRTIidEXY.jpg?size=320x480&quality=90&sign=d4db38f9584b549dadb69a96d51b9fc0&c_uniq_tag=OKOSmFJC3mCVBVtgrYs94rBjOw5K8eqiIG72Ee8WI58",
+    "biography": "ALINK (Андрей Вильховский) - автор и исполнитель своих треков из г. Красноярск. Артист музыкального лейбла Край Music.",
+    "socials": [
+      { "label": "ВК", "url": "https://vk.ru/a.liink" }
+    ],
+    "videos": [
+      { "title": "Midnight Bloom", "url": "https://www.youtube.com/watch?v=ScMzIvxBSi4", "thumbnail": "/images/video-1.svg" }
+    ],
+    "featuredImage": "https://sun9-82.vkuserphoto.ru/impg/08H7MJpiGsMEVyp0w6o0RnG98GhJT6ZTn_vPTw/APJRTIidEXY.jpg?size=320x480&quality=90&sign=d4db38f9584b549dadb69a96d51b9fc0&c_uniq_tag=OKOSmFJC3mCVBVtgrYs94rBjOw5K8eqiIG72Ee8WI58"
+  },
+  {
+    "id": "yukoroleva",
+    "nickname": "YuKoRoLeVa",
+    "slug": "yukoroleva",
+    "avatar": "https://sun9-64.vkuserphoto.ru/impg/TyIyIxiDuEa3_eKX0LUke2-0T3cDqaGKvrfGAA/IvQsMzSqzNM.jpg?size=320x480&quality=90&sign=709a9347ed6d6f9a6ba3a074b29de087&c_uniq_tag=VsT112pVfssPzeQ2B-rEpbvsYB7rodPQ4k62vYELDSI",
+    "biography": "YuKoRoLeVa -  певица и автор песен. Ты найдёшь эксклюзивные записи, тексты песен и закулисные моменты моего творчества.",
+    "socials": [
+      { "label": "ВК", "url": "https://vk.ru/liyaquinn96" }
+    ],
+    "videos": [
+      { "title": "Quiet Signal", "url": "https://www.youtube.com/watch?v=ScMzIvxBSi4", "thumbnail": "/images/video-2.svg" }
+    ],
+    "featuredImage": "https://sun9-64.vkuserphoto.ru/impg/TyIyIxiDuEa3_eKX0LUke2-0T3cDqaGKvrfGAA/IvQsMzSqzNM.jpg?size=320x480&quality=90&sign=709a9347ed6d6f9a6ba3a074b29de087&c_uniq_tag=VsT112pVfssPzeQ2B-rEpbvsYB7rodPQ4k62vYELDSI"
+  }
+]

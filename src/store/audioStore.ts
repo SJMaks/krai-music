@@ -1,0 +1,99 @@
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+import type { Track } from '../types/content'
+
+type AudioStoreState = {
+  queue: Track[]
+  currentTrack: Track | null
+  isPlaying: boolean
+  isVisible: boolean
+  volume: number
+  muted: boolean
+  progress: number
+  duration: number
+  currentTime: number
+  repeat: boolean
+  shuffle: boolean
+}
+
+interface AudioState extends AudioStoreState {
+  setQueue: (queue: Track[]) => void
+  playTrack: (track: Track, queue?: Track[]) => void
+  togglePlay: () => void
+  closePlayer: () => void
+  nextTrack: () => void
+  previousTrack: () => void
+  seek: (value: number) => void
+  setVolume: (volume: number) => void
+  toggleMute: () => void
+  toggleRepeat: () => void
+  toggleShuffle: () => void
+  setCurrentTime: (value: number) => void
+  setDuration: (value: number) => void
+  setProgress: (value: number) => void
+}
+
+export const useAudioStore = create<AudioState>()(
+  persist(
+    (set, get) => ({
+      queue: [],
+      currentTrack: null,
+      isPlaying: false,
+      isVisible: true,
+      volume: 0.8,
+      muted: false,
+      progress: 0,
+      duration: 0,
+      currentTime: 0,
+      repeat: false,
+      shuffle: false,
+      setQueue: (queue: Track[]) => set({ queue }),
+      playTrack: (track: Track, queue?: Track[]) => {
+        const nextQueue = queue ?? get().queue
+        const exists = nextQueue.some((item: Track) => item.id === track.id)
+        const mergedQueue = exists ? nextQueue : [track, ...nextQueue]
+        set({ currentTrack: track, queue: mergedQueue, isPlaying: true, isVisible: true, progress: 0, currentTime: 0 })
+      },
+      togglePlay: () => set((state: AudioStoreState) => ({ isPlaying: !state.isPlaying })),
+      closePlayer: () => set({ isVisible: false }),
+      nextTrack: () => {
+        const { queue, currentTrack, shuffle, repeat } = get()
+        if (!queue.length) return
+        if (!currentTrack) {
+          set({ currentTrack: queue[0], isPlaying: true })
+          return
+        }
+        const index = queue.findIndex((track) => track.id === currentTrack.id)
+        if (index === -1) {
+          set({ currentTrack: queue[0], isPlaying: true })
+          return
+        }
+        const nextIndex = shuffle ? Math.floor(Math.random() * queue.length) : (index + 1) % queue.length
+        const track = queue[nextIndex]
+        set({ currentTrack: track, isPlaying: true, progress: 0, currentTime: 0 })
+        if (repeat && track) {
+          set({ currentTrack: track, isPlaying: true })
+        }
+      },
+      previousTrack: () => {
+        const { queue, currentTrack, shuffle } = get()
+        if (!queue.length || !currentTrack) return
+        const index = queue.findIndex((track) => track.id === currentTrack.id)
+        const previousIndex = shuffle ? Math.floor(Math.random() * queue.length) : (index > 0 ? index - 1 : queue.length - 1)
+        set({ currentTrack: queue[previousIndex], isPlaying: true, progress: 0, currentTime: 0 })
+      },
+      seek: (value: number) => set({ progress: value, currentTime: value }),
+      setVolume: (volume: number) => set({ volume }),
+      toggleMute: () => set((state: AudioStoreState) => ({ muted: !state.muted })),
+      toggleRepeat: () => set((state: AudioStoreState) => ({ repeat: !state.repeat })),
+      toggleShuffle: () => set((state: AudioStoreState) => ({ shuffle: !state.shuffle })),
+      setCurrentTime: (value: number) => set({ currentTime: value }),
+      setDuration: (value: number) => set({ duration: value }),
+      setProgress: (value: number) => set({ progress: value }),
+    }),
+    {
+      name: 'kray-audio-store',
+      partialize: (state: AudioState) => ({ volume: state.volume, muted: state.muted, queue: state.queue, currentTrack: state.currentTrack, repeat: state.repeat, shuffle: state.shuffle }),
+    },
+  ),
+)
