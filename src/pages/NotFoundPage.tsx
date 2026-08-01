@@ -5,7 +5,7 @@ import { Seo } from '../shared/ui/Seo'
 export default function NotFoundPage() {
   return (
     <>
-      <Seo title="Not Found" description="The requested page was not found on Kray Music." />
+      <Seo title="Страница не найдена" description="Запрашиваемая страница не найдена на Kray Music." />
       <section className={styles.page}>
       <p className={styles.eyebrow}>404</p>
       <h1>Страница не найдена</h1>

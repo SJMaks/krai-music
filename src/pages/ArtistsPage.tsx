@@ -20,12 +20,12 @@ export default function ArtistsPage() {
 
   return (
     <>
-      <Seo title="Artists" description="Browse the Kray Music roster and discover featured artists." />
+      <Seo title="Артисты" description="ИзучайтеRoster Kray Music и открывайте новых артистов." />
       <section className={styles.page}>
       <div className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>Artists</p>
-          <h1>Selected voices</h1>
+          <p className={styles.eyebrow}>Артисты</p>
+          <h1>Избранные голоса</h1>
         </div>
         <input
           type="search"
@@ -34,9 +34,9 @@ export default function ArtistsPage() {
             setQuery(event.target.value)
             setPage(1)
           }}
-          placeholder="Search artists"
+          placeholder="Поиск артистов"
           className={styles.input}
-          aria-label="Search artists"
+          aria-label="Поиск артистов"
         />
       </div>
       <div className={styles.grid}>
@@ -45,17 +45,17 @@ export default function ArtistsPage() {
             <img src={artist.avatar} alt={artist.nickname} className={styles.image} />
             <h2>{artist.nickname}</h2>
             <p>{artist.biography}</p>
-            <Link to={`/artists/${artist.slug}`}>View profile</Link>
+            <Link to={`/artists/${artist.slug}`}>Открыть профиль</Link>
           </article>
         ))}
       </div>
       <div className={styles.pagination}>
         <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} disabled={currentPage === 1}>
-          Previous
+          Назад
         </button>
         <span>{currentPage} / {totalPages}</span>
         <button type="button" onClick={() => setPage((value) => Math.min(totalPages, value + 1))} disabled={currentPage === totalPages}>
-          Next
+          Вперёд
         </button>
       </div>
     </section>

@@ -7,23 +7,23 @@ export default function ContactPage() {
 
   return (
     <>
-      <Seo title="Contacts" description="Get in touch with Kray Music for collaborations and bookings." />
+      <Seo title="Контакты" description="Свяжитесь с Kray Music для сотрудничества и бронирования выступлений." />
       <section className={styles.page}>
       <div className={styles.header}>
-        <p className={styles.eyebrow}>Contacts</p>
-        <h1>Reach the label</h1>
+        <p className={styles.eyebrow}>Контакты</p>
+        <h1>Свяжитесь с лейблом</h1>
       </div>
       <div className={styles.grid}>
         <article className={styles.card}>
-          <h2>Email</h2>
+          <h2>E-mail</h2>
           <a href={`mailto:${contact.email}`}>{contact.email}</a>
         </article>
         <article className={styles.card}>
-          <h2>Phone</h2>
+          <h2>Телефон</h2>
           <a href={`tel:${contact.phone}`}>{contact.phone}</a>
         </article>
         <article className={styles.card}>
-          <h2>Address</h2>
+          <h2>Адрес</h2>
           <p>{contact.address}</p>
         </article>
       </div>

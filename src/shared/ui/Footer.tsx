@@ -14,7 +14,7 @@ export function Footer() {
       <div className={styles.container}>
         <div className={styles.section}>
           <h2 className={styles.head}>Разделы сайта</h2>
-          <nav className={styles.nav} aria-label="Primary navigation">
+          <nav className={styles.nav} aria-label="Основная навигация">
             {links.filter(item => item.to !== '/contacts').map((link) => (
               <NavLink
                 key={link.to}
@@ -28,7 +28,7 @@ export function Footer() {
         </div>
         <div className={styles.section}>
           <h2 className={styles.head}>Информация</h2>
-          <nav className={styles.nav} aria-label="Primary navigation">
+          <nav className={styles.nav} aria-label="Основная навигация">
             <NavLink
               key='/privacy_policy'
               to='/privacy_policy'
@@ -70,10 +70,10 @@ export function Footer() {
         </div>
       </div>
       <p className={styles.copy}>
-        {footer?.copyrightText ?? 'All rights reserved.'}
+        {footer?.copyrightText ?? 'Все права защищены.'}
       </p>
       <p className={styles.designed}>
-        Designed by &nbsp; <p style={{ fontWeight: 'bold', fontStyle: 'italic' }}>MAZE</p>
+        Разработано&nbsp;<span style={{ fontWeight: 'bold', fontStyle: 'italic' }}>MAZE</span>
       </p>
     </footer>
   )

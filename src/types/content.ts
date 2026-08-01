@@ -52,7 +52,6 @@ export interface Service {
 export interface HomepageContent {
   heroTitle: string
   heroSubtitle: string
-  heroImage: string
 }
 
 export interface ContactContent {

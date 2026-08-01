@@ -8,7 +8,6 @@ export function useContent() {
   const homepage = useMemo<HomepageContent>(() => ({
     heroTitle: '— Добро пожаловать! —',
     heroSubtitle: ' — музыкальный лейбл, который открывает новые имена и задаёт тренды.',
-    heroImage: '/images/hero.webp',
   }), [])
   const contact = useMemo<ContactContent>(() => ({
     email: 'vovabreshko@mail.ru',

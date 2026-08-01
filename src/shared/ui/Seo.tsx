@@ -10,7 +10,7 @@ export function Seo({ title, description }: SeoProps) {
   const location = useLocation()
 
   useEffect(() => {
-    document.title = `${title} | Kray Music`
+    document.title = `${title} | КрайMusic`
     document.querySelector('meta[name="description"]')?.setAttribute('content', description)
     document.querySelector('meta[property="og:title"]')?.setAttribute('content', title)
     document.querySelector('meta[property="og:description"]')?.setAttribute('content', description)

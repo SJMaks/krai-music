@@ -117,23 +117,23 @@ export function Player() {
           </div>
         </div>
         <div className={styles.controls}>
-          <button type="button" className={styles.iconButton} onClick={toggleShuffle} aria-label="Toggle shuffle">
+          <button type="button" className={styles.iconButton} onClick={toggleShuffle} aria-label="Переключить случайный порядок">
             <FiShuffle color={shuffle ? '#c71d1b' : '#cfcbcb'} />
           </button>
-          <button type="button" className={styles.iconButton} onClick={previousTrack} aria-label="Previous track">
+          <button type="button" className={styles.iconButton} onClick={previousTrack} aria-label="Предыдущий трек">
             <FiSkipBack />
           </button>
-          <button type="button" className={styles.playButton} onClick={togglePlay} aria-label={isPlaying ? 'Pause' : 'Play'}>
+          <button type="button" className={styles.playButton} onClick={togglePlay} aria-label={isPlaying ? 'Пауза' : 'Воспроизведение'}>
             {isPlaying ? <FiPause /> : <FiPlay />}
           </button>
-          <button type="button" className={styles.iconButton} onClick={nextTrack} aria-label="Next track">
+          <button type="button" className={styles.iconButton} onClick={nextTrack} aria-label="Следующий трек">
             <FiSkipForward />
           </button>
-          <button type="button" className={styles.iconButton} onClick={toggleRepeat} aria-label="Toggle repeat">
+          <button type="button" className={styles.iconButton} onClick={toggleRepeat} aria-label="Переключить повтор">
             <FiRepeat color={repeat ? '#c71d1b' : '#cfcbcb'} />
           </button>
         </div>
-        <button type="button" className={styles.closeButton} onClick={closePlayer} aria-label="Close player">
+        <button type="button" className={styles.closeButton} onClick={closePlayer} aria-label="Закрыть плеер">
           <FiX />
         </button>
       </div>
@@ -146,7 +146,7 @@ export function Player() {
       />
       <div className={styles.timelineWrap}>
         <div className={styles.volumeWrap}>
-          <button type="button" className={styles.iconButton} onClick={toggleMute} aria-label="Toggle mute">
+          <button type="button" className={styles.iconButton} onClick={toggleMute} aria-label="Переключить беззвучный режим">
             {muted ? <FiVolumeX /> : <FiVolume2 />}
           </button>
           <input
@@ -157,7 +157,7 @@ export function Player() {
             value={volume}
             onChange={(event) => setVolume(Number(event.target.value))}
             className={styles.range}
-            aria-label="Volume"
+            aria-label="Громкость"
           />
         </div>
         <span>{formatTime(currentTime)}</span>
@@ -168,7 +168,7 @@ export function Player() {
           value={currentTime}
           onChange={(event) => handleSeek(Number(event.target.value))}
           className={styles.range}
-          aria-label="Seek"
+          aria-label="Позиция"
         />
         <span>{formatTime(duration)}</span>
       </div>

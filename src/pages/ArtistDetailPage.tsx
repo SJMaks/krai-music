@@ -21,17 +21,17 @@ export default function ArtistDetailPage() {
   const pageTracks = artistTracks.slice((currentPage - 1) * perPage, currentPage * perPage)
 
   if (!artist) {
-    return <div className={styles.empty}>Artist not found.</div>
+    return <div className={styles.empty}>Артист не найден.</div>
   }
 
   return (
     <>
-      <Seo title={artist.nickname} description={`${artist.nickname} on Kray Music.`} />
+      <Seo title={artist.nickname} description={`${artist.nickname} — артист Kray Music.`} />
       <section className={styles.page}>
       <section className={styles.hero}>
         <img src={artist.featuredImage} alt={artist.nickname} className={styles.heroImage} />
         <div>
-          <p className={styles.eyebrow}>Artist profile</p>
+          <p className={styles.eyebrow}>Профиль артиста</p>
           <h1>{artist.nickname}</h1>
           <p>{artist.biography}</p>
           <div className={styles.socials}>
@@ -44,7 +44,7 @@ export default function ArtistDetailPage() {
         </div>
       </section>
       <section className={styles.section}>
-        <h2>Videos</h2>
+        <h2>Видео</h2>
         <div className={styles.videoGrid}>
           {artist.videos.map((video) => (
             <button key={video.title} type="button" className={styles.videoCard} onClick={() => setActiveVideo(video.url)}>
@@ -57,7 +57,7 @@ export default function ArtistDetailPage() {
       <section className={styles.section}>
         <div className={styles.trackLayout}>
           <div>
-            <h2>Tracklist</h2>
+            <h2>Список треков</h2>
             <div className={styles.trackList}>
               {pageTracks.map((track) => (
                 <div key={track.id} className={styles.trackCard}>
@@ -67,18 +67,18 @@ export default function ArtistDetailPage() {
                     <p>{track.duration}</p>
                   </div>
                   <button type="button" className={styles.playButton} onClick={() => playTrack(track, queue)}>
-                    Play
+                    Воспроизвести
                   </button>
                 </div>
               ))}
             </div>
             <div className={styles.pagination}>
               <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} disabled={currentPage === 1}>
-                Previous
+                Назад
               </button>
               <span>{currentPage} / {totalPages}</span>
               <button type="button" onClick={() => setPage((value) => Math.min(totalPages, value + 1))} disabled={currentPage === totalPages}>
-                Next
+                Вперёд
               </button>
             </div>
           </div>
@@ -92,7 +92,7 @@ export default function ArtistDetailPage() {
       <div className={styles.modalOverlay} role="dialog" aria-modal="true">
         <div className={styles.modalContent}>
           <button type="button" className={styles.closeButton} onClick={() => setActiveVideo(null)}>
-            Close
+            Закрыть
           </button>
           <ReactPlayer src={activeVideo} controls width="100%" height="100%" />
         </div>

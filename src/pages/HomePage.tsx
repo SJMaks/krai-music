@@ -23,7 +23,7 @@ export default function HomePage() {
 
   return (
     <>
-      <Seo title="Home" description="Kray Music is a music label for discovering artists and listening to new releases." />
+      <Seo title="Главная" description="Kray Music — музыкальный лейбл, который помогает открывать новых артистов и слушать свежие релизы." />
       <section className={styles.page}>
         <section className={styles.hero}>
           <h1 className={styles.title}>{homepage.heroTitle}</h1>

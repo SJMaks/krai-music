@@ -19,7 +19,7 @@ export function BackToTop() {
       type="button"
       className={styles.button}
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      aria-label="Back to top"
+      aria-label="Наверх"
     >
       <FiArrowUp />
     </button>

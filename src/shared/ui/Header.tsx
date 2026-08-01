@@ -24,7 +24,7 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <NavLink to="/" aria-label="Kray Music home">
+        <NavLink to="/" aria-label="Главная страница Kray Music">
           <img className={styles.logo} src={logo}/>
         </NavLink>
         <button
@@ -32,11 +32,11 @@ export function Header() {
           className={styles.burger}
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
-          aria-label="Toggle navigation"
+          aria-label="Открыть меню"
         >
           {open ? <FiX size={20} /> : <FiMenu size={20} />}
         </button>
-        <nav className={`${styles.nav} ${open ? styles.open : ''}`} aria-label="Primary navigation">
+        <nav className={`${styles.nav} ${open ? styles.open : ''}`} aria-label="Основная навигация">
           {links.filter(link => link.to !== '/').map((link) => (
             link.to === '/contacts' ? (
               <button

@@ -6,7 +6,7 @@ import './index.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Suspense fallback={<div className="loading">Loading Kray Music…</div>}>
+    <Suspense fallback={<div className="loading">Загрузка…</div>}>
       <RouterProvider router={router} />
     </Suspense>
   </StrictMode>,

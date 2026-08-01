@@ -5,11 +5,11 @@ import { Seo } from '../shared/ui/Seo'
 export default function ServicesPage() {
   return (
     <>
-      <Seo title="Services" description="Discover artist development and label services from Kray Music." />
+      <Seo title="Услуги" description="Изучайте услуги по развитию артистов и работе с лейблом Kray Music." />
       <section className={styles.page}>
       <div className={styles.header}>
-        <p className={styles.eyebrow}>Services</p>
-        <h1>Support for every stage</h1>
+        <p className={styles.eyebrow}>Услуги</p>
+        <h1>Поддержка на каждом этапе</h1>
       </div>
       <div className={styles.list}>
         {servicesData.map((service, index) => (
@@ -18,7 +18,7 @@ export default function ServicesPage() {
             <div className={styles.content}>
               <h2>{service.title}</h2>
               <p>{service.description}</p>
-              <a href="#footer" className={styles.link}>Contact</a>
+              <a href="#footer" className={styles.link}>Связаться</a>
             </div>
           </article>
         ))}
