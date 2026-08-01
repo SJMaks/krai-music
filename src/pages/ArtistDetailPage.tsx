@@ -1,24 +1,52 @@
 import { useMemo, useState } from 'react'
-import ReactPlayer from 'react-player'
 import { useParams } from 'react-router-dom'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Pagination } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
 import { artistsData, tracksData } from '../cms/data'
 import { useAudioStore } from '../store/audioStore'
 import styles from './ArtistDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
+import { motion } from 'framer-motion'
+import type { Track } from '../types/content'
 
 export default function ArtistDetailPage() {
   const { slug } = useParams()
   const [page, setPage] = useState(1)
-  const [activeVideo, setActiveVideo] = useState<string | null>(null)
   const playTrack = useAudioStore((state) => state.playTrack)
-  const queue = useAudioStore((state) => state.queue)
 
   const artist = useMemo(() => artistsData.find((entry) => entry.slug === slug), [slug])
   const artistTracks = useMemo(() => tracksData.filter((track) => track.artistSlug === slug), [slug])
+  const featuredTrack = useMemo<(Track & { description: string; releaseType: string; releaseDate: string }) | null>(() => {
+    const selection = artist?.featuredTrack
+    const baseTrack = selection?.trackId
+      ? tracksData.find((track) => track.id === selection.trackId)
+      : artistTracks[0] ?? null
+
+    if (!baseTrack) {
+      return null
+    }
+
+    return {
+      ...baseTrack,
+      title: selection?.title || baseTrack.title,
+      cover: selection?.cover || baseTrack.cover,
+      releaseDate: selection?.releaseDate || baseTrack.releaseDate,
+      releaseType: selection?.releaseType || 'Single',
+      description: selection?.description || 'Новый релиз артиста.',
+    }
+  }, [artist, artistTracks])
   const perPage = 4
   const totalPages = Math.max(1, Math.ceil(artistTracks.length / perPage))
   const currentPage = Math.min(page, totalPages)
   const pageTracks = artistTracks.slice((currentPage - 1) * perPage, currentPage * perPage)
+
+  const handlePlayTrack = (track: Track) => {
+    const nextQueue = artistTracks.length > 0 ? artistTracks : [track]
+    playTrack(track, nextQueue)
+  }
 
   if (!artist) {
     return <div className={styles.empty}>Артист не найден.</div>
@@ -28,76 +56,111 @@ export default function ArtistDetailPage() {
     <>
       <Seo title={artist.nickname} description={`${artist.nickname} — артист Kray Music.`} />
       <section className={styles.page}>
-      <section className={styles.hero}>
-        <img src={artist.featuredImage} alt={artist.nickname} className={styles.heroImage} />
-        <div>
-          <p className={styles.eyebrow}>Профиль артиста</p>
-          <h1>{artist.nickname}</h1>
-          <p>{artist.biography}</p>
-          <div className={styles.socials}>
-            {artist.socials.map((social) => (
-              <a key={social.label} href={social.url} target="_blank" rel="noreferrer">
-                {social.label}
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className={styles.section}>
-        <h2>Видео</h2>
-        <div className={styles.videoGrid}>
-          {artist.videos.map((video) => (
-            <button key={video.title} type="button" className={styles.videoCard} onClick={() => setActiveVideo(video.url)}>
-              <img src={video.thumbnail} alt={video.title} className={styles.videoImage} />
-              <span>{video.title}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-      <section className={styles.section}>
-        <div className={styles.trackLayout}>
+        <section className={styles.hero}>
+          <img src={artist.featuredImage} alt={artist.nickname} className={styles.heroImage} />
           <div>
-            <h2>Список треков</h2>
-            <div className={styles.trackList}>
-              {pageTracks.map((track) => (
-                <div key={track.id} className={styles.trackCard}>
-                  <img src={track.cover} alt={track.title} className={styles.trackCover} />
-                  <div>
-                    <h3>{track.title}</h3>
-                    <p>{track.duration}</p>
-                  </div>
-                  <button type="button" className={styles.playButton} onClick={() => playTrack(track, queue)}>
-                    Воспроизвести
-                  </button>
-                </div>
+            <p className={styles.eyebrow}>Профиль артиста</p>
+            <h1>{artist.nickname}</h1>
+            <p>{artist.biography}</p>
+            <div className={styles.socials}>
+              {artist.socials.map((social) => (
+                <a key={social.label} href={social.url} target="_blank" rel="noreferrer">
+                  {social.label}
+                </a>
               ))}
             </div>
-            <div className={styles.pagination}>
-              <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} disabled={currentPage === 1}>
-                Назад
-              </button>
-              <span>{currentPage} / {totalPages}</span>
-              <button type="button" onClick={() => setPage((value) => Math.min(totalPages, value + 1))} disabled={currentPage === totalPages}>
-                Вперёд
-              </button>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <h2>Клипы</h2>
+          </div>
+          <Swiper
+            className={styles.swiper}
+            modules={[Navigation, Pagination]}
+            slidesPerView={1}
+            spaceBetween={16}
+            navigation
+            pagination={{ clickable: true }}
+            breakpoints={{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}
+          >
+            {artist.videos.map((video) => (
+              <SwiperSlide key={video.title} className={styles.swiperSlide}>
+                <motion.article initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.card}>
+                  <a href={video.url} target="_blank" rel="noreferrer">
+                    <img src={video.cover} alt={video.title} className={styles.image} />
+                  </a>
+                  <h3>{video.title}</h3>
+                  <p>{video.description}</p>
+                  <a href={video.url} target="_blank" rel="noreferrer">
+                    <button type="button" className={styles.secondaryButton}>
+                      Смотреть
+                    </button>
+                  </a>
+                </motion.article>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </section>
+
+        <section className={styles.section}>
+          <div className={styles.trackLayout}>
+            <div style={{ alignSelf: 'start' }}>
+              <h2>Список треков</h2>
+              <div className={styles.trackList}>
+                {pageTracks.map((track) => (
+                  <div key={track.id} className={styles.trackCard}>
+                    <img src={track.cover} alt={track.title} className={styles.trackCover} />
+                    <div>
+                      <h3>{track.title}</h3>
+                      <p>{track.duration}</p>
+                    </div>
+                    <button type="button" className={styles.playButton} onClick={() => handlePlayTrack(track)}>
+                      Воспроизвести
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.pagination}>
+                <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} disabled={currentPage === 1}>
+                  Назад
+                </button>
+                <span>{currentPage} / {totalPages}</span>
+                <button type="button" onClick={() => setPage((value) => Math.min(totalPages, value + 1))} disabled={currentPage === totalPages}>
+                  Вперёд
+                </button>
+              </div>
+            </div>
+            <div className={styles.featuredTrackCard}>
+              <div className={styles.featuredTrackHeader}>
+                <p className={styles.eyebrow}>Новый релиз</p>
+              </div>
+              {featuredTrack ? (
+                <>
+                  <button type="button" className={styles.featuredTrackCoverButton} onClick={() => handlePlayTrack(featuredTrack)}>
+                    <img src={featuredTrack.cover} alt={featuredTrack.title} className={styles.featuredTrackCover} />
+                  </button>
+                  <div className={styles.featuredTrackInfo}>
+                    <h3>{featuredTrack.title}</h3>
+                    <p>{featuredTrack.artist}</p>
+                    <p>Релиз: {featuredTrack.releaseDate}</p>
+                    <p>Тип релиза: {featuredTrack.releaseType}</p>
+                    <p>Длительность: {featuredTrack.duration}</p>
+                    <p>{featuredTrack.description}</p>
+                    <button type="button" className={styles.secondaryButton} onClick={() => handlePlayTrack(featuredTrack)}>
+                      Слушать
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <p>Пока нет доступных релизов.</p>
+              )}
             </div>
           </div>
-          <div className={styles.artworkPanel}>
-            <img src={artist.featuredImage} alt={`${artist.nickname} featured artwork`} className={styles.artworkImage} />
-          </div>
-        </div>
+        </section>
       </section>
-    </section>
-    {activeVideo ? (
-      <div className={styles.modalOverlay} role="dialog" aria-modal="true">
-        <div className={styles.modalContent}>
-          <button type="button" className={styles.closeButton} onClick={() => setActiveVideo(null)}>
-            Закрыть
-          </button>
-          <ReactPlayer src={activeVideo} controls width="100%" height="100%" />
-        </div>
-      </div>
-    ) : null}
     </>
   )
 }
+

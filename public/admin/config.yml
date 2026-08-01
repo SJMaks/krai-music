@@ -1,0 +1,79 @@
+backend:
+  name: github
+  repo: your-username/your-repo
+  branch: main
+
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: artists
+    label: Артисты
+    file: content/artists.json
+    format: json
+    fields:
+      - label: Артисты
+        name: artists
+        widget: list
+        fields:
+          - { label: ID, name: id, widget: string }
+          - { label: Никнейм, name: nickname, widget: string }
+          - { label: Slug, name: slug, widget: string }
+          - { label: Аватар, name: avatar, widget: image }
+          - { label: Биография, name: biography, widget: text }
+          - { label: Featured Image, name: featuredImage, widget: image }
+          - { label: Социальные ссылки, name: socials, widget: list, fields: [{ label: Label, name: label, widget: string }, { label: URL, name: url, widget: string }] }
+          - { label: Видео, name: videos, widget: list, fields: [{ label: Title, name: title, widget: string }, { label: Description, name: description, widget: text }, { label: URL, name: url, widget: string }, { label: Cover, name: cover, widget: image }] }
+          - label: Featured Track
+            name: featuredTrack
+            widget: object
+            fields:
+              - { label: Track ID, name: trackId, widget: string }
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+              - { label: Release Date, name: releaseDate, widget: string }
+              - { label: Release Type, name: releaseType, widget: string }
+              - { label: Cover, name: cover, widget: image }
+  - name: tracks
+    label: Треки
+    file: content/tracks.json
+    format: json
+    fields:
+      - label: Треки
+        name: tracks
+        widget: list
+        fields:
+          - { label: ID, name: id, widget: string }
+          - { label: Title, name: title, widget: string }
+          - { label: Artist, name: artist, widget: string }
+          - { label: Artist Slug, name: artistSlug, widget: string }
+          - { label: Cover, name: cover, widget: image }
+          - { label: Audio, name: audio, widget: file }
+          - { label: Release Date, name: releaseDate, widget: string }
+          - { label: Duration, name: duration, widget: string }
+  - name: events
+    label: Мероприятия
+    file: content/events.json
+    format: json
+    fields:
+      - label: Мероприятия
+        name: events
+        widget: list
+        fields:
+          - { label: ID, name: id, widget: string }
+          - { label: Title, name: title, widget: string }
+          - { label: Image, name: image, widget: image }
+          - { label: Description, name: description, widget: text }
+          - { label: Date, name: date, widget: string }
+          - { label: Location, name: location, widget: string }
+          - { label: External Links, name: externalLinks, widget: list, fields: [{ label: Label, name: label, widget: string }, { label: URL, name: url, widget: string }] }
+  - name: homepage
+    label: Главная страница
+    file: content/homepage.json
+    format: json
+    fields:
+      - { label: Hero Title, name: heroTitle, widget: string }
+      - { label: Hero Subtitle, name: heroSubtitle, widget: text }
+      - { label: Featured Artist IDs, name: featuredArtistIds, widget: list }
+      - { label: Featured Track IDs, name: featuredTrackIds, widget: list }
+      - { label: Featured Event IDs, name: featuredEventIds, widget: list }

@@ -36,30 +36,31 @@ export function Player() {
       return
     }
 
+    const playIfReady = () => {
+      if (isPlaying) {
+        void audio.play().catch(() => undefined)
+      } else {
+        audio.pause()
+      }
+    }
+
     audio.src = currentTrack.audio
     audio.load()
     setCurrentTime(0)
     setProgress(0)
 
-    if (isPlaying) {
-      void audio.play().catch(() => undefined)
-    } else {
-      audio.pause()
-    }
-  }, [currentTrack?.audio, currentTrack?.id, setCurrentTime, setProgress])
-
-  useEffect(() => {
-    const audio = audioRef.current
-    if (!audio || !currentTrack) {
+    if (audio.readyState >= 2) {
+      playIfReady()
       return
     }
 
-    if (isPlaying) {
-      void audio.play().catch(() => undefined)
-    } else {
-      audio.pause()
+    const handleCanPlay = () => playIfReady()
+    audio.addEventListener('canplay', handleCanPlay, { once: true })
+
+    return () => {
+      audio.removeEventListener('canplay', handleCanPlay)
     }
-  }, [isPlaying, currentTrack?.id])
+  }, [currentTrack?.audio, currentTrack?.id, isPlaying, setCurrentTime, setProgress])
 
   useEffect(() => {
     const audio = audioRef.current

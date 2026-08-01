@@ -1,14 +1,11 @@
 import { useMemo } from 'react'
-import { artistsData } from '../cms/data'
+import { artistsData, homepageContentData, tracksData } from '../cms/data'
 import type { Artist, ContactContent, HomepageContent, RadioPlaylist, Track } from '../types/content'
 
 export function useContent() {
   const artists = artistsData as Artist[]
-  const tracks = useMemo(() => (artistsData[0] ? [] : []) as Track[], [])
-  const homepage = useMemo<HomepageContent>(() => ({
-    heroTitle: '— Добро пожаловать! —',
-    heroSubtitle: ' — музыкальный лейбл, который открывает новые имена и задаёт тренды.',
-  }), [])
+  const tracks = useMemo(() => tracksData as Track[], [])
+  const homepage = useMemo<HomepageContent>(() => homepageContentData, [])
   const contact = useMemo<ContactContent>(() => ({
     email: 'vovabreshko@mail.ru',
     phone: '+79620751111',

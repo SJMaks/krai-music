@@ -5,8 +5,18 @@ export interface SocialLink {
 
 export interface Video {
   title: string
+  description: string
   url: string
-  thumbnail: string
+  cover: string
+}
+
+export interface ArtistFeaturedTrack {
+  trackId: string
+  title: string
+  description: string
+  releaseDate: string
+  releaseType: string
+  cover: string
 }
 
 export interface Artist {
@@ -18,6 +28,7 @@ export interface Artist {
   socials: SocialLink[]
   videos: Video[]
   featuredImage: string
+  featuredTrack?: ArtistFeaturedTrack | null
 }
 
 export interface Track {
@@ -52,6 +63,9 @@ export interface Service {
 export interface HomepageContent {
   heroTitle: string
   heroSubtitle: string
+  featuredArtistIds: string[]
+  featuredTrackIds: string[]
+  featuredEventIds: string[]
 }
 
 export interface ContactContent {

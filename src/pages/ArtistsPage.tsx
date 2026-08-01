@@ -42,7 +42,7 @@ export default function ArtistsPage() {
       <div className={styles.grid}>
         {pageArtists.map((artist) => (
           <article key={artist.id} className={styles.card}>
-            <img src={artist.avatar} alt={artist.nickname} className={styles.image} />
+            <Link to={`/artists/${artist.slug}`}><img src={artist.avatar} alt={artist.nickname} className={styles.image} /></Link>
             <h2>{artist.nickname}</h2>
             <p>{artist.biography}</p>
             <Link to={`/artists/${artist.slug}`}>Открыть профиль</Link>

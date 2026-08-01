@@ -11,15 +11,40 @@ import { artistsData, eventsData, tracksData } from '../cms/data'
 import styles from './HomePage.module.css'
 import { Link } from 'react-router-dom'
 import { Seo } from '../shared/ui/Seo'
+import { FiCalendar, FiMapPin } from 'react-icons/fi'
+import type { Artist, Event, Track } from '../types/content'
 
 export default function HomePage() {
   const { homepage } = useContent()
   const playTrack = useAudioStore((state) => state.playTrack)
   const queue = useAudioStore((state) => state.queue)
 
-  const featuredArtists = useMemo(() => artistsData.slice(0, 3), [])
-  const featuredTracks = useMemo(() => tracksData.slice(0, 3), [])
-  const featuredEvents = useMemo(() => eventsData.slice(0, 3), [])
+  const featuredArtists = useMemo(() => {
+    const configuredIds = homepage.featuredArtistIds.length > 0 ? homepage.featuredArtistIds : artistsData.slice(0, 3).map((artist) => artist.id)
+    const ordered = configuredIds
+      .map((id) => artistsData.find((artist) => artist.id === id))
+      .filter((artist): artist is Artist => Boolean(artist))
+
+    return ordered.length > 0 ? ordered : artistsData.slice(0, 3)
+  }, [homepage.featuredArtistIds])
+
+  const featuredTracks = useMemo(() => {
+    const configuredIds = homepage.featuredTrackIds.length > 0 ? homepage.featuredTrackIds : tracksData.slice(0, 3).map((track) => track.id)
+    const ordered = configuredIds
+      .map((id) => tracksData.find((track) => track.id === id))
+      .filter((track): track is Track => Boolean(track))
+
+    return ordered.length > 0 ? ordered : tracksData.slice(0, 3)
+  }, [homepage.featuredTrackIds])
+
+  const featuredEvents = useMemo(() => {
+    const configuredIds = homepage.featuredEventIds.length > 0 ? homepage.featuredEventIds : eventsData.slice(0, 3).map((event) => event.id)
+    const ordered = configuredIds
+      .map((id) => eventsData.find((event) => event.id === id))
+      .filter((event): event is Event => Boolean(event))
+
+    return ordered.length > 0 ? ordered : eventsData.slice(0, 3)
+  }, [homepage.featuredEventIds])
 
   return (
     <>
@@ -110,8 +135,14 @@ export default function HomePage() {
                 <motion.article initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.card}>
                   <img src={event.image} alt={event.title} className={styles.image} />
                   <h3>{event.title}</h3>
-                  <p>{event.location}</p>
-                  <p>{event.date}</p>
+                  <div className={styles.item}>
+                    <FiCalendar />
+                    <p>{event.date}</p>
+                  </div>
+                  <div className={styles.item}>
+                    <FiMapPin />
+                    <p>{event.location}</p>
+                  </div>
                   <p>{event.description}</p>
                 </motion.article>
               </SwiperSlide>

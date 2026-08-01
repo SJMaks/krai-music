@@ -24,6 +24,17 @@
   margin-bottom: 2rem;
 }
 
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #cfcbcb;
+  text-decoration: none;
+  font-weight: bold;
+  flex-wrap: wrap;
+  word-break: break-word;
+}
+
 .subtitle {
   max-width: 620px;
   color: rgba(207, 203, 203, 0.78);
