@@ -90,7 +90,7 @@ export default function HomePage() {
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
             <h2>Недавние релизы</h2>
-            <Link to="/artists">Все релизы</Link>
+            <Link to="/radio">Все релизы</Link>
           </div>
           <Swiper
             className={styles.swiper}
@@ -144,6 +144,9 @@ export default function HomePage() {
                     <p>{event.location}</p>
                   </div>
                   <p>{event.description}</p>
+                  <Link to={`/events/${event.id}`} className={styles.secondaryButton}>
+                    Подробнее
+                  </Link>
                 </motion.article>
               </SwiperSlide>
             ))}

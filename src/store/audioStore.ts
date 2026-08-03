@@ -52,35 +52,56 @@ export const useAudioStore = create<AudioState>()(
         const nextQueue = queue ?? get().queue
         const exists = nextQueue.some((item: Track) => item.id === track.id)
         const mergedQueue = exists ? nextQueue : [track, ...nextQueue]
-        set({ currentTrack: track, queue: mergedQueue, isPlaying: true, isVisible: true, progress: 0, currentTime: 0 })
+        set({ currentTrack: track, queue: mergedQueue, isPlaying: true, isVisible: true, progress: 0, currentTime: 0, duration: 0 })
       },
-      togglePlay: () => set((state: AudioStoreState) => ({ isPlaying: !state.isPlaying })),
+      togglePlay: () => set((state: AudioStoreState) => ({ isPlaying: state.currentTrack ? !state.isPlaying : state.isPlaying })),
       closePlayer: () => set({ isVisible: false }),
       nextTrack: () => {
         const { queue, currentTrack, shuffle, repeat } = get()
         if (!queue.length) return
         if (!currentTrack) {
-          set({ currentTrack: queue[0], isPlaying: true })
+          set({ currentTrack: queue[0], isPlaying: true, progress: 0, currentTime: 0, duration: 0 })
+          return
+        }
+        if (repeat) {
+          set({ currentTrack, isPlaying: true, progress: 0, currentTime: 0 })
           return
         }
         const index = queue.findIndex((track) => track.id === currentTrack.id)
         if (index === -1) {
-          set({ currentTrack: queue[0], isPlaying: true })
+          set({ currentTrack: queue[0], isPlaying: true, progress: 0, currentTime: 0, duration: 0 })
           return
         }
-        const nextIndex = shuffle ? Math.floor(Math.random() * queue.length) : (index + 1) % queue.length
-        const track = queue[nextIndex]
-        set({ currentTrack: track, isPlaying: true, progress: 0, currentTime: 0 })
-        if (repeat && track) {
-          set({ currentTrack: track, isPlaying: true })
+        let nextIndex = (index + 1) % queue.length
+        if (shuffle) {
+          nextIndex = Math.floor(Math.random() * queue.length)
+          while (nextIndex === index && queue.length > 1) {
+            nextIndex = Math.floor(Math.random() * queue.length)
+          }
         }
+        const track = queue[nextIndex]
+        set({ currentTrack: track, isPlaying: true, progress: 0, currentTime: 0, duration: 0 })
       },
       previousTrack: () => {
-        const { queue, currentTrack, shuffle } = get()
+        const { queue, currentTrack, shuffle, repeat } = get()
         if (!queue.length || !currentTrack) return
+        if (repeat) {
+          set({ currentTrack, isPlaying: true, progress: 0, currentTime: 0 })
+          return
+        }
         const index = queue.findIndex((track) => track.id === currentTrack.id)
-        const previousIndex = shuffle ? Math.floor(Math.random() * queue.length) : (index > 0 ? index - 1 : queue.length - 1)
-        set({ currentTrack: queue[previousIndex], isPlaying: true, progress: 0, currentTime: 0 })
+        if (index === -1) {
+          set({ currentTrack: queue[0], isPlaying: true, progress: 0, currentTime: 0, duration: 0 })
+          return
+        }
+        let previousIndex = index > 0 ? index - 1 : queue.length - 1
+        if (shuffle) {
+          previousIndex = Math.floor(Math.random() * queue.length)
+          while (previousIndex === index && queue.length > 1) {
+            previousIndex = Math.floor(Math.random() * queue.length)
+          }
+        }
+        set({ currentTrack: queue[previousIndex], isPlaying: true, progress: 0, currentTime: 0, duration: 0 })
       },
       seek: (value: number) => set({ progress: value, currentTime: value }),
       setVolume: (volume: number) => set({ volume }),

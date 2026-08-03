@@ -3,5 +3,4 @@ id: service-1
 title: Artist Development
 image: /images/service-1.webp
 description: We shape narrative, rollout strategy, and release positioning for modern artists.
-ctaLabel: Contact Us
 ---

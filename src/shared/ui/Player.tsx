@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { FiPause, FiPlay, FiSkipBack, FiSkipForward, FiVolume2, FiVolumeX, FiRepeat, FiShuffle, FiX } from 'react-icons/fi'
 import styles from './Player.module.css'
 import { useAudioStore } from '../../store/audioStore'
+import { Link } from 'react-router-dom'
 
 export function Player() {
   const {
@@ -36,18 +37,28 @@ export function Player() {
       return
     }
 
-    const playIfReady = () => {
-      if (isPlaying) {
-        void audio.play().catch(() => undefined)
-      } else {
-        audio.pause()
-      }
-    }
-
     audio.src = currentTrack.audio
     audio.load()
+    audio.currentTime = 0
     setCurrentTime(0)
     setProgress(0)
+    setDuration(0)
+  }, [currentTrack?.audio, currentTrack?.id, setCurrentTime, setProgress, setDuration])
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio || !currentTrack) {
+      return
+    }
+
+    if (!isPlaying) {
+      audio.pause()
+      return
+    }
+
+    const playIfReady = () => {
+      void audio.play().catch(() => undefined)
+    }
 
     if (audio.readyState >= 2) {
       playIfReady()
@@ -60,7 +71,7 @@ export function Player() {
     return () => {
       audio.removeEventListener('canplay', handleCanPlay)
     }
-  }, [currentTrack?.audio, currentTrack?.id, isPlaying, setCurrentTime, setProgress])
+  }, [currentTrack?.id, isPlaying])
 
   useEffect(() => {
     const audio = audioRef.current
@@ -114,7 +125,9 @@ export function Player() {
           <img src={currentTrack.cover} alt={currentTrack.title} className={styles.cover} />
           <div>
             <p className={styles.title}>{currentTrack.title}</p>
-            <p className={styles.artist}>{currentTrack.artist}</p>
+            <Link to={`/artists/${currentTrack.artistSlug}`} className={styles.artistLink}>
+              {currentTrack.artist}
+            </Link>
           </div>
         </div>
         <div className={styles.controls}>
@@ -143,7 +156,20 @@ export function Player() {
         preload="metadata"
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
-        onEnded={nextTrack}
+        onEnded={() => {
+          const { repeat } = useAudioStore.getState()
+          if (repeat) {
+            const audio = audioRef.current
+            if (audio) {
+              audio.currentTime = 0
+              setCurrentTime(0)
+              setProgress(0)
+              void audio.play().catch(() => undefined)
+            }
+            return
+          }
+          nextTrack()
+        }}
       />
       <div className={styles.timelineWrap}>
         <div className={styles.volumeWrap}>

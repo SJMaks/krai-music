@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { eventsData } from '../cms/data'
 import styles from './EventsPage.module.css'
 import { Seo } from '../shared/ui/Seo'
@@ -28,11 +29,9 @@ export default function EventsPage() {
                   <p>{event.location}</p>
                 </div>
                 <div className={styles.links}>
-                  {event.externalLinks.map((link) => (
-                    <a key={link.label} href={link.url} target="_blank" rel="noreferrer">
-                      {link.label}
-                    </a>
-                  ))}
+                  <Link to={`/events/${event.id}`} className={styles.primaryAction}>
+                    Подробнее
+                  </Link>
                 </div>
               </div>
             </article>

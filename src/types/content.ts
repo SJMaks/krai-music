@@ -57,7 +57,6 @@ export interface Service {
   title: string
   image: string
   description: string
-  ctaLabel: string
 }
 
 export interface HomepageContent {

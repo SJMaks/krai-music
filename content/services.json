@@ -1,9 +1,8 @@
 [
   {
     "id": "service-1",
-    "title": "Artist Development",
-    "image": "/images/service-1.svg",
-    "description": "We shape narrative, rollout strategy, and release positioning for modern artists.",
-    "ctaLabel": "Contact Us"
+    "title": "Продвижение исполнителя",
+    "image": "https://avatars.mds.yandex.net/i?id=9403fc52d1bdc667b0b7e0ac885b641837bcc13d-10859624-images-thumbs&n=13",
+    "description": "Мы помогаем артистам продвигать свои треки, клипы и концерты, используя современные маркетинговые стратегии и инструменты."
   }
 ]

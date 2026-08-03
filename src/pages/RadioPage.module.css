@@ -9,6 +9,15 @@
   gap: 1rem;
 }
 
+h1 {
+  margin-bottom: 1rem;
+}
+
+.artistLink {
+  color: rgba(207, 203, 203, 0.7);
+  font-size: 0.95rem;
+}
+
 .eyebrow {
   color: #c71d1b;
   text-transform: uppercase;
