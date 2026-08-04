@@ -1,17 +1,16 @@
 {
   "artists": [
     {
-      "id": "alink",
-      "nickname": "ALINK",
-      "slug": "alink",
-      "avatar": "https://sun9-82.vkuserphoto.ru/impg/08H7MJpiGsMEVyp0w6o0RnG98GhJT6ZTn_vPTw/APJRTIidEXY.jpg?size=320x480&quality=90&sign=d4db38f9584b549dadb69a96d51b9fc0&c_uniq_tag=OKOSmFJC3mCVBVtgrYs94rBjOw5K8eqiIG72Ee8WI58",
-      "biography": "ALINK (Андрей Вильховский) - автор и исполнитель своих треков из г. Красноярск. Артист музыкального лейбла Край Music.",
       "socials": [
         {
           "label": "ВК",
           "url": "https://vk.ru/a.liink"
         }
       ],
+      "slug": "alink",
+      "featuredImage": "https://sun9-82.vkuserphoto.ru/impg/08H7MJpiGsMEVyp0w6o0RnG98GhJT6ZTn_vPTw/APJRTIidEXY.jpg?size=320x480&quality=90&sign=d4db38f9584b549dadb69a96d51b9fc0&c_uniq_tag=OKOSmFJC3mCVBVtgrYs94rBjOw5K8eqiIG72Ee8WI58",
+      "nickname": "ALINK",
+      "biography": "ALINK (Андрей Вильховский) - автор и исполнитель своих треков из г. Красноярск. Артист музыкального лейбла Край Music.",
       "videos": [
         {
           "title": "Quiet Signal",
@@ -20,7 +19,8 @@
           "cover": "https://avatars.yandex.net/get-music-content/17722696/f9df6944.a.42294811-1/m1000x1000"
         }
       ],
-      "featuredImage": "https://sun9-82.vkuserphoto.ru/impg/08H7MJpiGsMEVyp0w6o0RnG98GhJT6ZTn_vPTw/APJRTIidEXY.jpg?size=320x480&quality=90&sign=d4db38f9584b549dadb69a96d51b9fc0&c_uniq_tag=OKOSmFJC3mCVBVtgrYs94rBjOw5K8eqiIG72Ee8WI58",
+      "avatar": "https://sun9-82.vkuserphoto.ru/impg/08H7MJpiGsMEVyp0w6o0RnG98GhJT6ZTn_vPTw/APJRTIidEXY.jpg?size=320x480&quality=90&sign=d4db38f9584b549dadb69a96d51b9fc0&c_uniq_tag=OKOSmFJC3mCVBVtgrYs94rBjOw5K8eqiIG72Ee8WI58",
+      "id": "alink",
       "featuredTrack": {
         "trackId": "track-2",
         "title": "Quiet Signal",
@@ -31,17 +31,16 @@
       }
     },
     {
-      "id": "yukoroleva",
-      "nickname": "YuKoRoLeVa",
-      "slug": "yukoroleva",
-      "avatar": "https://sun9-64.vkuserphoto.ru/impg/TyIyIxiDuEa3_eKX0LUke2-0T3cDqaGKvrfGAA/IvQsMzSqzNM.jpg?size=320x480&quality=90&sign=709a9347ed6d6f9a6ba3a074b29de087&c_uniq_tag=VsT112pVfssPzeQ2B-rEpbvsYB7rodPQ4k62vYELDSI",
-      "biography": "YuKoRoLeVa -  певица и автор песен. Ты найдёшь эксклюзивные записи, тексты песен и закулисные моменты моего творчества.",
       "socials": [
         {
           "label": "ВК",
           "url": "https://vk.ru/liyaquinn96"
         }
       ],
+      "slug": "yukoroleva",
+      "featuredImage": "https://sun9-64.vkuserphoto.ru/impg/TyIyIxiDuEa3_eKX0LUke2-0T3cDqaGKvrfGAA/IvQsMzSqzNM.jpg?size=320x480&quality=90&sign=709a9347ed6d6f9a6ba3a074b29de087&c_uniq_tag=VsT112pVfssPzeQ2B-rEpbvsYB7rodPQ4k62vYELDSI",
+      "nickname": "YuKoRoLeVa",
+      "biography": "YuKoRoLeVa -  певица и автор песен. Ты найдёшь эксклюзивные записи, тексты песен и закулисные моменты моего творчества.",
       "videos": [
         {
           "title": "Midnight Bloom",
@@ -56,7 +55,8 @@
           "cover": "https://i.pinimg.com/originals/2c/30/a7/2c30a76f9f8ec9833f915aa97d2df278.jpg"
         }
       ],
-      "featuredImage": "https://sun9-64.vkuserphoto.ru/impg/TyIyIxiDuEa3_eKX0LUke2-0T3cDqaGKvrfGAA/IvQsMzSqzNM.jpg?size=320x480&quality=90&sign=709a9347ed6d6f9a6ba3a074b29de087&c_uniq_tag=VsT112pVfssPzeQ2B-rEpbvsYB7rodPQ4k62vYELDSI",
+      "avatar": "https://sun9-64.vkuserphoto.ru/impg/TyIyIxiDuEa3_eKX0LUke2-0T3cDqaGKvrfGAA/IvQsMzSqzNM.jpg?size=320x480&quality=90&sign=709a9347ed6d6f9a6ba3a074b29de087&c_uniq_tag=VsT112pVfssPzeQ2B-rEpbvsYB7rodPQ4k62vYELDSI",
+      "id": "yukoroleva",
       "featuredTrack": {
         "trackId": "track-1",
         "title": "Midnight Bloom",
@@ -65,6 +65,20 @@
         "releaseType": "EP",
         "cover": "https://i.pinimg.com/originals/2c/30/a7/2c30a76f9f8ec9833f915aa97d2df278.jpg"
       }
+    },
+    {
+      "id": "tarantyl",
+      "nickname": "Tarantyl",
+      "slug": "tarantyl",
+      "avatar": "https://sun9-80.vkuserphoto.ru/impg/5pRZ8B59fs_Bc3qsXIkIH4aVgr2w_ToaGgnAOQ/L0gRXZi2Sco.jpg?size=320x480&quality=90&sign=c1eaef7fc8c217fc8cedacbe4c0d1e64&c_uniq_tag=m8RtCV4XlCHLlXt_U8Gsij5_ttIpxRijxtqqqvJAZVI",
+      "biography": "Тарантул очень крут!",
+      "featuredImage": "https://sun9-1.vkuserphoto.ru/s/v1/ig2/tOOxKROJ0QTkvDA4tVtTv07pl1VixuUT4kmXo7R7RZL31LTRXiVn71k8xUy6oTMdnTetlVn97bPKd-KJ0-_7j_En.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1280x1280&from=bu&u=LIZMrjcdj6oeBNHzk7CSPEMgbOQ7nI--P3R6atKcPbY&cs=640x0",
+      "socials": [
+        {
+          "label": "ВК",
+          "url": "https://vk.com/club202564214"
+        }
+      ]
     }
   ]
 }
