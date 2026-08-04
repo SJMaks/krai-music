@@ -19,14 +19,6 @@
     if (window.location.hash.includes('invite_token') || window.location.search.includes('invite_token')) {
       window.location.href = '/admin/' + window.location.hash + window.location.search;
     }
-
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', function (user) {
-        if (user) {
-          window.location.href = '/admin/';
-        }
-      });
-    }
   </script>
 </body>
 
