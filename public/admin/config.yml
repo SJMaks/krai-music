@@ -1,6 +1,5 @@
 backend:
-  name: github
-  repo: sjmaks/krai-music
+  name: git-gateway
   branch: main
 
 media_folder: public/images
@@ -10,8 +9,8 @@ collections:
   - name: artists
     label: Артисты
     files:
-      - name: artists          # внутренний идентификатор файла
-        label: Артисты         # отображаемое название
+      - name: artists
+        label: Артисты
         file: content/artists.json
         format: json
         fields:
