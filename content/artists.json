@@ -67,18 +67,34 @@
       }
     },
     {
-      "id": "tarantyl",
-      "nickname": "Tarantyl",
-      "slug": "tarantyl",
-      "avatar": "https://sun9-80.vkuserphoto.ru/impg/5pRZ8B59fs_Bc3qsXIkIH4aVgr2w_ToaGgnAOQ/L0gRXZi2Sco.jpg?size=320x480&quality=90&sign=c1eaef7fc8c217fc8cedacbe4c0d1e64&c_uniq_tag=m8RtCV4XlCHLlXt_U8Gsij5_ttIpxRijxtqqqvJAZVI",
-      "biography": "Тарантул очень крут!",
-      "featuredImage": "https://sun9-1.vkuserphoto.ru/s/v1/ig2/tOOxKROJ0QTkvDA4tVtTv07pl1VixuUT4kmXo7R7RZL31LTRXiVn71k8xUy6oTMdnTetlVn97bPKd-KJ0-_7j_En.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1280x1280&from=bu&u=LIZMrjcdj6oeBNHzk7CSPEMgbOQ7nI--P3R6atKcPbY&cs=640x0",
       "socials": [
         {
           "label": "ВК",
           "url": "https://vk.com/club202564214"
         }
-      ]
+      ],
+      "slug": "tarantyl",
+      "featuredImage": "https://sun9-1.vkuserphoto.ru/s/v1/ig2/tOOxKROJ0QTkvDA4tVtTv07pl1VixuUT4kmXo7R7RZL31LTRXiVn71k8xUy6oTMdnTetlVn97bPKd-KJ0-_7j_En.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1280x1280&from=bu&u=LIZMrjcdj6oeBNHzk7CSPEMgbOQ7nI--P3R6atKcPbY&cs=640x0",
+      "nickname": "Tarantyl",
+      "biography": "Тарантул очень крут!",
+      "videos": [
+        {
+          "title": "Some",
+          "description": "Some",
+          "cover": "/images/track-1.jpg",
+          "url": "https://youtu.be/watch?falkflskjdafl"
+        }
+      ],
+      "avatar": "https://sun9-80.vkuserphoto.ru/impg/5pRZ8B59fs_Bc3qsXIkIH4aVgr2w_ToaGgnAOQ/L0gRXZi2Sco.jpg?size=320x480&quality=90&sign=c1eaef7fc8c217fc8cedacbe4c0d1e64&c_uniq_tag=m8RtCV4XlCHLlXt_U8Gsij5_ttIpxRijxtqqqvJAZVI",
+      "id": "tarantyl",
+      "featuredTrack": {
+        "trackId": "track-5",
+        "title": "Some",
+        "description": "Some",
+        "releaseDate": "some",
+        "releaseType": "some",
+        "cover": "/images/track-1.jpg"
+      }
     }
   ]
 }
