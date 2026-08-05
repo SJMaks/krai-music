@@ -51,14 +51,14 @@ collections:
             fields:
               - { label: ID, name: id, widget: string }
               - { label: Title, name: title, widget: string }
-              - label: Артисты (выберите из списка)
-                name: artists
-                widget: relation
-                collection: artists
-                file: content/artists.json
-                searchFields: ['nickname']
-                valueField: 'id'
-                displayFields: ['nickname']
+              - label: "Артисты (выберите из списка)"
+                name: "artists"
+                widget: "relation"
+                collection: "artists"
+                file: "content/artists.json"
+                searchFields: ["nickname"]
+                valueField: "id"
+                displayFields: ["nickname"]
                 multiple: true
               - { label: Cover, name: cover, widget: image }
               - { label: Audio, name: audio, widget: file }
