@@ -55,7 +55,7 @@ collections:
                 name: artists
                 widget: relation
                 collection: artists
-                file: artists
+                file: content/artists.json
                 searchFields: ['nickname']
                 valueField: 'id'
                 displayFields: ['nickname']
