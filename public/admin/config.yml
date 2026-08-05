@@ -51,8 +51,15 @@ collections:
             fields:
               - { label: ID, name: id, widget: string }
               - { label: Title, name: title, widget: string }
-              - { label: Artist, name: artist, widget: string }
-              - { label: Artist Slug, name: artistSlug, widget: string }
+              - label: Артисты (выберите из списка)
+                name: artists
+                widget: relation
+                collection: artists
+                file: artists
+                searchFields: ['nickname']
+                valueField: 'id'
+                displayFields: ['nickname']
+                multiple: true
               - { label: Cover, name: cover, widget: image }
               - { label: Audio, name: audio, widget: file }
               - { label: Release Date, name: releaseDate, widget: string }
