@@ -24,7 +24,7 @@ collections:
         collection: tracks
         search_fields: [title]
         value_field: id
-        display_fields: [title, authors.nickname]
+        display_fields: [title, authors]
         multiple: true
 
   - name: tracks
