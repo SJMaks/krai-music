@@ -56,9 +56,9 @@ collections:
                 widget: "relation"
                 collection: "artists"
                 file: "artists"
-                searchFields: ["nickname"]
-                valueField: "id"
-                displayFields: ["nickname"]
+                search_fields: ["nickname"]
+                value_field: "id"
+                display_fields: ["nickname"]
                 multiple: true
               - { label: Cover, name: cover, widget: image }
               - { label: Audio, name: audio, widget: file }
