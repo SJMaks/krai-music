@@ -7,94 +7,91 @@ public_folder: /images
 
 collections:
   - name: artists
-    label: Артисты
-    files:
-      - name: artists
-        label: Артисты
-        file: content/artists.json
-        format: json
-        fields:
-          - label: Артисты
-            name: artists
-            widget: list
-            fields:
-              - { label: ID, name: id, widget: string, default: "{{uuid}}" }
-              - { label: Никнейм, name: nickname, widget: string }
-              - { label: Slug, name: slug, widget: string }
-              - { label: Аватар, name: avatar, widget: image }
-              - { label: Биография, name: biography, widget: text }
-              - { label: Featured Image, name: featuredImage, widget: image }
-              - { label: Социальные ссылки, name: socials, widget: list, fields: [{ label: Label, name: label, widget: string }, { label: URL, name: url, widget: string }] }
-              - { label: Видео, name: videos, widget: list, fields: [{ label: Title, name: title, widget: string }, { label: Description, name: description, widget: text }, { label: URL, name: url, widget: string }, { label: Cover, name: cover, widget: image }] }
-              - label: Featured Track
-                name: featuredTrack
-                widget: object
-                fields:
-                  - { label: Track ID, name: trackId, widget: string }
-                  - { label: Title, name: title, widget: string }
-                  - { label: Description, name: description, widget: text }
-                  - { label: Release Date, name: releaseDate, widget: string }
-                  - { label: Release Type, name: releaseType, widget: string }
-                  - { label: Cover, name: cover, widget: image }
+    label: Исполнители
+    folder: "content/artists"
+    create: true
+    fields:
+      - { label: ID, name: id, hidden: true, default: "{{now}}"}
+      - { label: Никнейм, name: nickname, widget: string }
+      - { label: Фото 4/5, name: verticalImage, widget: image }
+      - { label: Биография, name: biography, widget: text }
+      - { label: Фото 1/1, name: squareImage, widget: image }
+      - { label: Ссылки на соц. сети, name: socials, widget: list, fields: [{ label: Соц. сеть, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
+      - { label: Видео, name: videos, widget: list, fields: [{ label: Название, name: title, widget: string }, { label: Описание, name: description, widget: text }, { label: Ссылка, name: url, widget: string }, { label: Обложка, name: cover, widget: image }] }
+      - label: Выделенный трек
+        name: featuredTrack
+        widget: relation
+        collection: tracks
+        search_fields: [title]
+        value_field: id
+        display_fields: [title, authors.nickname]
+        multiple: true
 
   - name: tracks
     label: Треки
-    files:
-      - name: tracks
-        label: Треки
-        file: content/tracks.json
-        format: json
-        fields:
-          - label: Треки
-            name: tracks
-            widget: list
-            fields:
-              - { label: ID, name: id, widget: string, default: "{{uuid}}" }
-              - { label: Title, name: title, widget: string }
-              - label: "Артисты (выберите из списка)"
-                name: "artists"
-                widget: "relation"
-                collection: "artists"
-                file: "artists"
-                search_fields: ["nickname"]
-                value_field: "id"
-                display_fields: ["nickname"]
-                multiple: true
-              - { label: Cover, name: cover, widget: image }
-              - { label: Audio, name: audio, widget: file }
-              - { label: Release Date, name: releaseDate, widget: string }
-              - { label: Duration, name: duration, widget: string }
+    folder: "content/tracks"
+    create: true
+    fields:
+      - { label: ID, name: id, hidden: true, default: "{{now}}"}
+      - { label: Название, name: title, widget: string }
+      - label: Авторы
+        name: authors
+        widget: relation
+        collection: artists
+        search_fields: [nickname]
+        value_field: id
+        display_fields: [nickname]
+        multiple: true
+      - { label: Обложка, name: cover, widget: image }
+      - { label: Аудио, name: audio, widget: file }
+      - { label: Дата релиза, name: releaseDate, widget: datetime }
+      - { label: Тип релиза, name: releaseType, widget: string }
+      - { label: Описание, name: description, widget: string }
 
   - name: events
     label: Мероприятия
-    files:
-      - name: events
-        label: Мероприятия
-        file: content/events.json
-        format: json
-        fields:
-          - label: Мероприятия
-            name: events
-            widget: list
-            fields:
-              - { label: ID, name: id, widget: string, default: "{{uuid}}" }
-              - { label: Title, name: title, widget: string }
-              - { label: Image, name: image, widget: image }
-              - { label: Description, name: description, widget: text }
-              - { label: Date, name: date, widget: string }
-              - { label: Location, name: location, widget: string }
-              - { label: External Links, name: externalLinks, widget: list, fields: [{ label: Label, name: label, widget: string }, { label: URL, name: url, widget: string }] }
+    folder: "content/events"
+    create: true
+    fields:
+      - { label: ID, name: id, hidden: true, default: "{{now}}" }
+      - { label: Название, name: title, widget: string }
+      - { label: Описание, name: description, widget: text }
+      - { label: Изображение, name: image, widget: image }
+      - { label: Дата, name: date, widget: datetime }
+      - { label: Место, name: location, widget: string }
+      - { label: Ссылки, name: links, widget: list, fields: [{ label: Название, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
 
   - name: homepage
-    label: Главная страница
+    label: Содержимое страниц
     files:
       - name: homepage
         label: Главная страница
         file: content/homepage.json
         format: json
         fields:
-          - { label: Hero Title, name: heroTitle, widget: string }
-          - { label: Hero Subtitle, name: heroSubtitle, widget: text }
-          - { label: Featured Artist IDs, name: featuredArtistIds, widget: list }
-          - { label: Featured Track IDs, name: featuredTrackIds, widget: list }
-          - { label: Featured Event IDs, name: featuredEventIds, widget: list }
+          - { label: Заголовок, name: heroTitle, widget: string }
+          - { label: Подзаголовок, name: heroSubtitle, widget: text }
+          - label: Выделенные исполнители
+            name: featuredArtists
+            widget: relation
+            collection: artists
+            search_fields: [nickname]
+            value_field: id
+            display_fields: [nickname]
+            multiple: true
+          - label: Выделенные треки
+            name: featuredTracks
+            widget: relation
+            collection: tracks
+            search_fields: [title]
+            value_field: id
+            display_fields: [title]
+            multiple: true
+          - label: Выделенные мероприятия
+            name: featuredEvents
+            widget: relation
+            collection: events
+            search_fields: [title]
+            value_field: id
+            display_fields: [title]
+            multiple: true
