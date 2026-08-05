@@ -11,10 +11,10 @@ collections:
     folder: "content/artists"
     create: true
     fields:
-      - { label: ID, name: id, widget: hidden, default: "{{now}}"}
+      - { label: ID, name: id, widget: hidden, default: '{{now}}'}
       - { label: Никнейм, name: nickname, widget: string }
-      - { label: Фото 4/5, name: verticalImage, widget: image }
       - { label: Биография, name: biography, widget: text }
+      - { label: Фото 4/5, name: verticalImage, widget: image }
       - { label: Фото 1/1, name: squareImage, widget: image }
       - { label: Ссылки на соц. сети, name: socials, widget: list, fields: [{ label: Соц. сеть, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
       - { label: Видео, name: videos, widget: list, fields: [{ label: Название, name: title, widget: string }, { label: Описание, name: description, widget: text }, { label: Ссылка, name: url, widget: string }, { label: Обложка, name: cover, widget: image }] }
