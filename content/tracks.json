@@ -1,62 +1,64 @@
-[
-  {
-    "id": "track-1",
-    "title": "Midnight Bloom",
-    "artist": "YuKoRoLeVa",
-    "artistSlug": "yukoroleva",
-    "cover": "https://i.pinimg.com/originals/2c/30/a7/2c30a76f9f8ec9833f915aa97d2df278.jpg",
-    "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    "releaseDate": "2026-02-14",
-    "duration": "03:41"
-  },
-  {
-    "id": "track-2",
-    "title": "Quiet Signal",
-    "artist": "ALINK",
-    "artistSlug": "alink",
-    "cover": "https://avatars.yandex.net/get-music-content/17722696/f9df6944.a.42294811-1/m1000x1000",
-    "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-    "releaseDate": "2026-06-01",
-    "duration": "04:12"
-  },
-  {
-    "id": "track-3",
-    "title": "Dark Horizon",
-    "artist": "ALINK",
-    "artistSlug": "alink",
-    "cover": "https://xpertos.in/wp-content/uploads/2025/04/Untitled-design-2025-04-10T151200.940-1024x1024.webp",
-    "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-    "releaseDate": "2026-06-01",
-    "duration": "04:01"
-  },
-  {
-    "id": "track-4",
-    "title": "First Light",
-    "artist": "ALINK",
-    "artistSlug": "alink",
-    "cover": "https://avatars.mds.yandex.net/get-yapic/37154/jYY8byiPw1P7IgWC92whPu2R6c-1/orig",
-    "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-    "releaseDate": "2026-06-01",
-    "duration": "03:41"
-  },
-  {
-    "id": "track-5",
-    "title": "Beyond the Veil",
-    "artist": "ALINK",
-    "artistSlug": "alink",
-    "cover": "https://avatars.mds.yandex.net/i?id=f05a3239e3ed960b6a005cc02cee256d_l-7550683-images-thumbs&n=13",
-    "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
-    "releaseDate": "2026-06-01",
-    "duration": "03:55"
-  },
-  {
-    "id": "track-6",
-    "title": "Be my baby",
-    "artist": "ALINK",
-    "artistSlug": "alink",
-    "cover": "https://avatars.mds.yandex.net/i?id=2f2277c03b56b729c548de575896543e_l-10476199-images-thumbs&n=13",
-    "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
-    "releaseDate": "2026-06-01",
-    "duration": "03:50"
-  }
-]
+{
+  "tracks": [
+    {
+      "id": "track-1",
+      "title": "Midnight Bloom",
+      "artist": "YuKoRoLeVa",
+      "artistSlug": "yukoroleva",
+      "cover": "https://i.pinimg.com/originals/2c/30/a7/2c30a76f9f8ec9833f915aa97d2df278.jpg",
+      "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      "releaseDate": "2026-02-14",
+      "duration": "03:41"
+    },
+    {
+      "id": "track-2",
+      "title": "Quiet Signal",
+      "artist": "ALINK",
+      "artistSlug": "alink",
+      "cover": "https://avatars.yandex.net/get-music-content/17722696/f9df6944.a.42294811-1/m1000x1000",
+      "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+      "releaseDate": "2026-06-01",
+      "duration": "04:12"
+    },
+    {
+      "id": "track-3",
+      "title": "Dark Horizon",
+      "artist": "ALINK",
+      "artistSlug": "alink",
+      "cover": "https://xpertos.in/wp-content/uploads/2025/04/Untitled-design-2025-04-10T151200.940-1024x1024.webp",
+      "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+      "releaseDate": "2026-06-01",
+      "duration": "04:01"
+    },
+    {
+      "id": "track-4",
+      "title": "First Light",
+      "artist": "ALINK",
+      "artistSlug": "alink",
+      "cover": "https://avatars.mds.yandex.net/get-yapic/37154/jYY8byiPw1P7IgWC92whPu2R6c-1/orig",
+      "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+      "releaseDate": "2026-06-01",
+      "duration": "03:41"
+    },
+    {
+      "id": "track-5",
+      "title": "Beyond the Veil",
+      "artist": "ALINK",
+      "artistSlug": "alink",
+      "cover": "https://avatars.mds.yandex.net/i?id=f05a3239e3ed960b6a005cc02cee256d_l-7550683-images-thumbs&n=13",
+      "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+      "releaseDate": "2026-06-01",
+      "duration": "03:55"
+    },
+    {
+      "id": "track-6",
+      "title": "Be my baby",
+      "artist": "ALINK",
+      "artistSlug": "alink",
+      "cover": "https://avatars.mds.yandex.net/i?id=2f2277c03b56b729c548de575896543e_l-10476199-images-thumbs&n=13",
+      "audio": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
+      "releaseDate": "2026-06-01",
+      "duration": "03:50"
+    }
+  ]
+}
