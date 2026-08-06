@@ -118,6 +118,8 @@ export function Player() {
     return null
   }
 
+  const authors = currentTrack.authors ?? []
+
   return (
     <div className={styles.player}>
       <div className={styles.playerHeader}>
@@ -125,9 +127,18 @@ export function Player() {
           <img src={currentTrack.cover} alt={currentTrack.title} className={styles.cover} />
           <div>
             <p className={styles.title}>{currentTrack.title}</p>
-            <Link to={`/artists/${currentTrack.artistSlug}`} className={styles.artistLink}>
-              {currentTrack.artist}
-            </Link>
+            {authors.length > 0 ? (
+              authors.map((author, index) => (
+                <span key={author.id}>
+                  <Link to={`/artists/${author.id}`} className={styles.artistLink}>
+                    {author.nickname}
+                  </Link>
+                  {index < authors.length - 1 && ', '}
+                </span>
+              ))
+            ) : (
+              <span className={styles.artistLink}>Неизвестный исполнитель</span>
+            )}
           </div>
         </div>
         <div className={styles.controls}>

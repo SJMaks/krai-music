@@ -3,17 +3,17 @@ import homepageJson from '../../content/homepage.json'
 import contactsJson from '../../content/contacts.json'
 
 const artistModules = import.meta.glob('../../content/artists/*.json', { eager: true, import: 'default' })
-const trackModules  = import.meta.glob('../../content/tracks/*.json',  { eager: true, import: 'default' })
-const eventModules  = import.meta.glob('../../content/events/*.json',  { eager: true, import: 'default' })
+const trackModules = import.meta.glob('../../content/tracks/*.json', { eager: true, import: 'default' })
+const eventModules = import.meta.glob('../../content/events/*.json', { eager: true, import: 'default' })
 const serviceModules = import.meta.glob('../../content/services/*.json', { eager: true, import: 'default' })
 
 const rawArtists = Object.values(artistModules) as any[]
-const rawTracks  = Object.values(trackModules)  as any[]
-const rawEvents  = Object.values(eventModules)  as any[]
+const rawTracks = Object.values(trackModules) as any[]
+const rawEvents = Object.values(eventModules) as any[]
 const rawServices = Object.values(serviceModules) as any[]
 
 const artistsMap = new Map<string, Omit<Artist, 'featuredTrack'>>()
-const tracksMap  = new Map<string, Track>()
+const tracksMap = new Map<string, Track>()
 
 rawArtists.forEach(artist => {
   artistsMap.set(artist.id, {
@@ -53,8 +53,8 @@ const services: Service[] = rawServices as Service[]
 const homepageData = homepageJson as Partial<HomepageContent> & Record<string, unknown>
 
 const featuredArtistIds = (Array.isArray(homepageData.featuredArtists) ? homepageData.featuredArtists : []) as unknown as string[]
-const featuredTrackIds  = (Array.isArray(homepageData.featuredTracks)  ? homepageData.featuredTracks  : []) as unknown as string[]
-const featuredEventIds  = (Array.isArray(homepageData.featuredEvents)  ? homepageData.featuredEvents  : []) as unknown as string[]
+const featuredTrackIds = (Array.isArray(homepageData.featuredTracks) ? homepageData.featuredTracks : []) as unknown as string[]
+const featuredEventIds = (Array.isArray(homepageData.featuredEvents) ? homepageData.featuredEvents : []) as unknown as string[]
 
 const homepageContent: HomepageContent = {
   heroTitle: homepageData.heroTitle ?? '— Добро пожаловать! —',
@@ -86,8 +86,8 @@ const contacts: ContactContent = {
 }
 
 export const artistsData = artistsWithFeatured
-export const tracksData   = Array.from(tracksMap.values())
-export const eventsData   = events
+export const tracksData = Array.from(tracksMap.values())
+export const eventsData = events
 export const servicesData = services
 export const homepageContentData = homepageContent
 export const contactData = contacts

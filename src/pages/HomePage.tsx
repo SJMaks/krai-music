@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
@@ -11,7 +10,6 @@ import styles from './HomePage.module.css'
 import { Link } from 'react-router-dom'
 import { Seo } from '../shared/ui/Seo'
 import { FiCalendar, FiMapPin } from 'react-icons/fi'
-import type { Artist, Event, Track } from '../types/content'
 
 export default function HomePage() {
   const playTrack = useAudioStore((state) => state.playTrack)

@@ -4,7 +4,6 @@ import { Layout } from '../app/layout/Layout'
 import {
   ArtistDetailPage,
   ArtistsPage,
-  ContactPage,
   EventDetailPage,
   EventsPage,
   HomePage,
@@ -26,7 +25,6 @@ export const router = createBrowserRouter([
       { path: 'events/:slug', element: <Suspense fallback={<PageSkeleton />}><EventDetailPage /></Suspense> },
       { path: 'services', element: <Suspense fallback={<PageSkeleton />}><ServicesPage /></Suspense> },
       { path: 'radio', element: <Suspense fallback={<PageSkeleton />}><RadioPage /></Suspense> },
-      { path: 'contacts', element: <Suspense fallback={<PageSkeleton />}><ContactPage /></Suspense> },
       { path: '404', element: <Suspense fallback={<PageSkeleton />}><NotFoundPage /></Suspense> },
       { path: '*', element: <Navigate to="/404" replace /> },
     ],
