@@ -48,22 +48,22 @@ export function Footer() {
         <div className={styles.section}>
           <h2 className={styles.head}>Контакты</h2>
           <div className={styles.details}>
-            <a href={`mailto:${contact?.email ?? ''}`} className={styles.item}>
+            <a href={`mailto:${contact?.email}`} className={styles.item}>
               <FiMail />
-              <span>{contact?.email ?? 'vovabreshko@mail.ru'}</span>
+              <span>{contact?.email}</span>
             </a>
-            <a href={`tel:${contact?.phone ?? '+79620751111'}`} className={styles.item}>
+            <a href={`tel:${contact?.phone}`} className={styles.item}>
               <FiPhone />
-              <span>{contact?.phone ?? '+79620751111'}</span>
+              <span>{contact?.phone}</span>
             </a>
             <div className={styles.item}>
               <FiMapPin />
-              <span>{contact?.address ?? 'Красноярск, ул. Курчатова, 11А'}</span>
+              <span>{contact?.address}</span>
             </div>
             {contact.socials.map((social) => (
               <a href={social.url} className={styles.item}>
                 <FaVk />
-                <span>{social?.label ?? 'Группа ВК'}</span>
+                <span>{social?.label}</span>
               </a>
             ))}
           </div>

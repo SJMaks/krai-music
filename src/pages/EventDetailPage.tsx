@@ -41,9 +41,9 @@ export default function EventDetailPage() {
               <FiMapPin />
               <span>{event.location}</span>
             </div>
-            {event.externalLinks.length > 0 && (
+            {event.links.length > 0 && (
               <div className={styles.links}>
-                {event.externalLinks.map((link) => (
+                {event.links.map((link) => (
                   <a key={link.label} href={link.url} target="_blank" rel="noreferrer">
                     {link.label}
                   </a>

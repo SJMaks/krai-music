@@ -1,7 +1,4 @@
 {
   "heroTitle": "— Добро пожаловать! —",
-  "heroSubtitle": " — музыкальный лейбл, который открывает новые имена и задаёт тренды.",
-  "featuredArtistIds": ["alink", "yukoroleva"],
-  "featuredTrackIds": ["track-1", "track-2"],
-  "featuredEventIds": ["event-1", "event-2"]
+  "heroSubtitle": " — музыкальный лейбл, который открывает новые имена и задаёт тренды."
 }

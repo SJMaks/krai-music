@@ -10,61 +10,51 @@ export interface Video {
   cover: string
 }
 
-export interface ArtistFeaturedTrack {
-  trackId: string
-  title: string
-  description: string
-  releaseDate: string
-  releaseType: string
-  cover: string
-}
-
 export interface Artist {
   id: string
   nickname: string
-  slug: string
-  avatar: string
   biography: string
+  verticalImage: string
+  squareImage: string
   socials: SocialLink[]
   videos: Video[]
-  featuredImage: string
-  featuredTrack?: ArtistFeaturedTrack | null
+  featuredTrack?: Track | null
 }
 
 export interface Track {
   id: string
   title: string
-  artist: string
-  artistSlug: string
+  authors: Artist[]
   cover: string
   audio: string
   releaseDate: string
-  duration: string
+  releaseType: string
+  description: string
 }
 
 export interface Event {
   id: string
   title: string
-  image: string
   description: string
+  image: string
   date: string
   location: string
-  externalLinks: SocialLink[]
+  links: SocialLink[]
 }
 
 export interface Service {
   id: string
   title: string
-  image: string
   description: string
+  image: string
 }
 
 export interface HomepageContent {
   heroTitle: string
   heroSubtitle: string
-  featuredArtistIds: string[]
-  featuredTrackIds: string[]
-  featuredEventIds: string[]
+  featuredArtists: Artist[]
+  featuredTracks: Track[]
+  featuredEvents: Event[]
 }
 
 export interface ContactContent {

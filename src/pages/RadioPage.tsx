@@ -11,9 +11,12 @@ export default function RadioPage() {
   const queue = useAudioStore((state) => state.queue)
 
   const artistFilters = useMemo(() => ['Все', ...artistsData.map((artist) => artist.nickname)], [])
+
   const filteredTracks = useMemo(() => {
     if (filter === 'Все') return tracksData
-    return tracksData.filter((track) => track.artist === filter)
+    return tracksData.filter((track) =>
+      track.authors.some((author) => author.nickname === filter)
+    )
   }, [filter])
 
   return (
@@ -40,9 +43,16 @@ export default function RadioPage() {
               <img src={track.cover} alt={track.title} className={styles.image} />
               <div>
                 <h2>{track.title}</h2>
-                <Link to={`/artists/${track.artistSlug}`} className={styles.artistLink}>
-                  {track.artist}
-                </Link>
+                <div>
+                  {track.authors.map((author, index) => (
+                    <span key={author.id}>
+                      <Link to={`/artists/${author.id}`} className={styles.artistLink}>
+                        {author.nickname}
+                      </Link>
+                      {index < track.authors.length - 1 && ', '}
+                    </span>
+                  ))}
+                </div>
               </div>
               <button type="button" className={styles.playButton} onClick={() => playTrack(track, queue)}>
                 В очередь и играть

@@ -12,27 +12,31 @@ collections:
     label: Исполнители
     folder: "content/artists"
     create: true
+    format: json
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'artist'}
       - { label: Никнейм, name: nickname, widget: string }
       - { label: Биография, name: biography, widget: text }
       - { label: Фото 4/5, name: verticalImage, widget: image }
-      - { label: Фото 1/1, name: squareImage, widget: image }
-      - { label: Ссылки на соц. сети, name: socials, widget: list, fields: [{ label: Соц. сеть, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
-      - { label: Видео, name: videos, widget: list, fields: [{ label: Название, name: title, widget: string }, { label: Описание, name: description, widget: text }, { label: Ссылка, name: url, widget: string }, { label: Обложка, name: cover, widget: image }] }
+      - { label: Фото 1/1, name: squareImage, required: false, widget: image }
+      - { label: Ссылки на соц. сети, name: socials, required: false, widget: list, fields: [{ label: Соц. сеть, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
+      - { label: Видео, name: videos, required: false, widget: list, fields: [{ label: Название, name: title, widget: string }, { label: Описание, name: description, widget: text }, { label: Ссылка, name: url, widget: string }, { label: Обложка, name: cover, widget: image }] }
       - label: Выделенный трек
         name: featuredTrack
+        required: false
         widget: relation
         collection: tracks
         search_fields: [title]
         value_field: id
-        display_fields: [title, authors]
-        multiple: true
+        display_fields: [title, authors.nickname]
+        multiple: false
+        filter: { authors: { $in: ["{{id}}"] } }
 
   - name: tracks
     label: Треки
     folder: "content/tracks"
     create: true
+    format: json
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'track'}
       - { label: Название, name: title, widget: string }
@@ -48,12 +52,13 @@ collections:
       - { label: Аудио, name: audio, widget: file }
       - { label: Дата релиза, name: releaseDate, widget: datetime }
       - { label: Тип релиза, name: releaseType, widget: string }
-      - { label: Описание, name: description, widget: string }
+      - { label: Описание, name: description, widget: text }
 
   - name: events
     label: Мероприятия
     folder: "content/events"
     create: true
+    format: json
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'event'}
       - { label: Название, name: title, widget: string }
@@ -61,7 +66,18 @@ collections:
       - { label: Изображение, name: image, widget: image }
       - { label: Дата, name: date, widget: datetime }
       - { label: Место, name: location, widget: string }
-      - { label: Ссылки, name: links, widget: list, fields: [{ label: Название, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
+      - { label: Ссылки, name: links, required: false, widget: list, fields: [{ label: Название, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
+
+  - name: services
+    label: Услуги
+    folder: "content/services"
+    create: true
+    format: json
+    fields:
+      - { label: ID, name: id, widget: "uuid", prefix: 'service'}
+      - { label: Название, name: title, widget: string }
+      - { label: Описание, name: description, widget: text }
+      - { label: Изображение, name: image, widget: image }
 
   - name: homepage
     label: Содержимое страниц
@@ -97,3 +113,12 @@ collections:
             value_field: id
             display_fields: [title]
             multiple: true
+      - name: contacts
+        label: Контакты
+        file: content/contacts.json
+        format: json
+        fields:
+          - { label: Email, name: email, widget: string }
+          - { label: Номер телефона, name: phone, widget: string }
+          - { label: Адрес, name: address, widget: string }
+          - { label: Ссылки на соц. сети, name: socials, required: false, widget: list, fields: [{ label: Соц. сеть, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }

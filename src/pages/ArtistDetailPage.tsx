@@ -13,31 +13,21 @@ import { motion } from 'framer-motion'
 import type { Track } from '../types/content'
 
 export default function ArtistDetailPage() {
-  const { slug } = useParams()
+  const { id } = useParams()
   const [page, setPage] = useState(1)
   const playTrack = useAudioStore((state) => state.playTrack)
 
-  const artist = useMemo(() => artistsData.find((entry) => entry.slug === slug), [slug])
-  const artistTracks = useMemo(() => tracksData.filter((track) => track.artistSlug === slug), [slug])
-  const featuredTrack = useMemo<(Track & { description: string; releaseType: string; releaseDate: string }) | null>(() => {
-    const selection = artist?.featuredTrack
-    const baseTrack = selection?.trackId
-      ? tracksData.find((track) => track.id === selection.trackId)
-      : artistTracks[0] ?? null
+  const artist = useMemo(() => artistsData.find((entry) => entry.id === id), [id])
 
-    if (!baseTrack) {
-      return null
-    }
+  const artistTracks = useMemo(() => {
+    if (!artist) return []
+    return tracksData.filter((track) =>
+      track.authors.some((author) => author.id === artist.id)
+    )
+  }, [artist])
 
-    return {
-      ...baseTrack,
-      title: selection?.title || baseTrack.title,
-      cover: selection?.cover || baseTrack.cover,
-      releaseDate: selection?.releaseDate || baseTrack.releaseDate,
-      releaseType: selection?.releaseType || 'Single',
-      description: selection?.description || 'Новый релиз артиста.',
-    }
-  }, [artist, artistTracks])
+  const featuredTrack = artist?.featuredTrack ?? null
+
   const perPage = 4
   const totalPages = Math.max(1, Math.ceil(artistTracks.length / perPage))
   const currentPage = Math.min(page, totalPages)
@@ -57,7 +47,11 @@ export default function ArtistDetailPage() {
       <Seo title={artist.nickname} description={`${artist.nickname} — артист Kray Music.`} />
       <section className={styles.page}>
         <section className={styles.hero}>
-          <img src={artist.featuredImage} alt={artist.nickname} className={styles.heroImage} />
+          <img
+            src={artist.squareImage || artist.verticalImage}
+            alt={artist.nickname}
+            className={styles.heroImage}
+          />
           <div>
             <p className={styles.eyebrow}>Профиль артиста</p>
             <h1>{artist.nickname}</h1>
@@ -87,7 +81,12 @@ export default function ArtistDetailPage() {
           >
             {artist.videos.map((video) => (
               <SwiperSlide key={video.title} className={styles.swiperSlide}>
-                <motion.article initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.card}>
+                <motion.article
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className={styles.card}
+                >
                   <a href={video.url} target="_blank" rel="noreferrer">
                     <img src={video.cover} alt={video.title} className={styles.image} />
                   </a>
@@ -114,41 +113,69 @@ export default function ArtistDetailPage() {
                     <img src={track.cover} alt={track.title} className={styles.trackCover} />
                     <div>
                       <h3>{track.title}</h3>
-                      <p>{track.duration}</p>
+                      <p>
+                        {track.authors.map((a) => a.nickname).join(', ')}
+                      </p>
                     </div>
-                    <button type="button" className={styles.playButton} onClick={() => handlePlayTrack(track)}>
+                    <button
+                      type="button"
+                      className={styles.playButton}
+                      onClick={() => handlePlayTrack(track)}
+                    >
                       Воспроизвести
                     </button>
                   </div>
                 ))}
               </div>
               <div className={styles.pagination}>
-                <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} disabled={currentPage === 1}>
+                <button
+                  type="button"
+                  onClick={() => setPage((value) => Math.max(1, value - 1))}
+                  disabled={currentPage === 1}
+                >
                   Назад
                 </button>
                 <span>{currentPage} / {totalPages}</span>
-                <button type="button" onClick={() => setPage((value) => Math.min(totalPages, value + 1))} disabled={currentPage === totalPages}>
+                <button
+                  type="button"
+                  onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+                  disabled={currentPage === totalPages}
+                >
                   Вперёд
                 </button>
               </div>
             </div>
+
             <div className={styles.featuredTrackCard}>
               <div className={styles.featuredTrackHeader}>
                 <p className={styles.eyebrow}>Новый релиз</p>
               </div>
               {featuredTrack ? (
                 <>
-                  <button type="button" className={styles.featuredTrackCoverButton} onClick={() => handlePlayTrack(featuredTrack)}>
-                    <img src={featuredTrack.cover} alt={featuredTrack.title} className={styles.featuredTrackCover} />
+                  <button
+                    type="button"
+                    className={styles.featuredTrackCoverButton}
+                    onClick={() => handlePlayTrack(featuredTrack)}
+                  >
+                    <img
+                      src={featuredTrack.cover}
+                      alt={featuredTrack.title}
+                      className={styles.featuredTrackCover}
+                    />
                   </button>
                   <div className={styles.featuredTrackInfo}>
                     <h3>{featuredTrack.title}</h3>
-                    <p>{featuredTrack.artist}</p>
+                    <p>
+                      {featuredTrack.authors.map((a) => a.nickname).join(', ')}
+                    </p>
                     <p>Релиз: {featuredTrack.releaseDate}</p>
                     <p>Тип релиза: {featuredTrack.releaseType}</p>
-                    <p>Длительность: {featuredTrack.duration}</p>
                     <p>{featuredTrack.description}</p>
-                    <button type="button" className={styles.secondaryButton} onClick={() => handlePlayTrack(featuredTrack)}>
+                    <button
+                      type="button"
+                      className={styles.secondaryButton}
+                      onClick={() => handlePlayTrack(featuredTrack)}
+                    >
                       Слушать
                     </button>
                   </div>
@@ -163,4 +190,3 @@ export default function ArtistDetailPage() {
     </>
   )
 }
-
