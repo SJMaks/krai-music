@@ -97,6 +97,7 @@ collections:
             value_field: id
             display_fields: [nickname]
             multiple: true
+            required: false
           - label: Выделенные треки
             name: featuredTracks
             widget: relation
@@ -105,6 +106,7 @@ collections:
             value_field: id
             display_fields: [title]
             multiple: true
+            required: false
           - label: Выделенные мероприятия
             name: featuredEvents
             widget: relation
@@ -113,6 +115,7 @@ collections:
             value_field: id
             display_fields: [title]
             multiple: true
+            required: false
       - name: contacts
         label: Контакты
         file: content/contacts.json
