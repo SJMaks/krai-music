@@ -3,14 +3,11 @@
   "private": false,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://sjmaks.github.io/krai-music/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "framer-motion": "^12.43.0",
