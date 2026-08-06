@@ -2,7 +2,7 @@ backend:
   name: github
   repo: sjmaks/krai-music
   branch: main
-  base_url: sveltia-cms-auth.kraev-maksim2003.workers.dev
+  base_url: https://sveltia-cms-auth.kraev-maksim2003.workers.dev/
 
 media_folder: public/images
 public_folder: /images
