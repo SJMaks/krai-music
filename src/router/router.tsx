@@ -11,7 +11,7 @@ import NotFoundPage from '../pages/NotFoundPage'
 
 export const router = createBrowserRouter([
   {
-    path: '/krai-music/',
+    path: '/',
     element: <Layout />,
     children: [
       { index: true, element: <HomePage /> },
@@ -24,4 +24,7 @@ export const router = createBrowserRouter([
       { path: '404', element: <NotFoundPage /> },
     ],
   },
-])
+],
+{
+  basename: '/krai-music',
+})
