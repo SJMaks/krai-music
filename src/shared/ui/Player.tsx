@@ -3,6 +3,7 @@ import { FiPause, FiPlay, FiSkipBack, FiSkipForward, FiVolume2, FiVolumeX, FiRep
 import styles from './Player.module.css'
 import { useAudioStore } from '../../store/audioStore'
 import { Link } from 'react-router-dom'
+import { getMediaUrl } from '../../shared/lib/media'
 
 export function Player() {
   const {
@@ -31,54 +32,57 @@ export function Player() {
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
+  // Основной эффект: управление источником и воспроизведением
   useEffect(() => {
     const audio = audioRef.current
-    if (!audio || !currentTrack) {
-      return
+    if (!audio || !currentTrack) return
+
+    const src = getMediaUrl(currentTrack.audio)
+
+    // Если источник изменился, перезагружаем аудио
+    if (audio.src !== src) {
+      audio.src = src
+      audio.load()
+      audio.currentTime = 0
+      setCurrentTime(0)
+      setProgress(0)
+      setDuration(0)
     }
 
-    audio.src = currentTrack.audio
-    audio.load()
-    audio.currentTime = 0
-    setCurrentTime(0)
-    setProgress(0)
-    setDuration(0)
-  }, [currentTrack?.audio, currentTrack?.id, setCurrentTime, setProgress, setDuration])
-
-  useEffect(() => {
-    const audio = audioRef.current
-    if (!audio || !currentTrack) {
-      return
-    }
-
-    if (!isPlaying) {
-      audio.pause()
-      return
-    }
-
+    // Функция для запуска воспроизведения
     const playIfReady = () => {
-      void audio.play().catch(() => undefined)
+      if (isPlaying) {
+        void audio.play().catch(() => {
+          // игнорируем ошибки (например, если пользователь не взаимодействовал с документом)
+        })
+      }
     }
 
-    if (audio.readyState >= 2) {
-      playIfReady()
-      return
+    if (isPlaying) {
+      // Если аудио уже загружено достаточно, воспроизводим сразу
+      if (audio.readyState >= 2) {
+        playIfReady()
+      } else {
+        // Иначе ждём события canplay
+        const handleCanPlay = () => {
+          playIfReady()
+          audio.removeEventListener('canplay', handleCanPlay)
+        }
+        audio.addEventListener('canplay', handleCanPlay)
+        return () => {
+          audio.removeEventListener('canplay', handleCanPlay)
+        }
+      }
+    } else {
+      // Если не играем — ставим на паузу
+      audio.pause()
     }
+  }, [currentTrack, isPlaying, setCurrentTime, setProgress, setDuration])
 
-    const handleCanPlay = () => playIfReady()
-    audio.addEventListener('canplay', handleCanPlay, { once: true })
-
-    return () => {
-      audio.removeEventListener('canplay', handleCanPlay)
-    }
-  }, [currentTrack?.id, isPlaying])
-
+  // Эффект для громкости и muted
   useEffect(() => {
     const audio = audioRef.current
-    if (!audio) {
-      return
-    }
-
+    if (!audio) return
     audio.volume = volume
     audio.muted = muted
   }, [volume, muted])
@@ -88,7 +92,6 @@ export function Player() {
     seek(value)
     setCurrentTime(value)
     setProgress(value)
-
     if (audio) {
       audio.currentTime = value
     }
@@ -96,10 +99,7 @@ export function Player() {
 
   const handleTimeUpdate = () => {
     const audio = audioRef.current
-    if (!audio) {
-      return
-    }
-
+    if (!audio) return
     const nextTime = audio.currentTime
     setCurrentTime(nextTime)
     setProgress(nextTime)
@@ -107,10 +107,7 @@ export function Player() {
 
   const handleLoadedMetadata = () => {
     const audio = audioRef.current
-    if (!audio) {
-      return
-    }
-
+    if (!audio) return
     setDuration(audio.duration || 0)
   }
 
@@ -124,7 +121,7 @@ export function Player() {
     <div className={styles.player}>
       <div className={styles.playerHeader}>
         <div className={styles.trackInfo}>
-          <img src={currentTrack.cover} alt={currentTrack.title} className={styles.cover} />
+          <img src={getMediaUrl(currentTrack.cover)} alt={currentTrack.title} className={styles.cover} />
           <div>
             <p className={styles.title}>{currentTrack.title}</p>
             {authors.length > 0 ? (
@@ -175,7 +172,7 @@ export function Player() {
               audio.currentTime = 0
               setCurrentTime(0)
               setProgress(0)
-              void audio.play().catch(() => undefined)
+              void audio.play().catch(() => {})
             }
             return
           }

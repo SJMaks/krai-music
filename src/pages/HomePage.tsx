@@ -10,6 +10,7 @@ import styles from './HomePage.module.css'
 import { Link } from 'react-router-dom'
 import { Seo } from '../shared/ui/Seo'
 import { FiCalendar, FiMapPin } from 'react-icons/fi'
+import { getMediaUrl } from '../shared/lib/media'
 
 export default function HomePage() {
   const playTrack = useAudioStore((state) => state.playTrack)
@@ -52,7 +53,7 @@ export default function HomePage() {
             {displayArtists.map((artist) => (
               <SwiperSlide key={artist.id} className={styles.swiperSlide}>
                 <motion.article initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.card}>
-                  <Link to={`/artists/${artist.id}`}><img src={artist.verticalImage} alt={artist.nickname} className={styles.image} /></Link>
+                  <Link to={`/artists/${artist.id}`}><img src={getMediaUrl(artist.verticalImage)} alt={artist.nickname} className={styles.image} /></Link>
                   <h3>{artist.nickname}</h3>
                   <p>{artist.biography}</p>
                   <Link to={`/artists/${artist.id}`}>Открыть профиль</Link>
@@ -79,7 +80,7 @@ export default function HomePage() {
             {displayTracks.map((track) => (
               <SwiperSlide key={track.id} className={styles.swiperSlide}>
                 <motion.article initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.card}>
-                  <img src={track.cover} alt={track.title} className={styles.image} />
+                  <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.image} />
                   <h3>{track.title}</h3>
                   <p>{track.authors.map(a => a.nickname).join(', ')}</p>
                   <button type="button" className={styles.secondaryButton} onClick={() => playTrack(track, queue)}>
@@ -108,7 +109,7 @@ export default function HomePage() {
             {displayEvents.map((event) => (
               <SwiperSlide key={event.id} className={styles.swiperSlide}>
                 <motion.article initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.card}>
-                  <img src={event.image} alt={event.title} className={styles.image} />
+                  <img src={getMediaUrl(event.image)} alt={event.title} className={styles.image} />
                   <h3>{event.title}</h3>
                   <div className={styles.item}>
                     <FiCalendar />

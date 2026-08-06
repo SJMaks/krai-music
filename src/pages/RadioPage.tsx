@@ -4,6 +4,7 @@ import { useAudioStore } from '../store/audioStore'
 import styles from './RadioPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { Link } from 'react-router-dom'
+import { getMediaUrl } from '../shared/lib/media'
 
 export default function RadioPage() {
   const [filter, setFilter] = useState('Все')
@@ -40,7 +41,7 @@ export default function RadioPage() {
         <div className={styles.list}>
           {filteredTracks.map((track) => (
             <article key={track.id} className={styles.card}>
-              <img src={track.cover} alt={track.title} className={styles.image} />
+              <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.image} />
               <div>
                 <h2>{track.title}</h2>
                 <div>

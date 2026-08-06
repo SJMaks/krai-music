@@ -1,6 +1,7 @@
 import { servicesData } from '../cms/data'
 import styles from './ServicesPage.module.css'
 import { Seo } from '../shared/ui/Seo'
+import { getMediaUrl } from '../shared/lib/media'
 
 export default function ServicesPage() {
   return (
@@ -14,7 +15,7 @@ export default function ServicesPage() {
       <div className={styles.list}>
         {servicesData.map((service, index) => (
           <article key={service.id} className={`${styles.card} ${index % 2 === 1 ? styles.reverse : ''}`}>
-            <img src={service.image} alt={service.title} className={styles.image} />
+            <img src={getMediaUrl(service.image)} alt={service.title} className={styles.image} />
             <div className={styles.content}>
               <h2>{service.title}</h2>
               <p>{service.description}</p>

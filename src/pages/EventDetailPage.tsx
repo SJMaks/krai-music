@@ -4,6 +4,7 @@ import { eventsData } from '../cms/data'
 import styles from './EventDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { FiCalendar, FiMapPin, FiArrowLeft } from 'react-icons/fi'
+import { getMediaUrl } from '../shared/lib/media'
 
 export default function EventDetailPage() {
   const { slug } = useParams()
@@ -28,7 +29,7 @@ export default function EventDetailPage() {
           <span>К мероприятиям</span>
         </Link>
         <article className={styles.card}>
-          <img src={event.image} alt={event.title} className={styles.image} />
+          <img src={getMediaUrl(event.image)} alt={event.title} className={styles.image} />
           <div className={styles.content}>
             <p className={styles.eyebrow}>Мероприятие</p>
             <h1>{event.title}</h1>

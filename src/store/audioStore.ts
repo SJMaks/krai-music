@@ -49,10 +49,30 @@ export const useAudioStore = create<AudioState>()(
       shuffle: false,
       setQueue: (queue: Track[]) => set({ queue }),
       playTrack: (track: Track, queue?: Track[]) => {
+        const state = get()
+        if (state.currentTrack?.id === track.id) {
+          set({
+            currentTrack: { ...track },
+            progress: 0,
+            currentTime: 0,
+            duration: 0,
+            isPlaying: true,
+            isVisible: true,
+          })
+          return
+        }
         const nextQueue = queue ?? get().queue
         const exists = nextQueue.some((item: Track) => item.id === track.id)
         const mergedQueue = exists ? nextQueue : [track, ...nextQueue]
-        set({ currentTrack: track, queue: mergedQueue, isPlaying: true, isVisible: true, progress: 0, currentTime: 0, duration: 0 })
+        set({
+          currentTrack: track,
+          queue: mergedQueue,
+          isPlaying: true,
+          isVisible: true,
+          progress: 0,
+          currentTime: 0,
+          duration: 0,
+        })
       },
       togglePlay: () => set((state: AudioStoreState) => ({ isPlaying: state.currentTrack ? !state.isPlaying : state.isPlaying })),
       closePlayer: () => set({ isVisible: false }),

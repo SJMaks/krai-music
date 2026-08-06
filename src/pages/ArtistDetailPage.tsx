@@ -11,6 +11,17 @@ import styles from './ArtistDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { motion } from 'framer-motion'
 import type { Track } from '../types/content'
+import { getMediaUrl } from '../shared/lib/media'
+
+function formatDate(dateString?: string): string {
+  if (!dateString) return 'Дата не указана'
+  const date = new Date(dateString)
+  if (isNaN(date.getTime())) return dateString
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = date.getFullYear()
+  return `${day}.${month}.${year}`
+}
 
 export default function ArtistDetailPage() {
   const { id } = useParams()
@@ -42,13 +53,16 @@ export default function ArtistDetailPage() {
     return <div className={styles.empty}>Артист не найден.</div>
   }
 
+  const socials = artist.socials ?? []
+  const videos = artist.videos ?? []
+
   return (
     <>
       <Seo title={artist.nickname} description={`${artist.nickname} — артист Kray Music.`} />
       <section className={styles.page}>
         <section className={styles.hero}>
           <img
-            src={artist.squareImage || artist.verticalImage}
+            src={getMediaUrl(artist.squareImage || artist.verticalImage)}
             alt={artist.nickname}
             className={styles.heroImage}
           />
@@ -57,7 +71,7 @@ export default function ArtistDetailPage() {
             <h1>{artist.nickname}</h1>
             <p>{artist.biography}</p>
             <div className={styles.socials}>
-              {artist.socials.map((social) => (
+              {socials.map((social) => (
                 <a key={social.label} href={social.url} target="_blank" rel="noreferrer">
                   {social.label}
                 </a>
@@ -70,37 +84,41 @@ export default function ArtistDetailPage() {
           <div className={styles.sectionHeader}>
             <h2>Клипы</h2>
           </div>
-          <Swiper
-            className={styles.swiper}
-            modules={[Navigation, Pagination]}
-            slidesPerView={1}
-            spaceBetween={16}
-            navigation
-            pagination={{ clickable: true }}
-            breakpoints={{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}
-          >
-            {artist.videos.map((video) => (
-              <SwiperSlide key={video.title} className={styles.swiperSlide}>
-                <motion.article
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className={styles.card}
-                >
-                  <a href={video.url} target="_blank" rel="noreferrer">
-                    <img src={video.cover} alt={video.title} className={styles.image} />
-                  </a>
-                  <h3>{video.title}</h3>
-                  <p>{video.description}</p>
-                  <a href={video.url} target="_blank" rel="noreferrer">
-                    <button type="button" className={styles.secondaryButton}>
-                      Смотреть
-                    </button>
-                  </a>
-                </motion.article>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          {videos.length > 0 ? (
+            <Swiper
+              className={styles.swiper}
+              modules={[Navigation, Pagination]}
+              slidesPerView={1}
+              spaceBetween={16}
+              navigation
+              pagination={{ clickable: true }}
+              breakpoints={{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}
+            >
+              {videos.map((video) => (
+                <SwiperSlide key={video.title} className={styles.swiperSlide}>
+                  <motion.article
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className={styles.card}
+                  >
+                    <a href={video.url} target="_blank" rel="noreferrer">
+                      <img src={getMediaUrl(video.cover)} alt={video.title} className={styles.image} />
+                    </a>
+                    <h3>{video.title}</h3>
+                    <p>{video.description}</p>
+                    <a href={video.url} target="_blank" rel="noreferrer">
+                      <button type="button" className={styles.secondaryButton}>
+                        Смотреть
+                      </button>
+                    </a>
+                  </motion.article>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            <p className={styles.empty}>У этого артиста пока нет клипов.</p>
+          )}
         </section>
 
         <section className={styles.section}>
@@ -110,7 +128,7 @@ export default function ArtistDetailPage() {
               <div className={styles.trackList}>
                 {pageTracks.map((track) => (
                   <div key={track.id} className={styles.trackCard}>
-                    <img src={track.cover} alt={track.title} className={styles.trackCover} />
+                    <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.trackCover} />
                     <div>
                       <h3>{track.title}</h3>
                       <p>
@@ -158,7 +176,7 @@ export default function ArtistDetailPage() {
                     onClick={() => handlePlayTrack(featuredTrack)}
                   >
                     <img
-                      src={featuredTrack.cover}
+                      src={getMediaUrl(featuredTrack.cover)}
                       alt={featuredTrack.title}
                       className={styles.featuredTrackCover}
                     />
@@ -168,7 +186,7 @@ export default function ArtistDetailPage() {
                     <p>
                       {featuredTrack.authors.map((a) => a.nickname).join(', ')}
                     </p>
-                    <p>Релиз: {featuredTrack.releaseDate}</p>
+                    <p>Дата релиза: {formatDate(featuredTrack.releaseDate)}</p>
                     <p>Тип релиза: {featuredTrack.releaseType}</p>
                     <p>{featuredTrack.description}</p>
                     <button

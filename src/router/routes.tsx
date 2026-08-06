@@ -20,9 +20,9 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Suspense fallback={<PageSkeleton />}><HomePage /></Suspense> },
       { path: 'artists', element: <Suspense fallback={<PageSkeleton />}><ArtistsPage /></Suspense> },
-      { path: 'artists/:slug', element: <Suspense fallback={<PageSkeleton />}><ArtistDetailPage /></Suspense> },
+      { path: 'artists/:id', element: <Suspense fallback={<PageSkeleton />}><ArtistDetailPage /></Suspense> },
       { path: 'events', element: <Suspense fallback={<PageSkeleton />}><EventsPage /></Suspense> },
-      { path: 'events/:slug', element: <Suspense fallback={<PageSkeleton />}><EventDetailPage /></Suspense> },
+      { path: 'events/:id', element: <Suspense fallback={<PageSkeleton />}><EventDetailPage /></Suspense> },
       { path: 'services', element: <Suspense fallback={<PageSkeleton />}><ServicesPage /></Suspense> },
       { path: 'radio', element: <Suspense fallback={<PageSkeleton />}><RadioPage /></Suspense> },
       { path: '404', element: <Suspense fallback={<PageSkeleton />}><NotFoundPage /></Suspense> },
