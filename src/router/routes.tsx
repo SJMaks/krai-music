@@ -31,4 +31,7 @@ export const router = createBrowserRouter([
       { path: '*', element: <Navigate to="/404" replace /> },
     ],
   },
-])
+],
+{
+  basename: '/krai-music',
+})

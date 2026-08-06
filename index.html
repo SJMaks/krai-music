@@ -14,12 +14,6 @@
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script>
-    if (window.location.hash.includes('invite_token') || window.location.search.includes('invite_token')) {
-      window.location.href = '/admin/' + window.location.hash + window.location.search;
-    }
-  </script>
 </body>
 
 </html>
