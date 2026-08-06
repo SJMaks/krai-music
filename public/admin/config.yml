@@ -13,7 +13,7 @@ collections:
     folder: "content/artists"
     create: true
     format: json
-    identifier_field: id
+    identifier_field: nickname
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'artist_'}
       - { label: Никнейм, name: nickname, widget: string }
@@ -38,7 +38,6 @@ collections:
     folder: "content/tracks"
     create: true
     format: json
-    identifier_field: id
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'track_'}
       - { label: Название, name: title, widget: string }
@@ -61,7 +60,6 @@ collections:
     folder: "content/events"
     create: true
     format: json
-    identifier_field: id
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'event_'}
       - { label: Название, name: title, widget: string }
@@ -76,7 +74,6 @@ collections:
     folder: "content/services"
     create: true
     format: json
-    identifier_field: id
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'service_'}
       - { label: Название, name: title, widget: string }
