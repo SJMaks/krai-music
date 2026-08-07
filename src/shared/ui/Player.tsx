@@ -4,6 +4,7 @@ import styles from './Player.module.css'
 import { useAudioStore } from '../../store/audioStore'
 import { Link } from 'react-router-dom'
 import { getMediaUrl } from '../../shared/lib/media'
+import type { Track } from '../../types/content'
 
 export function Player() {
   const {
@@ -31,17 +32,20 @@ export function Player() {
   } = useAudioStore()
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const prevTrackRef = useRef<Track | null>(null)
 
-  // Основной эффект: управление источником и воспроизведением
+  // Главный эффект: управление источником и воспроизведением
   useEffect(() => {
     const audio = audioRef.current
     if (!audio || !currentTrack) return
 
-    const src = getMediaUrl(currentTrack.audio)
+    // Сравниваем по ссылке на объект (при повторном нажатии создаётся новый объект)
+    const trackChanged = prevTrackRef.current !== currentTrack
+    prevTrackRef.current = currentTrack
 
-    // Если источник изменился, перезагружаем аудио
-    if (audio.src !== src) {
-      audio.src = src
+    if (trackChanged) {
+      // Меняем источник, сбрасываем время и длительность
+      audio.src = getMediaUrl(currentTrack.audio)
       audio.load()
       audio.currentTime = 0
       setCurrentTime(0)
@@ -49,37 +53,17 @@ export function Player() {
       setDuration(0)
     }
 
-    // Функция для запуска воспроизведения
-    const playIfReady = () => {
-      if (isPlaying) {
-        void audio.play().catch(() => {
-          // игнорируем ошибки (например, если пользователь не взаимодействовал с документом)
-        })
-      }
-    }
-
+    // Управление воспроизведением
     if (isPlaying) {
-      // Если аудио уже загружено достаточно, воспроизводим сразу
-      if (audio.readyState >= 2) {
-        playIfReady()
-      } else {
-        // Иначе ждём события canplay
-        const handleCanPlay = () => {
-          playIfReady()
-          audio.removeEventListener('canplay', handleCanPlay)
-        }
-        audio.addEventListener('canplay', handleCanPlay)
-        return () => {
-          audio.removeEventListener('canplay', handleCanPlay)
-        }
+      if (audio.paused) {
+        void audio.play().catch(() => {})
       }
     } else {
-      // Если не играем — ставим на паузу
       audio.pause()
     }
   }, [currentTrack, isPlaying, setCurrentTime, setProgress, setDuration])
 
-  // Эффект для громкости и muted
+  // Эффект для громкости
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
@@ -100,9 +84,8 @@ export function Player() {
   const handleTimeUpdate = () => {
     const audio = audioRef.current
     if (!audio) return
-    const nextTime = audio.currentTime
-    setCurrentTime(nextTime)
-    setProgress(nextTime)
+    setCurrentTime(audio.currentTime)
+    setProgress(audio.currentTime)
   }
 
   const handleLoadedMetadata = () => {
@@ -139,23 +122,23 @@ export function Player() {
           </div>
         </div>
         <div className={styles.controls}>
-          <button type="button" className={styles.iconButton} onClick={toggleShuffle} aria-label="Переключить случайный порядок">
+          <button type="button" className={styles.iconButton} onClick={toggleShuffle}>
             <FiShuffle color={shuffle ? '#c71d1b' : '#cfcbcb'} />
           </button>
-          <button type="button" className={styles.iconButton} onClick={previousTrack} aria-label="Предыдущий трек">
+          <button type="button" className={styles.iconButton} onClick={previousTrack}>
             <FiSkipBack />
           </button>
-          <button type="button" className={styles.playButton} onClick={togglePlay} aria-label={isPlaying ? 'Пауза' : 'Воспроизведение'}>
+          <button type="button" className={styles.playButton} onClick={togglePlay}>
             {isPlaying ? <FiPause /> : <FiPlay />}
           </button>
-          <button type="button" className={styles.iconButton} onClick={nextTrack} aria-label="Следующий трек">
+          <button type="button" className={styles.iconButton} onClick={nextTrack}>
             <FiSkipForward />
           </button>
-          <button type="button" className={styles.iconButton} onClick={toggleRepeat} aria-label="Переключить повтор">
+          <button type="button" className={styles.iconButton} onClick={toggleRepeat}>
             <FiRepeat color={repeat ? '#c71d1b' : '#cfcbcb'} />
           </button>
         </div>
-        <button type="button" className={styles.closeButton} onClick={closePlayer} aria-label="Закрыть плеер">
+        <button type="button" className={styles.closeButton} onClick={closePlayer}>
           <FiX />
         </button>
       </div>
@@ -181,7 +164,7 @@ export function Player() {
       />
       <div className={styles.timelineWrap}>
         <div className={styles.volumeWrap}>
-          <button type="button" className={styles.iconButton} onClick={toggleMute} aria-label="Переключить беззвучный режим">
+          <button type="button" className={styles.iconButton} onClick={toggleMute}>
             {muted ? <FiVolumeX /> : <FiVolume2 />}
           </button>
           <input
@@ -190,9 +173,8 @@ export function Player() {
             max="1"
             step="0.01"
             value={volume}
-            onChange={(event) => setVolume(Number(event.target.value))}
+            onChange={(e) => setVolume(Number(e.target.value))}
             className={styles.range}
-            aria-label="Громкость"
           />
         </div>
         <span>{formatTime(currentTime)}</span>
@@ -201,9 +183,8 @@ export function Player() {
           min="0"
           max={duration || 100}
           value={currentTime}
-          onChange={(event) => handleSeek(Number(event.target.value))}
+          onChange={(e) => handleSeek(Number(e.target.value))}
           className={styles.range}
-          aria-label="Позиция"
         />
         <span>{formatTime(duration)}</span>
       </div>

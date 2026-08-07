@@ -33,9 +33,6 @@ collections:
         value_field: id
         display_fields: ["title"]
         multiple: false
-        filters:
-          - field: authors
-            value: "{{id}}"
 
   - name: tracks
     label: Треки
