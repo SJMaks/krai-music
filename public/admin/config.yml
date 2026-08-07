@@ -31,9 +31,11 @@ collections:
         collection: tracks
         search_fields: [title]
         value_field: id
-        display_fields: [title, authors.nickname]
+        display_fields: ["{{title}}", "{{authors.nickname}}"]
         multiple: false
-        filter: { authors: { $in: ["{{id}}"] } }
+        filters: 
+          - field: authors
+            values: ["{{id}}"]
 
   - name: tracks
     label: Треки
