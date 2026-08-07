@@ -1,6 +1,6 @@
 // ===== 1. Подключаем стили =====
 // Если файл лежит в /admin/preview.css
-CMS.registerPreviewStyle('/admin/preview.css');
+CMS.registerPreviewStyle("./preview.css");
 
 // ===== 2. Вспомогательная функция для изображений =====
 function getImageUrl(asset) {
