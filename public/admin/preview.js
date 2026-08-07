@@ -1,5 +1,98 @@
 // ===== 1. Подключаем стили =====
-CMS.registerPreviewStyle("/preview.css");
+const cssText = `
+.page {
+  display: grid;
+  gap: 3rem;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0 1rem;
+}
+
+.title {
+  color: #c71d1b;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  max-width: 620px;
+  color: rgba(207, 203, 203, 0.78);
+  margin: 0.5rem 0 1rem;
+  font-size: 1.2rem;
+  text-align: center;
+  border: 2px dashed #555;
+  border-radius: 0 2rem 0 2rem;
+  padding: 1.5rem;
+}
+
+.section {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card {
+  border: 1px solid rgba(207, 203, 203, 0.12);
+  padding: 1rem;
+  display: grid;
+  gap: 0.8rem;
+  background: #1a1a1a;
+}
+
+.image {
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 4 / 5;
+  background: #2a2a2a;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #cfcbcb;
+  text-decoration: none;
+  font-weight: bold;
+  flex-wrap: wrap;
+  word-break: break-word;
+}
+
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1rem;
+  border: 1px solid #c71d1b;
+  color: #cfcbcb;
+  text-decoration: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.previewGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.previewContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+`;
+
+CMS.registerPreviewStyle(cssText, { raw: true });
 
 // ===== 2. Вспомогательная функция для изображений =====
 function getImageUrl(asset) {
