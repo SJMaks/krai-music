@@ -24,10 +24,6 @@ collections:
       - { label: Фото 1/1, name: squareImage, required: false, widget: image }
       - { label: Ссылки на соц. сети, name: socials, required: false, widget: list, fields: [{ label: Соц. сеть, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
       - { label: Видео, name: videos, required: false, widget: list, fields: [{ label: Название, name: title, widget: string }, { label: Описание, name: description, widget: text }, { label: Ссылка, name: url, widget: string }, { label: Обложка, name: cover, widget: image }] }
-      - label: Проверка
-        name: test
-        widget: string
-        default: "{{id}}"
       - label: Выделенный трек
         name: featuredTrack
         required: false
@@ -35,8 +31,11 @@ collections:
         collection: tracks
         search_fields: [title]
         value_field: id
-        display_fields: ["title", "authors.nickname"]
+        display_fields: ["title"]
         multiple: false
+        filters:
+          - field: authors
+            value: "{{id}}"
 
   - name: tracks
     label: Треки
