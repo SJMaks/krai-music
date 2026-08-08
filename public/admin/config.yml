@@ -7,7 +7,7 @@ backend:
 site_url: https://sjmaks.github.io/krai-music
 display_url: https://sjmaks.github.io/krai-music
 media_folder: public/media
-public_folder: krai-music/media
+public_folder: /krai-music/media
 
 locale: 'ru'
 
