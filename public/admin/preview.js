@@ -60,6 +60,12 @@ body {
   cursor: pointer;
 }
 
+.info-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .secondaryLink {
   display: inline-flex;
   align-items: center;
@@ -122,6 +128,30 @@ function getImageUrl(asset) {
   return asset.toString();
 }
 
+let artistsMap = {};
+
+async function loadArtists() {
+  try {
+    const backend = CMS.getBackend('github');
+    const entries = await backend.listEntries('artists');
+    const map = {};
+    entries.forEach(entry => {
+      const data = entry.data;
+      const id = data.id || entry.slug;
+      if (id && data.nickname) {
+        map[id] = data.nickname;
+      }
+    });
+    window.artistsMap = map;
+    artistsMap = map;
+  } catch (err) {
+    console.warn('Не удалось загрузить артистов:', err);
+    window.artistsMap = {};
+  }
+}
+
+loadArtists();
+
 var ArtistPreview = createClass({
   render: function () {
     var entry = this.props.entry;
@@ -155,7 +185,6 @@ var TrackPreview = createClass({
     var description = data.get('description') || '';
     var releaseDate = data.get('releaseDate') || '';
     var releaseType = data.get('releaseType') || '';
-    var authorsMap = window.artistsMap || {};
 
     function formatDate(dateString) {
       if (!dateString) return 'Дата не указана';
@@ -167,15 +196,15 @@ var TrackPreview = createClass({
       return day + '.' + month + '.' + year;
     }
 
-    var authorNames = authors.map(function(id) {
-      return authorsMap[id] || id;
+    var authorNames = authors.toJS().map(function(id) {
+      return window.artistsMap && window.artistsMap[id] ? window.artistsMap[id] : id;
     }).join(', ');
 
     return h('div', { className: 'container' },
       cover ? h('img', { className: 'squareImage', src: getImageUrl(cover), alt: title }) : null,
       h('p', { className: 'eyebrow' }, 'Новый релиз'),
       h('h1', {}, title),
-      h('h3', { className: 'authors' }, authorNames),
+      h('h3', { className: 'authors' }, authorNames || 'Авторы не указаны'),
       h('h3', {}, 'Тип релиза: ' + releaseType),
       h('h3', {}, 'Дата релиза: ' + formatDate(releaseDate)),
       h('p', {}, description),

@@ -10,42 +10,6 @@
 <body>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script>
-    function initArtistsMap() {
-      if (typeof CMS === 'undefined' || !CMS.getBackend) {
-        setTimeout(initArtistsMap, 200);
-        return;
-      }
-      const backend = CMS.getBackend();
-      if (!backend) {
-        setTimeout(initArtistsMap, 200);
-        return;
-      }
-      backend.listEntries('artists', 0, 999, {})
-        .then(response => {
-          const map = {};
-          response.entries.forEach(entry => {
-            const id = entry.get('id');
-            const nickname = entry.get('data').get('nickname');
-            if (id && nickname) {
-              map[id] = nickname;
-            }
-          });
-          window.artistsMap = map;
-          console.log('Загружены артисты для превью:', Object.keys(map).length);
-        })
-        .catch(err => {
-          console.error('Ошибка загрузки артистов для превью:', err);
-          window.artistsMap = {};
-        });
-    }
-
-    if (document.readyState === 'complete') {
-      initArtistsMap();
-    } else {
-      window.addEventListener('load', initArtistsMap);
-    }
-  </script>
   <script src="./index.js"></script>
   <script src="./preview.js"></script>
 </body>
