@@ -229,7 +229,6 @@ var EventPreview = createClass({
   }
 });
 
-// ===== 6. Превью для услуг (services) =====
 var ServicePreview = createClass({
   render: function () {
     var entry = this.props.entry;
@@ -238,17 +237,15 @@ var ServicePreview = createClass({
     var description = data.get('description') || '';
     var image = this.props.getAsset(data.get('image'));
 
-    return h('div', { className: 'previewContainer' },
-      h('div', { className: 'card' },
-        image ? h('img', { className: 'image', src: getImageUrl(image), alt: title }) : null,
-        h('h3', {}, title),
-        h('p', {}, description)
-      )
+    return h('div', { className: 'container' },
+      image ? h('img', { className: 'squareImage', src: getImageUrl(image), alt: title }) : null,
+      h('p', { className: 'eyebrow' }, 'Услуга'),
+      h('h1', {}, title),
+      h('p', {}, description)
     );
   }
 });
 
-// ===== 7. Превью для главной страницы (homepage) — ВАЖНО: имя файла =====
 var HomepagePreview = createClass({
   render: function () {
     var entry = this.props.entry;
