@@ -104,32 +104,6 @@ var ArtistPreview = createClass({
 });
 
 var TrackPreview = createClass({
-  getInitialState: function() {
-    return { authorsMap: {} };
-  },
-
-  componentDidMount: function() {
-    var self = this;
-    var backend = CMS.getBackend();
-
-    backend.listEntries('artists', 0, 999, {})
-      .then(function(response) {
-        var entries = response.entries;
-        var map = {};
-        entries.forEach(function(entry) {
-          var id = entry.get('id');
-          var nickname = entry.get('data').get('nickname');
-          if (id && nickname) {
-            map[id] = nickname;
-          }
-        });
-        self.setState({ authorsMap: map });
-      })
-      .catch(function(err) {
-        console.error('Не удалось загрузить артистов для превью:', err);
-      });
-  },
-
   render: function () {
     var entry = this.props.entry;
     var data = entry.get('data');
@@ -139,7 +113,8 @@ var TrackPreview = createClass({
     var description = data.get('description') || '';
     var releaseDate = data.get('releaseDate') || '';
     var releaseType = data.get('releaseType') || '';
-    var authorsMap = this.state.authorsMap;
+    // Используем глобальную карту
+    var authorsMap = window.artistsMap || {};
 
     function formatDate(dateString) {
       if (!dateString) return 'Дата не указана';
@@ -170,6 +145,8 @@ var TrackPreview = createClass({
 
 var EventPreview = createClass({
   render: function () {
+    var { FiCalendar, FiMapPin } = window;
+
     var entry = this.props.entry;
     var data = entry.get('data');
     var title = data.get('title') || '';
