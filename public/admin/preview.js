@@ -172,10 +172,6 @@ var TrackPreview = createClass({
       return day + '.' + month + '.' + year;
     }
 
-    var authorNames = authors.toJS().map(function(id) {
-      return window.artistsMap && window.artistsMap[id] ? window.artistsMap[id] : id;
-    }).join(', ');
-
     return h('div', { className: 'container' },
       cover ? h('img', { className: 'squareImage', src: getImageUrl(cover), alt: title }) : null,
       h('p', { className: 'eyebrow' }, 'Новый релиз'),
