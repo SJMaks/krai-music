@@ -75,7 +75,7 @@ function getImageUrl(asset) {
 }
 
 var ArtistPreview = createClass({
-  render: function() {
+  render: function () {
     var entry = this.props.entry;
     var data = entry.get('data');
     var nickname = data.get('nickname') || '';
@@ -90,15 +90,15 @@ var ArtistPreview = createClass({
       h('p', { className: 'eyebrow' }, 'Профиль артиста'),
       h('h1', {}, nickname),
       h('p', {}, biography),
-      socials.size > 0 ? h('div', { className: 'socials' }, socials.map(function(s) {
-         return h('a', {href: s.get('url')}, s.get('label')); 
+      socials.size > 0 ? h('div', { className: 'socials' }, socials.map(function (s) {
+        return h('a', { href: s.get('url') }, s.get('label'));
       })) : null
     );
   }
 });
 
 var TrackPreview = createClass({
-  render: function() {
+  render: function () {
     var entry = this.props.entry;
     var data = entry.get('data');
     var title = data.get('title') || '';
@@ -122,8 +122,8 @@ var TrackPreview = createClass({
       cover ? h('img', { className: 'squareImage', src: getImageUrl(cover), alt: title }) : null,
       h('p', { className: 'eyebrow' }, 'Новый релиз'),
       h('h1', {}, title),
-      h('h3', { className: 'authors' }, authors.map(function(s) {
-         return s.get('nickname'); 
+      h('h3', { className: 'authors' }, authors.map(function (s) {
+        return s.get('nickname');
       }).join(', ')),
       h('h3', {}, 'Тип релиза: ' + releaseType),
       h('h3', {}, 'Дата релиза: ' + formatDate(releaseDate)),
@@ -134,7 +134,7 @@ var TrackPreview = createClass({
 });
 
 var EventPreview = createClass({
-  render: function() {
+  render: function () {
     var entry = this.props.entry;
     var data = entry.get('data');
     var title = data.get('title') || '';
@@ -144,27 +144,41 @@ var EventPreview = createClass({
     var location = data.get('location') || '';
     var links = data.get('links') || [];
 
-    return h('div', { className: 'previewContainer' },
-      h('div', { className: 'card' },
-        image ? h('img', { className: 'image', src: getImageUrl(image), alt: title }) : null,
-        h('h3', {}, title),
-        h('div', { className: 'item' }, '📅 ' + date),
-        h('div', { className: 'item' }, '📍 ' + location),
-        h('p', {}, description),
-        links.size > 0 ? h('div', { className: 'item' }, 
-          'Ссылки: ' + links.map(function(l) { 
-            return h('a', { href: l.get('url'), target: '_blank' }, l.get('label')); 
-          }).join(' | ')
-        ) : null,
-        h('button', { className: 'secondaryButton' }, 'Подробнее')
-      )
+    function formatDate(dateString) {
+      if (!dateString) return 'Дата не указана';
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${day}.${month}.${year} ${hours}:${minutes}`;
+    }
+
+    return h('div', { className: 'container' },
+      image ? h('img', { className: 'horizontalImage', src: getImageUrl(image), alt: title }) : null,
+      h('p', { className: 'eyebrow' }, 'Мероприятие'),
+      h('h1', {}, title),
+      h('p', {}, description),
+      h('div', { className: 'info-line' },
+        h(FiCalendar, { style: { marginRight: '8px' } }),
+        formatDate(date)
+      ),
+      h('div', { className: 'info-line' },
+        h(FiMapPin, { style: { marginRight: '8px' } }),
+        location || 'Место не указано'
+      ),
+      links.size > 0 ? h('div', { className: 'socials' }, links.map(function (s) {
+        return h('a', { href: s.get('url') }, s.get('label'));
+      })) : null
     );
   }
 });
 
 // ===== 6. Превью для услуг (services) =====
 var ServicePreview = createClass({
-  render: function() {
+  render: function () {
     var entry = this.props.entry;
     var data = entry.get('data');
     var title = data.get('title') || '';
@@ -183,7 +197,7 @@ var ServicePreview = createClass({
 
 // ===== 7. Превью для главной страницы (homepage) — ВАЖНО: имя файла =====
 var HomepagePreview = createClass({
-  render: function() {
+  render: function () {
     var entry = this.props.entry;
     var data = entry.get('data');
     var heroTitle = data.get('heroTitle') || '';
@@ -195,9 +209,9 @@ var HomepagePreview = createClass({
     return h('div', { className: 'previewContainer' },
       h('section', { className: 'hero' },
         h('h1', { className: 'title' }, heroTitle),
-        h('p', { className: 'subtitle' }, 
-          '«', h('span', { style: { color: '#c71d1b' } }, 'Край'), 
-          h('span', { style: { color: '#fff' } }, 'Music'), 
+        h('p', { className: 'subtitle' },
+          '«', h('span', { style: { color: '#c71d1b' } }, 'Край'),
+          h('span', { style: { color: '#fff' } }, 'Music'),
           '»', heroSubtitle
         )
       ),
@@ -206,7 +220,7 @@ var HomepagePreview = createClass({
           h('h2', {}, 'Выделенные артисты')
         ),
         h('div', { className: 'previewGrid' },
-          featuredArtists.map(function(id) {
+          featuredArtists.map(function (id) {
             return h('div', { key: id, className: 'card' }, 'ID: ' + id);
           })
         )
@@ -216,7 +230,7 @@ var HomepagePreview = createClass({
           h('h2', {}, 'Выделенные треки')
         ),
         h('div', { className: 'previewGrid' },
-          featuredTracks.map(function(id) {
+          featuredTracks.map(function (id) {
             return h('div', { key: id, className: 'card' }, 'ID: ' + id);
           })
         )
@@ -226,7 +240,7 @@ var HomepagePreview = createClass({
           h('h2', {}, 'Выделенные мероприятия')
         ),
         h('div', { className: 'previewGrid' },
-          featuredEvents.map(function(id) {
+          featuredEvents.map(function (id) {
             return h('div', { key: id, className: 'card' }, 'ID: ' + id);
           })
         )
@@ -237,7 +251,7 @@ var HomepagePreview = createClass({
 
 // ===== 8. Превью для контактов (contacts) — ВАЖНО: имя файла =====
 var ContactsPreview = createClass({
-  render: function() {
+  render: function () {
     var entry = this.props.entry;
     var data = entry.get('data');
     var email = data.get('email') || '';
@@ -251,9 +265,9 @@ var ContactsPreview = createClass({
         h('div', { className: 'item' }, '📧 ' + email),
         h('div', { className: 'item' }, '📞 ' + phone),
         h('div', { className: 'item' }, '📍 ' + address),
-        socials.size > 0 ? h('div', { className: 'item' }, 
-          'Соцсети: ' + socials.map(function(s) { 
-            return s.get('label') + ' (' + s.get('url') + ')'; 
+        socials.size > 0 ? h('div', { className: 'item' },
+          'Соцсети: ' + socials.map(function (s) {
+            return s.get('label') + ' (' + s.get('url') + ')';
           }).join(' | ')
         ) : null
       )

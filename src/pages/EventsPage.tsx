@@ -5,6 +5,18 @@ import { Seo } from '../shared/ui/Seo'
 import { FiMapPin, FiCalendar } from 'react-icons/fi'
 import { getMediaUrl } from '../shared/lib/media'
 
+function formatDate(dateString?: string): string {
+  if (!dateString) return 'Дата не указана';
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return dateString;
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
+}
+
 export default function EventsPage() {
   return (
     <>
@@ -23,7 +35,7 @@ export default function EventsPage() {
                 <p>{event.description}</p>
                 <div className={styles.item}>
                   <FiCalendar />
-                  <p>{event.date}</p>
+                  <p>{formatDate(event.date)}</p>
                 </div>
                 <div className={styles.item}>
                   <FiMapPin />

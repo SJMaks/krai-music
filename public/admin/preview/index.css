@@ -24,6 +24,12 @@ body {
   width: 100%;
 }
 
+.horizontalImage {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
 .eyebrow {
   color: #c71d1b;
   text-transform: uppercase;

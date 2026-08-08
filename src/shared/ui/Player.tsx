@@ -117,7 +117,7 @@ export function Player() {
                 </span>
               ))
             ) : (
-              <span className={styles.artistLink}>Неизвестный исполнитель</span>
+              <span className={styles.artistLink}>Неизвестный артист</span>
             )}
           </div>
         </div>

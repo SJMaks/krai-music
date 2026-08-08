@@ -11,7 +11,7 @@ locale: 'ru'
 
 collections:
   - name: artists
-    label: Исполнители
+    label: Артисты
     folder: "content/artists"
     create: true
     format: json
@@ -91,7 +91,7 @@ collections:
         fields:
           - { label: Заголовок, name: heroTitle, widget: string }
           - { label: Подзаголовок, name: heroSubtitle, widget: text }
-          - label: Выделенные исполнители
+          - label: Выделенные артисты
             name: featuredArtists
             widget: relation
             collection: artists
