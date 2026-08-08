@@ -25,6 +25,12 @@ body {
   width: 100%;
 }
 
+.horizontalImage {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
 .eyebrow {
   color: #c71d1b;
   text-transform: uppercase;
@@ -98,6 +104,32 @@ var ArtistPreview = createClass({
 });
 
 var TrackPreview = createClass({
+  getInitialState: function() {
+    return { authorsMap: {} };
+  },
+
+  componentDidMount: function() {
+    var self = this;
+    var backend = CMS.getBackend();
+
+    backend.listEntries('artists', 0, 999, {})
+      .then(function(response) {
+        var entries = response.entries;
+        var map = {};
+        entries.forEach(function(entry) {
+          var id = entry.get('id');
+          var nickname = entry.get('data').get('nickname');
+          if (id && nickname) {
+            map[id] = nickname;
+          }
+        });
+        self.setState({ authorsMap: map });
+      })
+      .catch(function(err) {
+        console.error('Не удалось загрузить артистов для превью:', err);
+      });
+  },
+
   render: function () {
     var entry = this.props.entry;
     var data = entry.get('data');
@@ -107,28 +139,31 @@ var TrackPreview = createClass({
     var description = data.get('description') || '';
     var releaseDate = data.get('releaseDate') || '';
     var releaseType = data.get('releaseType') || '';
+    var authorsMap = this.state.authorsMap;
 
     function formatDate(dateString) {
-      if (!dateString) return 'Дата не указана'
-      const date = new Date(dateString)
-      if (isNaN(date.getTime())) return dateString
-      const day = String(date.getDate()).padStart(2, '0')
-      const month = String(date.getMonth() + 1).padStart(2, '0')
-      const year = date.getFullYear()
-      return `${day}.${month}.${year}`
+      if (!dateString) return 'Дата не указана';
+      var date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      var day = String(date.getDate()).padStart(2, '0');
+      var month = String(date.getMonth() + 1).padStart(2, '0');
+      var year = date.getFullYear();
+      return day + '.' + month + '.' + year;
     }
+
+    var authorNames = authors.map(function(id) {
+      return authorsMap[id] || id;
+    }).join(', ');
 
     return h('div', { className: 'container' },
       cover ? h('img', { className: 'squareImage', src: getImageUrl(cover), alt: title }) : null,
       h('p', { className: 'eyebrow' }, 'Новый релиз'),
       h('h1', {}, title),
-      h('h3', { className: 'authors' }, authors.map(function (s) {
-        return s.get('nickname');
-      }).join(', ')),
+      h('h3', { className: 'authors' }, 'Авторы: ' + authorNames),
       h('h3', {}, 'Тип релиза: ' + releaseType),
       h('h3', {}, 'Дата релиза: ' + formatDate(releaseDate)),
       h('p', {}, description),
-      h('a', { className: 'secondaryLink' }, Слушать),
+      h('a', { className: 'secondaryLink' }, 'Слушать')
     );
   }
 });
