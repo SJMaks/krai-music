@@ -75,6 +75,48 @@ body {
 
 CMS.registerPreviewStyle(cssText, { raw: true });
 
+function CalendarIcon(props) {
+  return h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: 24,
+      height: 24,
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      ...props
+    },
+    h('rect', { x: 3, y: 4, width: 18, height: 18, rx: 2, ry: 2 }),
+    h('line', { x1: 16, y1: 2, x2: 16, y2: 6 }),
+    h('line', { x1: 8, y1: 2, x2: 8, y2: 6 }),
+    h('line', { x1: 3, y1: 10, x2: 21, y2: 10 })
+  );
+}
+
+function MapPinIcon(props) {
+  return h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: 24,
+      height: 24,
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      ...props
+    },
+    h('path', { d: 'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z' }),
+    h('circle', { cx: 12, cy: 10, r: 3 })
+  );
+}
+
 function getImageUrl(asset) {
   if (!asset) return '';
   return asset.toString();
@@ -113,7 +155,6 @@ var TrackPreview = createClass({
     var description = data.get('description') || '';
     var releaseDate = data.get('releaseDate') || '';
     var releaseType = data.get('releaseType') || '';
-    // Используем глобальную карту
     var authorsMap = window.artistsMap || {};
 
     function formatDate(dateString) {
@@ -134,7 +175,7 @@ var TrackPreview = createClass({
       cover ? h('img', { className: 'squareImage', src: getImageUrl(cover), alt: title }) : null,
       h('p', { className: 'eyebrow' }, 'Новый релиз'),
       h('h1', {}, title),
-      h('h3', { className: 'authors' }, 'Авторы: ' + authorNames),
+      h('h3', { className: 'authors' }, authorNames),
       h('h3', {}, 'Тип релиза: ' + releaseType),
       h('h3', {}, 'Дата релиза: ' + formatDate(releaseDate)),
       h('p', {}, description),
@@ -174,11 +215,11 @@ var EventPreview = createClass({
       h('h1', {}, title),
       h('p', {}, description),
       h('div', { className: 'info-line' },
-        h(FiCalendar, { style: { marginRight: '8px' } }),
+        h(CalendarIcon, { style: { marginRight: '8px' } }),
         formatDate(date)
       ),
       h('div', { className: 'info-line' },
-        h(FiMapPin, { style: { marginRight: '8px' } }),
+        h(MapPinIcon, { style: { marginRight: '8px' } }),
         location || 'Место не указано'
       ),
       links.size > 0 ? h('div', { className: 'socials' }, links.map(function (s) {

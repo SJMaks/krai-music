@@ -10,22 +10,17 @@
 <body>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script src="https://unpkg.com/react-icons/fi/index.js"></script>
   <script>
-    // Ждём, пока CMS полностью инициализируется
     function initArtistsMap() {
       if (typeof CMS === 'undefined' || !CMS.getBackend) {
-        // Если CMS ещё не загружена, пробуем через 200 мс
         setTimeout(initArtistsMap, 200);
         return;
       }
       const backend = CMS.getBackend();
       if (!backend) {
-        // Если бэкенд ещё не готов, пробуем позже
         setTimeout(initArtistsMap, 200);
         return;
       }
-      // Загружаем всех артистов (пагинация: 0..999)
       backend.listEntries('artists', 0, 999, {})
         .then(response => {
           const map = {};
@@ -37,15 +32,14 @@
             }
           });
           window.artistsMap = map;
-          console.log('✅ Загружены артисты для превью:', Object.keys(map).length);
+          console.log('Загружены артисты для превью:', Object.keys(map).length);
         })
         .catch(err => {
-          console.error('❌ Ошибка загрузки артистов для превью:', err);
-          window.artistsMap = {}; // чтобы не сломать превью
+          console.error('Ошибка загрузки артистов для превью:', err);
+          window.artistsMap = {};
         });
     }
 
-    // Запускаем после загрузки страницы
     if (document.readyState === 'complete') {
       initArtistsMap();
     } else {
