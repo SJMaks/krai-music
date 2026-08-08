@@ -78,6 +78,31 @@ body {
   background: transparent;
   cursor: pointer;
 }
+
+.homepage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(207, 203, 203, 0.12);
+  padding: 1rem;
+}
+
+.title {
+  color: #c71d1b;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
+
+.subtitle {
+  max-width: 620px;
+  color: rgba(207, 203, 203, 0.78);
+  margin: 1rem 0 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+  border: 2px dashed #555;
+  border-radius: 0 3rem 0 3rem;
+  padding: 3rem;
+}
 `;
 
 CMS.registerPreviewStyle(cssText, { raw: true });
@@ -121,6 +146,45 @@ function MapPinIcon(props) {
     },
     h('path', { d: 'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z' }),
     h('circle', { cx: 12, cy: 10, r: 3 })
+  );
+}
+
+function MailIcon(props) {
+  return h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: 24,
+      height: 24,
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      ...props
+    },
+    h('path', { d: 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z' }),
+    h('polyline', { points: '22,6 12,13 2,6' })
+  );
+}
+
+function PhoneIcon(props) {
+  return h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: 24,
+      height: 24,
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      ...props
+    },
+    h('path', { d: 'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z' })
   );
 }
 
@@ -252,54 +316,18 @@ var HomepagePreview = createClass({
     var data = entry.get('data');
     var heroTitle = data.get('heroTitle') || '';
     var heroSubtitle = data.get('heroSubtitle') || '';
-    var featuredArtists = data.get('featuredArtists') || [];
-    var featuredTracks = data.get('featuredTracks') || [];
-    var featuredEvents = data.get('featuredEvents') || [];
 
-    return h('div', { className: 'previewContainer' },
-      h('section', { className: 'hero' },
-        h('h1', { className: 'title' }, heroTitle),
-        h('p', { className: 'subtitle' },
-          '«', h('span', { style: { color: '#c71d1b' } }, 'Край'),
-          h('span', { style: { color: '#fff' } }, 'Music'),
-          '»', heroSubtitle
-        )
-      ),
-      h('section', { className: 'section' },
-        h('div', { className: 'sectionHeader' },
-          h('h2', {}, 'Выделенные артисты')
-        ),
-        h('div', { className: 'previewGrid' },
-          featuredArtists.map(function (id) {
-            return h('div', { key: id, className: 'card' }, 'ID: ' + id);
-          })
-        )
-      ),
-      h('section', { className: 'section' },
-        h('div', { className: 'sectionHeader' },
-          h('h2', {}, 'Выделенные треки')
-        ),
-        h('div', { className: 'previewGrid' },
-          featuredTracks.map(function (id) {
-            return h('div', { key: id, className: 'card' }, 'ID: ' + id);
-          })
-        )
-      ),
-      h('section', { className: 'section' },
-        h('div', { className: 'sectionHeader' },
-          h('h2', {}, 'Выделенные мероприятия')
-        ),
-        h('div', { className: 'previewGrid' },
-          featuredEvents.map(function (id) {
-            return h('div', { key: id, className: 'card' }, 'ID: ' + id);
-          })
-        )
+    return h('div', { className: 'homepage' },
+      h('h1', { className: 'title' }, heroTitle),
+      h('p', { className: 'subtitle' },
+        '«', h('span', { style: { color: '#c71d1b' } }, 'Край'),
+        h('span', { style: { color: '#fff' } }, 'Music'),
+        '»', heroSubtitle
       )
     );
   }
 });
 
-// ===== 8. Превью для контактов (contacts) — ВАЖНО: имя файла =====
 var ContactsPreview = createClass({
   render: function () {
     var entry = this.props.entry;
@@ -309,29 +337,36 @@ var ContactsPreview = createClass({
     var address = data.get('address') || '';
     var socials = data.get('socials') || [];
 
+    var lineStyle = { display: 'flex', alignItems: 'center', margin: '0.5rem 0' };
+    var iconStyle = { marginRight: '8px', flexShrink: 0 };
+
     return h('div', { className: 'previewContainer' },
       h('div', { className: 'card' },
         h('h3', {}, 'Контакты'),
-        h('div', { className: 'item' }, '📧 ' + email),
-        h('div', { className: 'item' }, '📞 ' + phone),
-        h('div', { className: 'item' }, '📍 ' + address),
-        socials.size > 0 ? h('div', { className: 'item' },
-          'Соцсети: ' + socials.map(function (s) {
-            return s.get('label') + ' (' + s.get('url') + ')';
-          }).join(' | ')
-        ) : null
+        h('div', { style: lineStyle },
+          h(MailIcon, { style: iconStyle }),
+          email
+        ),
+        h('div', { style: lineStyle },
+          h(PhoneIcon, { style: iconStyle }),
+          phone
+        ),
+        h('div', { style: lineStyle },
+          h(MapPinIcon, { style: iconStyle }),
+          address || 'Адрес не указан'
+        ),
+        socials.size > 0 ? h('div', { className: 'socials' }, socials.map(function (s) {
+          return h('a', { href: s.get('url') }, s.get('label'));
+        })) : null
       )
     );
   }
 });
 
-// ===== 9. Регистрируем шаблоны =====
-// Для папковых коллекций — имя коллекции
 CMS.registerPreviewTemplate('artists', ArtistPreview);
 CMS.registerPreviewTemplate('tracks', TrackPreview);
 CMS.registerPreviewTemplate('events', EventPreview);
 CMS.registerPreviewTemplate('services', ServicePreview);
 
-// Для файловых коллекций — имя ФАЙЛА (не коллекции!) из вашего конфига
-CMS.registerPreviewTemplate('homepage', HomepagePreview);  // имя файла
-CMS.registerPreviewTemplate('contacts', ContactsPreview);  // имя файла
+CMS.registerPreviewTemplate('homepage', HomepagePreview);
+CMS.registerPreviewTemplate('contacts', ContactsPreview);
