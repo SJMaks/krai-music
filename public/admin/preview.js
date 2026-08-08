@@ -1,105 +1,79 @@
 const cssText = `
-.page {
-  display: grid;
-  gap: 3rem;
-}
-
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem 0 1rem;
-}
-
-.title {
-  color: #c71d1b;
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.subtitle {
-  max-width: 620px;
-  color: rgba(207, 203, 203, 0.78);
-  margin: 0.5rem 0 1rem;
-  font-size: 1.2rem;
-  text-align: center;
-  border: 2px dashed #555;
-  border-radius: 0 2rem 0 2rem;
-  padding: 1.5rem;
-}
-
-.section {
-  display: grid;
-  gap: 1.2rem;
-}
-
-.sectionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card {
-  border: 1px solid rgba(207, 203, 203, 0.12);
-  padding: 1rem;
-  display: grid;
-  gap: 0.8rem;
-  background: #1a1a1a;
-}
-
-.image {
-  width: 100%;
-  object-fit: cover;
-  aspect-ratio: 4 / 5;
-  background: #2a2a2a;
-}
-
-.item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+body {
+  font-family: Inter, 'IBM Plex Sans', 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: #cfcbcb;
-  text-decoration: none;
-  font-weight: bold;
-  flex-wrap: wrap;
-  word-break: break-word;
+  background-color: #111111;
+  color-scheme: dark;
 }
 
-.secondaryButton {
+.container {
+    border: 1px solid rgba(207, 203, 203, 0.12);
+    padding: 1rem;
+}
+
+.squareImage {
+  aspect-ratio: 1 / 1;
+  max-width: 24rem;
+  object-fit: cover;
+  width: 100%;
+}
+
+.verticalImage {
+  aspect-ratio: 4 / 5;
+  max-width: 24rem;
+  object-fit: cover;
+  width: 100%;
+}
+
+.eyebrow {
+  color: #c71d1b;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.authors {
+  font-weight: normal;
+  color: #828282;
+}
+
+.socials {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.socials a {
+  color: #cfcbcb;
+  border: 1px solid rgba(207, 203, 203, 0.16);
+  padding: 0.7rem 1rem;
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.secondaryLink {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.6rem 1rem;
+  padding: 0.85rem 1.2rem;
   border: 1px solid #c71d1b;
   color: #cfcbcb;
   text-decoration: none;
   background: transparent;
   cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.previewGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem;
-}
-
-.previewContainer {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem;
 }
 `;
 
 CMS.registerPreviewStyle(cssText, { raw: true });
 
-// ===== 2. Вспомогательная функция для изображений =====
 function getImageUrl(asset) {
   if (!asset) return '';
   return asset.toString();
 }
 
-// ===== 3. Превью для исполнителей (artists) =====
 var ArtistPreview = createClass({
   render: function() {
     var entry = this.props.entry;
@@ -107,22 +81,22 @@ var ArtistPreview = createClass({
     var nickname = data.get('nickname') || '';
     var biography = data.get('biography') || '';
     var verticalImage = this.props.getAsset(data.get('verticalImage'));
+    var squareImage = this.props.getAsset(data.get('squareImage'));
     var socials = data.get('socials') || [];
-    var featuredTrack = data.get('featuredTrack') || '';
 
-    return h('div', { className: 'previewContainer' },
-      h('div', { className: 'card' },
-        verticalImage ? h('img', { className: 'image', src: getImageUrl(verticalImage), alt: nickname }) : null,
-        h('h3', {}, nickname),
-        h('p', {}, biography),
-        socials.size > 0 ? h('div', { className: 'item' }, 'Соцсети: ' + socials.map(function(s) { return s.get('label'); }).join(' | ')) : null,
-        featuredTrack ? h('div', { className: 'item' }, 'Выделенный трек ID: ' + featuredTrack) : null
-      )
+    return h('div', { className: 'container' },
+      squareImage ? h('img', { className: 'squareImage', src: getImageUrl(squareImage), alt: nickname }) : null,
+      verticalImage ? h('img', { className: 'verticalImage', src: getImageUrl(verticalImage), alt: nickname }) : null,
+      h('p', { className: 'eyebrow' }, 'Профиль артиста'),
+      h('h1', {}, nickname),
+      h('p', {}, biography),
+      socials.size > 0 ? h('div', { className: 'socials' }, socials.map(function(s) {
+         return h('a', {href: s.get('url')}, s.get('label')); 
+      })) : null
     );
   }
 });
 
-// ===== 4. Превью для треков (tracks) =====
 var TrackPreview = createClass({
   render: function() {
     var entry = this.props.entry;
@@ -132,21 +106,33 @@ var TrackPreview = createClass({
     var authors = data.get('authors') || [];
     var description = data.get('description') || '';
     var releaseDate = data.get('releaseDate') || '';
+    var releaseType = data.get('releaseType') || '';
 
-    return h('div', { className: 'previewContainer' },
-      h('div', { className: 'card' },
-        cover ? h('img', { className: 'image', src: getImageUrl(cover), alt: title }) : null,
-        h('h3', {}, title),
-        h('div', { className: 'item' }, 'Авторы: ' + (authors.size ? authors.join(', ') : '—')),
-        h('div', { className: 'item' }, 'Дата: ' + releaseDate),
-        h('p', {}, description),
-        h('button', { className: 'secondaryButton' }, 'Слушать')
-      )
+    function formatDate(dateString) {
+      if (!dateString) return 'Дата не указана'
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) return dateString
+      const day = String(date.getDate()).padStart(2, '0')
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const year = date.getFullYear()
+      return `${day}.${month}.${year}`
+    }
+
+    return h('div', { className: 'container' },
+      cover ? h('img', { className: 'squareImage', src: getImageUrl(cover), alt: title }) : null,
+      h('p', { className: 'eyebrow' }, 'Новый релиз'),
+      h('h1', {}, title),
+      h('h3', { className: 'authors' }, socials.map(function(s) {
+         return s.get('nickname'); 
+      }).join(', ')),
+      h('h3', {}, 'Тип релиза: ' + releaseType),
+      h('h3', {}, 'Дата релиза: ' + formatDate(releaseDate)),
+      h('p', {}, description),
+      h('a', { className: 'secondaryLink' }, Слушать),
     );
   }
 });
 
-// ===== 5. Превью для мероприятий (events) =====
 var EventPreview = createClass({
   render: function() {
     var entry = this.props.entry;
