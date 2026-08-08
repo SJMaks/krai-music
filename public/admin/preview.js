@@ -122,7 +122,7 @@ var TrackPreview = createClass({
       cover ? h('img', { className: 'squareImage', src: getImageUrl(cover), alt: title }) : null,
       h('p', { className: 'eyebrow' }, 'Новый релиз'),
       h('h1', {}, title),
-      h('h3', { className: 'authors' }, socials.map(function(s) {
+      h('h3', { className: 'authors' }, authors.map(function(s) {
          return s.get('nickname'); 
       }).join(', ')),
       h('h3', {}, 'Тип релиза: ' + releaseType),
