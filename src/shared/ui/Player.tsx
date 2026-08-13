@@ -56,7 +56,7 @@ export function Player() {
     // Управление воспроизведением
     if (isPlaying) {
       if (audio.paused) {
-        void audio.play().catch(() => {})
+        void audio.play().catch(() => { })
       }
     } else {
       audio.pause()
@@ -92,7 +92,16 @@ export function Player() {
     const audio = audioRef.current
     if (!audio) return
     setDuration(audio.duration || 0)
+    audio.volume = volume;
+    audio.muted = muted;
   }
+
+  const handleCanPlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = volume;
+    audio.muted = muted;
+  };
 
   if (!currentTrack || !isVisible) {
     return null
@@ -147,6 +156,7 @@ export function Player() {
         preload="metadata"
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
+        onCanPlay={handleCanPlay}
         onEnded={() => {
           const { repeat } = useAudioStore.getState()
           if (repeat) {
@@ -155,14 +165,14 @@ export function Player() {
               audio.currentTime = 0
               setCurrentTime(0)
               setProgress(0)
-              void audio.play().catch(() => {})
+              void audio.play().catch(() => { })
             }
             return
           }
           nextTrack()
         }}
       />
-      <div className={styles.timelineWrap}>
+      <div className={styles.horizontalWrap}>
         <div className={styles.volumeWrap}>
           <button type="button" className={styles.iconButton} onClick={toggleMute}>
             {muted ? <FiVolumeX /> : <FiVolume2 />}
@@ -177,16 +187,18 @@ export function Player() {
             className={styles.range}
           />
         </div>
-        <span>{formatTime(currentTime)}</span>
-        <input
-          type="range"
-          min="0"
-          max={duration || 100}
-          value={currentTime}
-          onChange={(e) => handleSeek(Number(e.target.value))}
-          className={styles.range}
-        />
-        <span>{formatTime(duration)}</span>
+        <div className={styles.timelineWrap}>
+          <span>{formatTime(currentTime)}</span>
+          <input
+            type="range"
+            min="0"
+            max={duration || 100}
+            value={currentTime}
+            onChange={(e) => handleSeek(Number(e.target.value))}
+            className={styles.range}
+          />
+          <span>{formatTime(duration)}</span>
+        </div>
       </div>
     </div>
   )

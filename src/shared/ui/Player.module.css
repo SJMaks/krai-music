@@ -82,13 +82,18 @@
   border-color: #c71d1b;
 }
 
-.timelineWrap,
+.horizontalWrap,
 .volumeWrap {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   color: rgba(207, 203, 203, 0.7);
   font-size: 0.8rem;
+}
+
+.timelineWrap {
+  display: flex;
+  width: 100%;
 }
 
 .volumeWrap {
@@ -140,7 +145,7 @@
     justify-self: end;
   }
 
-  .timelineWrap {
+  .horizontalWrap {
     grid-column: 1 / -1;
   }
 }
@@ -154,7 +159,7 @@
     width: 100%;
   }
 
-  .timelineWrap {
+  .horizontalWrap {
     flex-wrap: wrap;
     justify-content: center;
   }
