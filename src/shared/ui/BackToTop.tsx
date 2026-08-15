@@ -8,20 +8,20 @@ export function BackToTop() {
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 500)
     onScroll()
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  if (!visible) return null
 
   return (
     <button
       type="button"
-      className={styles.button}
+      className={`${styles.button} ${visible ? styles.visible : ''}`}
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Наверх"
+      aria-hidden={!visible}
+      tabIndex={visible ? 0 : -1}
     >
-      <FiArrowUp />
+      <FiArrowUp size={20} />
     </button>
   )
 }

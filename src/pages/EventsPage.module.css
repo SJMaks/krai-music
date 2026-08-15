@@ -70,14 +70,13 @@
 .media {
   position: relative;
   overflow: hidden;
-  background: #0e0e0e;
 }
 
 .image {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
