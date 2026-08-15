@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
@@ -10,6 +10,7 @@ import { useAudioStore } from '../store/audioStore'
 import styles from './ArtistDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { motion } from 'framer-motion'
+import { FiArrowLeft } from 'react-icons/fi'
 import type { Track } from '../types/content'
 import { getMediaUrl } from '../shared/lib/media'
 
@@ -60,6 +61,10 @@ export default function ArtistDetailPage() {
     <>
       <Seo title={artist.nickname} description={`${artist.nickname} — артист Kray Music.`} />
       <section className={styles.page}>
+        <Link to="/artists" className={styles.backLink}>
+          <FiArrowLeft />
+          <span>К артистам</span>
+        </Link>
         <section className={styles.hero}>
           <img
             src={getMediaUrl(artist.squareImage || artist.verticalImage)}

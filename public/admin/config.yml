@@ -22,7 +22,7 @@ collections:
       - { label: ID, name: id, widget: "uuid", prefix: 'artist_'}
       - { label: Никнейм, name: nickname, widget: string }
       - { label: Биография, name: biography, widget: text }
-      - { label: Фото 4/5, name: verticalImage, widget: image }
+      - { label: Фото 4/6, name: verticalImage, widget: image }
       - { label: Фото 1/1, name: squareImage, required: false, widget: image }
       - { label: Ссылки на соц. сети, name: socials, required: false, widget: list, fields: [{ label: Соц. сеть, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
       - { label: Видео, name: videos, required: false, widget: list, fields: [{ label: Название, name: title, widget: string }, { label: Описание, name: description, widget: text }, { label: Ссылка, name: url, widget: string }, { label: Обложка, name: cover, widget: image }] }

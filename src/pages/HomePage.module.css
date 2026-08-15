@@ -32,8 +32,9 @@
   color: #cfcbcb;
   text-decoration: none;
   font-weight: bold;
-  flex-wrap: wrap;
   word-break: break-word;
+  flex-wrap: nowrap;
+  min-width: 0; 
 }
 
 .subtitle {
@@ -60,11 +61,11 @@
   cursor: pointer;
 }
 
-.heroImage,
 .image {
   width: 100%;
   object-fit: cover;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 6;
+  flex-shrink: 0;
 }
 
 .section {
@@ -89,7 +90,7 @@
 }
 
 .swiperSlide {
-  height: auto;
+  height: 100%;
   padding-bottom: 0.5rem;
 }
 
@@ -122,10 +123,59 @@
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
   border: 1px solid rgba(207, 203, 203, 0.12);
   padding: 1rem;
-  display: grid;
   gap: 0.8rem;
+}
+
+.card h3,
+.card p {
+  margin: 0;
+}
+
+.card > h3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 3.2em;
+}
+
+.card > p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 4.5em;
+}
+
+.card .item p {
+  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 1.5em;
+  max-width: 100%;
+  margin: 0;
+}
+
+.card > *:last-child {
+  margin-top: auto;
+}
+
+.item svg {
+  flex-shrink: 0;
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 @media (min-width: 768px) {

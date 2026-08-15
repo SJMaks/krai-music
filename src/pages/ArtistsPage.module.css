@@ -38,9 +38,32 @@
   gap: 0.7rem;
 }
 
+.card h2,
+.card p {
+  margin: 0;
+}
+
+.card h2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 3.2em;
+}
+
+.card p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 4.5em;
+}
+
 .image {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 6;
   object-fit: cover;
 }
 

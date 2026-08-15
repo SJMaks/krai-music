@@ -4,6 +4,14 @@
   padding: 2rem 0;
 }
 
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #cfcbcb;
+  text-decoration: none;
+}
+
 .hero {
   display: grid;
   gap: 1.25rem;
