@@ -22,7 +22,7 @@
 .inner {
   width: min(1200px, 100%);
   margin: 0 auto;
-  padding: 0.65rem 1.5rem;
+  padding: 0 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -42,8 +42,8 @@
 
 .logo {
   display: block;
-  width: 2.9rem;
-  height: 2.9rem;
+  width: 6rem;
+  height: 6rem;
   border-radius: 50%;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
   transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.3, 1);
