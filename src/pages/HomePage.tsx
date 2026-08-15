@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
@@ -7,9 +7,10 @@ import 'swiper/css/pagination'
 import { useAudioStore } from '../store/audioStore'
 import { homepageContentData, artistsData, tracksData, eventsData } from '../cms/data'
 import styles from './HomePage.module.css'
+import logo from '../assets/logo.png'
 import { Link } from 'react-router-dom'
 import { Seo } from '../shared/ui/Seo'
-import { FiCalendar, FiMapPin } from 'react-icons/fi'
+import { FiArrowRight, FiCalendar, FiMapPin, FiPlay, FiHeadphones } from 'react-icons/fi'
 import { getMediaUrl } from '../shared/lib/media'
 
 function formatDate(dateString?: string): string {
@@ -24,9 +25,48 @@ function formatDate(dateString?: string): string {
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
+const SHORT_MONTHS = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']
+
+function formatDayMonth(dateString?: string): { day: string; month: string } {
+  if (!dateString) return { day: '--', month: '' }
+  const date = new Date(dateString)
+  if (isNaN(date.getTime())) return { day: '--', month: '' }
+  return {
+    day: String(date.getDate()).padStart(2, '0'),
+    month: SHORT_MONTHS[date.getMonth()],
+  }
+}
+
+const EQ_HEIGHTS = [22, 40, 30, 48, 34, 54, 26, 42, 36, 50, 30, 44]
+const MARQUEE_ITEMS = ['Новые имена', 'Красноярск', 'Музыкальный лейбл', 'Kray Music']
+const MARQUEE_CONTENT = Array.from({ length: 8 }, () => MARQUEE_ITEMS).flat()
+
+interface SectionHeadProps {
+  eyebrow: string
+  title: string
+  to: string
+  linkLabel: string
+}
+
+function SectionHead({ eyebrow, title, to, linkLabel }: SectionHeadProps) {
+  return (
+    <div className={styles.sectionHeader}>
+      <div>
+        <p className={styles.sectionEyebrow}>{eyebrow}</p>
+        <h2 className={styles.sectionTitle}>{title}</h2>
+      </div>
+      <Link to={to} className={styles.sectionLink}>
+        {linkLabel}
+        <FiArrowRight />
+      </Link>
+    </div>
+  )
+}
+
 export default function HomePage() {
   const playTrack = useAudioStore((state) => state.playTrack)
   const queue = useAudioStore((state) => state.queue)
+  const reduceMotion = useReducedMotion()
 
   const { heroTitle, heroSubtitle, featuredArtists, featuredTracks, featuredEvents } = homepageContentData
 
@@ -39,20 +79,106 @@ export default function HomePage() {
       <Seo title="Главная" description="Kray Music — музыкальный лейбл, который помогает открывать новых артистов и слушать свежие релизы." />
       <section className={styles.page}>
         <section className={styles.hero}>
-          <h1 className={styles.title}>{heroTitle}</h1>
-          <p className={styles.subtitle}>
-            «
-            <span style={{ color: '#c71d1b' }}>Край</span>
-            <span style={{ color: '#ffffff' }}>Music</span>
-            »{heroSubtitle}
-          </p>
+          <span className={styles.heroGlow} aria-hidden="true" />
+          <span className={styles.heroGlowSecond} aria-hidden="true" />
+
+          <div className={styles.heroContent}>
+            <motion.p
+              className={styles.eyebrow}
+              initial={{ opacity: 0, x: -14 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, ease: 'easeOut', delay: 0.05 }}
+            >
+              Музыкальный лейбл из Красноярска
+            </motion.p>
+            <motion.h1
+              className={styles.title}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.12 }}
+            >
+              {heroTitle}
+            </motion.h1>
+            <motion.span
+              className={styles.titleAccent}
+              aria-hidden="true"
+              initial={{ opacity: 0, scaleX: 0 }}
+              animate={{ opacity: 1, scaleX: 1 }}
+              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.2 }}
+            />
+            <motion.p
+              className={styles.subtitle}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.28 }}
+            >
+              <span className={styles.brand}>
+                «
+                <span className={styles.brandKray}>Край</span>
+                <span className={styles.brandMusic}>Music</span>
+                »
+              </span>
+              {heroSubtitle}
+            </motion.p>
+            <motion.div
+              className={styles.heroActions}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.36 }}
+            >
+              <Link to="/artists" className={styles.primaryLink}>
+                Наши артисты
+                <FiArrowRight />
+              </Link>
+              <Link to="/radio" className={styles.secondaryLink}>
+                <FiHeadphones />
+                Слушать релизы
+              </Link>
+            </motion.div>
+          </div>
+
+          <div className={styles.heroArt} aria-hidden="true">
+            <span className={styles.vinylRing} />
+            <div className={styles.vinyl}>
+              <span className={styles.vinylLabel}>
+                <img src={logo} alt="" className={styles.vinylLogo} />
+              </span>
+            </div>
+            <motion.div
+              className={styles.onAir}
+              animate={reduceMotion ? undefined : { y: [0, -8, 0] }}
+              transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <span className={styles.onAirDot} />
+              <span>В ЭФИРЕ</span>
+            </motion.div>
+            <div className={styles.equalizer}>
+              {EQ_HEIGHTS.map((height, index) => (
+                <motion.span
+                  key={index}
+                  className={styles.eqBar}
+                  style={{ height }}
+                  animate={reduceMotion ? undefined : { scaleY: [0.2, 1, 0.45, 0.8, 0.2] }}
+                  transition={{ duration: 1.9, repeat: Infinity, ease: 'easeInOut', delay: index * 0.09 }}
+                />
+              ))}
+            </div>
+          </div>
         </section>
 
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2>Наши артисты</h2>
-            <Link to="/artists">Все артисты</Link>
+        <div className={styles.marquee} aria-hidden="true">
+          <div className={styles.marqueeTrack}>
+            {MARQUEE_CONTENT.map((item, index) => (
+              <span key={index} className={styles.marqueeItem}>
+                <span className={styles.marqueeDot} />
+                {item}
+              </span>
+            ))}
           </div>
+        </div>
+
+        <section className={styles.section}>
+          <SectionHead eyebrow="Лейбл" title="Наши артисты" to="/artists" linkLabel="Все артисты" />
           <Swiper
             className={styles.swiper}
             modules={[Navigation, Pagination]}
@@ -64,11 +190,26 @@ export default function HomePage() {
           >
             {displayArtists.map((artist) => (
               <SwiperSlide key={artist.id} className={styles.swiperSlide}>
-                <motion.article initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.card}>
-                  <Link to={`/artists/${artist.id}`}><img src={getMediaUrl(artist.verticalImage)} alt={artist.nickname} className={styles.image} /></Link>
-                  <h3>{artist.nickname}</h3>
-                  <p>{artist.biography}</p>
-                  <Link to={`/artists/${artist.id}`}>Открыть профиль</Link>
+                <motion.article
+                  className={styles.card}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                >
+                  <div className={styles.cardMedia}>
+                    <Link to={`/artists/${artist.id}`} className={styles.cardImageLink}>
+                      <img src={getMediaUrl(artist.verticalImage)} alt={artist.nickname} className={styles.artistImage} loading="lazy" />
+                    </Link>
+                  </div>
+                  <div className={styles.cardBody}>
+                    <h3>{artist.nickname}</h3>
+                    <p className={styles.cardText}>{artist.biography}</p>
+                    <Link to={`/artists/${artist.id}`} className={styles.cardLink}>
+                      Открыть профиль
+                      <FiArrowRight />
+                    </Link>
+                  </div>
                 </motion.article>
               </SwiperSlide>
             ))}
@@ -76,10 +217,7 @@ export default function HomePage() {
         </section>
 
         <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2>Недавние релизы</h2>
-            <Link to="/radio">Все релизы</Link>
-          </div>
+          <SectionHead eyebrow="Релизы" title="Недавние релизы" to="/radio" linkLabel="Все релизы" />
           <Swiper
             className={styles.swiper}
             modules={[Navigation, Pagination]}
@@ -91,13 +229,38 @@ export default function HomePage() {
           >
             {displayTracks.map((track) => (
               <SwiperSlide key={track.id} className={styles.swiperSlide}>
-                <motion.article initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.card}>
-                  <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.image} />
-                  <h3>{track.title}</h3>
-                  <p>{track.authors.map(a => a.nickname).join(', ')}</p>
-                  <button type="button" className={styles.secondaryButton} onClick={() => playTrack(track, queue)}>
-                    Слушать
-                  </button>
+                <motion.article
+                  className={styles.card}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                >
+                  <div className={styles.cardMedia}>
+                    <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.trackImage} loading="lazy" />
+                    {track.releaseType ? <span className={styles.chip}>{track.releaseType}</span> : null}
+                    <button
+                      type="button"
+                      className={styles.playOverlay}
+                      onClick={() => playTrack(track, queue)}
+                      aria-label={`Слушать: ${track.title}`}
+                    >
+                      <FiPlay />
+                    </button>
+                  </div>
+                  <div className={styles.cardBody}>
+                    <h3>{track.title}</h3>
+                    <p className={styles.cardText}>
+                      {track.authors.map((author, index) => (
+                        <span key={author.id}>
+                          <Link to={`/artists/${author.id}`} className={styles.authorLink}>
+                            {author.nickname}
+                          </Link>
+                          {index < track.authors.length - 1 ? ', ' : ''}
+                        </span>
+                      ))}
+                    </p>
+                  </div>
                 </motion.article>
               </SwiperSlide>
             ))}
@@ -105,10 +268,7 @@ export default function HomePage() {
         </section>
 
         <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2>Мероприятия</h2>
-            <Link to="/events">Все мероприятия</Link>
-          </div>
+          <SectionHead eyebrow="События" title="Мероприятия" to="/events" linkLabel="Все мероприятия" />
           <Swiper
             className={styles.swiper}
             modules={[Navigation, Pagination]}
@@ -118,27 +278,57 @@ export default function HomePage() {
             pagination={{ clickable: true }}
             breakpoints={{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}
           >
-            {displayEvents.map((event) => (
-              <SwiperSlide key={event.id} className={styles.swiperSlide}>
-                <motion.article initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.card}>
-                  <img src={getMediaUrl(event.image)} alt={event.title} className={styles.image} />
-                  <h3>{event.title}</h3>
-                  <div className={styles.item}>
-                    <FiCalendar />
-                    <p>{formatDate(event.date)}</p>
-                  </div>
-                  <div className={styles.item}>
-                    <FiMapPin />
-                    <p>{event.location}</p>
-                  </div>
-                  <p>{event.description}</p>
-                  <Link to={`/events/${event.id}`} className={styles.secondaryButton}>
-                    Подробнее
-                  </Link>
-                </motion.article>
-              </SwiperSlide>
-            ))}
+            {displayEvents.map((event) => {
+              const { day, month } = formatDayMonth(event.date)
+              return (
+                <SwiperSlide key={event.id} className={styles.swiperSlide}>
+                  <motion.article
+                    className={styles.card}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                  >
+                    <div className={styles.cardMedia}>
+                      <img src={getMediaUrl(event.image)} alt={event.title} className={styles.eventImage} loading="lazy" />
+                      <span className={styles.dateBadge}>
+                        <span className={styles.dateBadgeDay}>{day}</span>
+                        <span className={styles.dateBadgeMonth}>{month}</span>
+                      </span>
+                    </div>
+                    <div className={styles.cardBody}>
+                      <h3>{event.title}</h3>
+                      <p className={styles.cardText}>{event.description}</p>
+                      <div className={styles.meta}>
+                        <FiCalendar />
+                        <span>{formatDate(event.date)}</span>
+                      </div>
+                      <div className={styles.meta}>
+                        <FiMapPin />
+                        <span>{event.location}</span>
+                      </div>
+                      <Link to={`/events/${event.id}`} className={styles.buttonOutline}>
+                        Подробнее
+                        <FiArrowRight />
+                      </Link>
+                    </div>
+                  </motion.article>
+                </SwiperSlide>
+              )
+            })}
           </Swiper>
+        </section>
+
+        <section className={styles.cta}>
+          <div>
+            <p className={styles.eyebrow}>Радио лейбла</p>
+            <h2>Готовы включить звук?</h2>
+            <p>Соберите собственную подборку из свежих релизов Край Music и запустите проигрывание.</p>
+          </div>
+          <Link to="/radio" className={styles.primaryLink}>
+            Открыть радио
+            <FiArrowRight />
+          </Link>
         </section>
       </section>
     </>

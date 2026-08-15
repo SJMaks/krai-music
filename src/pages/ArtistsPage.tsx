@@ -4,6 +4,7 @@ import { artistsData } from '../cms/data'
 import styles from './ArtistsPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { getMediaUrl } from '../shared/lib/media'
+import { FiArrowRight } from 'react-icons/fi'
 
 export default function ArtistsPage() {
   const [query, setQuery] = useState('')
@@ -27,6 +28,7 @@ export default function ArtistsPage() {
         <div>
           <p className={styles.eyebrow}>Артисты</p>
           <h1>Избранные голоса</h1>
+          <p className={styles.subtitle}>Изучайте артистов лейбла Край и открывайте новые имена — у каждого свой звук и история.</p>
         </div>
         <input
           type="search"
@@ -46,7 +48,10 @@ export default function ArtistsPage() {
             <Link to={`/artists/${artist.id}`}><img src={getMediaUrl(artist.verticalImage)} alt={artist.nickname} className={styles.image} /></Link>
             <h2>{artist.nickname}</h2>
             <p>{artist.biography}</p>
-            <Link to={`/artists/${artist.id}`}>Открыть профиль</Link>
+            <Link to={`/artists/${artist.id}`} className={styles.cardLink}>
+              Открыть профиль
+              <FiArrowRight />
+            </Link>
           </article>
         ))}
       </div>

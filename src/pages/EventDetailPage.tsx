@@ -18,6 +18,18 @@ function formatDate(dateString?: string): string {
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
+const SHORT_MONTHS = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']
+
+function formatBadge(dateString?: string): { day: string; month: string } {
+  if (!dateString) return { day: '--', month: '' }
+  const date = new Date(dateString)
+  if (isNaN(date.getTime())) return { day: '--', month: '' }
+  return {
+    day: String(date.getDate()).padStart(2, '0'),
+    month: SHORT_MONTHS[date.getMonth()],
+  }
+}
+
 export default function EventDetailPage() {
   const { id } = useParams()
 
@@ -41,7 +53,13 @@ export default function EventDetailPage() {
           <span>К мероприятиям</span>
         </Link>
         <article className={styles.card}>
-          <img src={getMediaUrl(event.image)} alt={event.title} className={styles.image} />
+          <div className={styles.media}>
+            <img src={getMediaUrl(event.image)} alt={event.title} className={styles.image} />
+            <span className={styles.dateBadge}>
+              <span className={styles.dateBadgeDay}>{formatBadge(event.date).day}</span>
+              <span className={styles.dateBadgeMonth}>{formatBadge(event.date).month}</span>
+            </span>
+          </div>
           <div className={styles.content}>
             <p className={styles.eyebrow}>Мероприятие</p>
             <h1>{event.title}</h1>

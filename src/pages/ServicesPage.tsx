@@ -2,6 +2,7 @@ import { servicesData } from '../cms/data'
 import styles from './ServicesPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { getMediaUrl } from '../shared/lib/media'
+import { FiArrowRight } from 'react-icons/fi'
 
 export default function ServicesPage() {
   return (
@@ -11,6 +12,7 @@ export default function ServicesPage() {
       <div className={styles.header}>
         <p className={styles.eyebrow}>Услуги</p>
         <h1>Поддержка на каждом этапе</h1>
+        <p className={styles.subtitle}>Помогаем артистам расти: от записи трека до продвижения и выступлений.</p>
       </div>
       <div className={styles.list}>
         {servicesData.map((service, index) => (
@@ -19,7 +21,7 @@ export default function ServicesPage() {
             <div className={styles.content}>
               <h2>{service.title}</h2>
               <p>{service.description}</p>
-              <a href="#footer" className={styles.link}>Связаться</a>
+              <a href="#footer" className={styles.link}>Связаться <FiArrowRight /></a>
             </div>
           </article>
         ))}

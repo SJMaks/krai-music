@@ -10,7 +10,7 @@ import { useAudioStore } from '../store/audioStore'
 import styles from './ArtistDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { motion } from 'framer-motion'
-import { FiArrowLeft } from 'react-icons/fi'
+import { FiArrowLeft, FiPlay } from 'react-icons/fi'
 import type { Track } from '../types/content'
 import { getMediaUrl } from '../shared/lib/media'
 
@@ -87,7 +87,10 @@ export default function ArtistDetailPage() {
 
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
-            <h2>Клипы</h2>
+            <div>
+              <p className={styles.eyebrow}>Видео</p>
+              <h2>Клипы</h2>
+            </div>
           </div>
           {videos.length > 0 ? (
             <Swiper
@@ -114,6 +117,7 @@ export default function ArtistDetailPage() {
                     <p>{video.description}</p>
                     <a href={video.url} target="_blank" rel="noreferrer">
                       <button type="button" className={styles.secondaryButton}>
+                        <FiPlay />
                         Смотреть
                       </button>
                     </a>
@@ -128,8 +132,11 @@ export default function ArtistDetailPage() {
 
         <section className={styles.section}>
           <div className={styles.trackLayout}>
-            <div style={{ alignSelf: 'start' }}>
-              <h2>Список треков</h2>
+            <div className={styles.trackColumn}>
+              <div>
+                <p className={styles.eyebrow}>Треки</p>
+                <h2>Список треков</h2>
+              </div>
               <div className={styles.trackList}>
                 {pageTracks.map((track) => (
                   <div key={track.id} className={styles.trackCard}>
@@ -145,6 +152,7 @@ export default function ArtistDetailPage() {
                       className={styles.playButton}
                       onClick={() => handlePlayTrack(track)}
                     >
+                      <FiPlay />
                       Воспроизвести
                     </button>
                   </div>
@@ -199,6 +207,7 @@ export default function ArtistDetailPage() {
                       className={styles.secondaryButton}
                       onClick={() => handlePlayTrack(featuredTrack)}
                     >
+                      <FiPlay />
                       Слушать
                     </button>
                   </div>

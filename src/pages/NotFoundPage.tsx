@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import styles from './NotFoundPage.module.css'
 import { Seo } from '../shared/ui/Seo'
+import { FiArrowRight } from 'react-icons/fi'
 
 export default function NotFoundPage() {
   return (
@@ -10,7 +11,11 @@ export default function NotFoundPage() {
       <p className={styles.eyebrow}>404</p>
       <h1>Страница не найдена</h1>
       <p>Но вы можете найти вдохновение на радио КрайMusic!</p>
-      <Link to="/radio" className={styles.link}>Поймать волну</Link>
+      <Link to="/radio" className={styles.link}>
+        Поймать волну
+        <FiArrowRight />
+      </Link>
+      <Link to="/" className={styles.homeLink}>На главную</Link>
     </section>
     </>
   )

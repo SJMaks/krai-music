@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { FiMenu, FiX } from 'react-icons/fi'
+
 import styles from './Header.module.css'
 import logo from '../../assets/logo.png'
 import { useContent } from '../../hooks/useContent'
@@ -24,17 +24,19 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <NavLink to="/" aria-label="Главная страница Kray Music">
-          <img className={styles.logo} src={logo}/>
+        <NavLink to="/" className={styles.brand} aria-label="Главная страница Kray Music">
+          <img className={styles.logo} src={logo} alt="" />
         </NavLink>
         <button
           type="button"
-          className={styles.burger}
+          className={`${styles.burger} ${open ? styles.burgerOpen : ''}`}
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
           aria-label="Открыть меню"
         >
-          {open ? <FiX size={20} /> : <FiMenu size={20} />}
+          <span className={styles.burgerLine} />
+          <span className={styles.burgerLine} />
+          <span className={styles.burgerLine} />
         </button>
         <nav className={`${styles.nav} ${open ? styles.open : ''}`} aria-label="Основная навигация">
           {links.filter(link => link.to !== '/').map((link) => (
@@ -44,7 +46,6 @@ export function Header() {
                 type="button"
                 className={styles.linkButton}
                 onClick={handleContactsClick}
-                style={{textAlign: 'left', padding: 0}}
               >
                 {link.label}
               </button>

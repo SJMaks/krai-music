@@ -75,7 +75,15 @@ export const useAudioStore = create<AudioState>()(
         })
       },
       togglePlay: () => set((state: AudioStoreState) => ({ isPlaying: state.currentTrack ? !state.isPlaying : state.isPlaying })),
-      closePlayer: () => set({ isVisible: false }),
+      closePlayer: () =>
+        set({
+          isVisible: false,
+          currentTrack: null,
+          isPlaying: false,
+          progress: 0,
+          currentTime: 0,
+          duration: 0,
+        }),
       nextTrack: () => {
         const { queue, currentTrack, shuffle, repeat } = get()
         if (!queue.length) return

@@ -10,7 +10,10 @@ export function Footer() {
 
   return (
     <footer id="footer" className={styles.footer}>
-      <img src={logo} className={styles.logo} />
+      <span className={styles.watermark} aria-hidden="true">КРАЙ MUSIC</span>
+      <div className={styles.logoWrap}>
+        <img src={logo} className={styles.logo} />
+      </div>
       <div className={styles.container}>
         <div className={styles.section}>
           <h2 className={styles.head}>Разделы сайта</h2>
@@ -69,12 +72,14 @@ export function Footer() {
           </div>
         </div>
       </div>
-      <p className={styles.copy}>
-        {footer?.copyrightText ?? 'Все права защищены.'}
-      </p>
-      <p className={styles.designed}>
-        Разработано&nbsp;<span style={{ fontWeight: 'bold', fontStyle: 'italic' }}>MAZE</span>
-      </p>
+      <div className={styles.bottom}>
+        <p className={styles.copy}>
+          {footer?.copyrightText ?? 'Все права защищены.'}
+        </p>
+        <p className={styles.designed}>
+          Разработано&nbsp;<span>MAZE</span>
+        </p>
+      </div>
     </footer>
   )
 }
