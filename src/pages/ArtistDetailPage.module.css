@@ -283,6 +283,7 @@
 .trackList {
   display: grid;
   gap: 0.85rem;
+  scroll-margin-top: 5rem;
 }
 
 .trackCard {
@@ -376,10 +377,16 @@
 }
 
 .pagination button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
   background: transparent;
   color: #cfcbcb;
   border: 1px solid rgba(207, 203, 203, 0.24);
-  padding: 0.65rem 1.2rem;
+  border-radius: 999px;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.2s ease, color 0.2s ease;

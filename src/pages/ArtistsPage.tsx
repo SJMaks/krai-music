@@ -1,15 +1,24 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { motion, useReducedMotion } from 'framer-motion'
 import { artistsData } from '../cms/data'
 import styles from './ArtistsPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { getMediaUrl } from '../shared/lib/media'
-import { FiArrowRight } from 'react-icons/fi'
+import { FiArrowRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 export default function ArtistsPage() {
+  const reduceMotion = useReducedMotion()
   const [query, setQuery] = useState('')
   const [page, setPage] = useState(1)
   const perPage = 4
+  const listRef = useRef<HTMLDivElement>(null)
+  const goToPage = (next: (value: number) => number) => {
+    setPage(next)
+    requestAnimationFrame(() => {
+      listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
 
   const filteredArtists = useMemo(() => {
     const sorted = [...artistsData].sort((left, right) => left.nickname.localeCompare(right.nickname))
@@ -22,9 +31,14 @@ export default function ArtistsPage() {
 
   return (
     <>
-      <Seo title="Артисты" description="ИзучайтеRoster Kray Music и открывайте новых артистов." />
+      <Seo title="Артисты" description="Изучайте артистов Kray Music и открывайте новых исполнителей." />
       <section className={styles.page}>
-      <div className={styles.header}>
+      <motion.div
+        className={styles.header}
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, ease: 'easeOut' }}
+      >
         <div>
           <p className={styles.eyebrow}>Артисты</p>
           <h1>Избранные голоса</h1>
@@ -41,10 +55,17 @@ export default function ArtistsPage() {
           className={styles.input}
           aria-label="Поиск артистов"
         />
-      </div>
-      <div className={styles.grid}>
-        {pageArtists.map((artist) => (
-          <article key={artist.id} className={styles.card}>
+      </motion.div>
+      <div className={styles.grid} ref={listRef}>
+        {pageArtists.map((artist, index) => (
+          <motion.article
+            key={artist.id}
+            className={styles.card}
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.5, delay: reduceMotion ? 0 : (index % 3) * 0.06, ease: 'easeOut' }}
+          >
             <Link to={`/artists/${artist.id}`}><img src={getMediaUrl(artist.verticalImage)} alt={artist.nickname} className={styles.image} /></Link>
             <h2>{artist.nickname}</h2>
             <p>{artist.biography}</p>
@@ -52,18 +73,23 @@ export default function ArtistsPage() {
               Открыть профиль
               <FiArrowRight />
             </Link>
-          </article>
+          </motion.article>
         ))}
       </div>
-      <div className={styles.pagination}>
-        <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} disabled={currentPage === 1}>
-          Назад
+      <motion.div
+        className={styles.pagination}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.45, delay: 0.12 }}
+      >
+        <button type="button" onClick={() => goToPage((value) => Math.max(1, value - 1))} disabled={currentPage === 1} aria-label="Назад">
+          <FiChevronLeft size={18} />
         </button>
         <span>{currentPage} / {totalPages}</span>
-        <button type="button" onClick={() => setPage((value) => Math.min(totalPages, value + 1))} disabled={currentPage === totalPages}>
-          Вперёд
+        <button type="button" onClick={() => goToPage((value) => Math.min(totalPages, value + 1))} disabled={currentPage === totalPages} aria-label="Вперёд">
+          <FiChevronRight size={18} />
         </button>
-      </div>
+      </motion.div>
     </section>
     </>
   )

@@ -269,6 +269,7 @@
     transform: scale(0.6);
     opacity: 1;
   }
+
   100% {
     transform: scale(1.8);
     opacity: 0;
@@ -300,10 +301,22 @@
   animation-play-state: paused;
 }
 
-.eqBig span:nth-child(2) { animation-delay: 0.15s; }
-.eqBig span:nth-child(3) { animation-delay: 0.3s; }
-.eqBig span:nth-child(4) { animation-delay: 0.45s; }
-.eqBig span:nth-child(5) { animation-delay: 0.6s; }
+.eqBig span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.eqBig span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.eqBig span:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+.eqBig span:nth-child(5) {
+  animation-delay: 0.6s;
+}
+
 .eqBigActive span {
   animation-play-state: running;
 }
@@ -324,13 +337,21 @@
   animation: eqBounce 0.9s ease-in-out infinite;
 }
 
-.eq span:nth-child(2) { animation-delay: 0.2s; }
-.eq span:nth-child(3) { animation-delay: 0.4s; }
+.eq span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.eq span:nth-child(3) {
+  animation-delay: 0.4s;
+}
 
 @keyframes eqBounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scaleY(0.3);
   }
+
   50% {
     transform: scaleY(1);
   }
@@ -398,26 +419,11 @@
   margin: 0;
 }
 
-.resetBtn {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: transparent;
-  color: rgba(255, 255, 255, 0.7);
-  border-radius: 999px;
-  padding: 0.45rem 1rem;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-
-.resetBtn:hover {
-  color: #ffffff;
-  border-color: rgba(242, 92, 92, 0.6);
-}
-
 .empty {
   color: rgba(255, 255, 255, 0.5);
   padding: 1rem 0;
 }
+
 /* ===== Сетка релизов (карточки-обложки) ===== */
 .shelf {
   display: grid;
@@ -566,7 +572,7 @@
   transition: background-color 0.2s ease;
 }
 
-.trackRow + .trackRow {
+.trackRow+.trackRow {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -686,6 +692,12 @@
 }
 
 @media (max-width: 620px) {
+  .billboardActions {
+    width: 100%;
+    padding: 0 10vw;
+    justify-content: center;
+  }
+
   .page {
     gap: 2.2rem;
     padding-top: 1.6rem;
@@ -727,6 +739,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .vinyl,
   .vinylRing,
   .eqBig span,

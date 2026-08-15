@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { eventsData } from '../cms/data'
 import styles from './EventDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
@@ -39,7 +40,13 @@ export default function EventDetailPage() {
     return (
       <section className={styles.page}>
         <Seo title="Мероприятие не найдено" description="Запрашиваемое мероприятие не найдено." />
-        <p>Мероприятие не найдено.</p>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: 'easeOut' }}
+        >
+          Мероприятие не найдено.
+        </motion.p>
       </section>
     )
   }
@@ -48,11 +55,22 @@ export default function EventDetailPage() {
     <>
       <Seo title={event.title} description={`${event.title} — мероприятие Kray Music.`} />
       <section className={styles.page}>
-        <Link to="/events" className={styles.backLink}>
-          <FiArrowLeft />
-          <span>К мероприятиям</span>
-        </Link>
-        <article className={styles.card}>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: 'easeOut' }}
+        >
+          <Link to="/events" className={styles.backLink}>
+            <FiArrowLeft />
+            <span>К мероприятиям</span>
+          </Link>
+        </motion.div>
+        <motion.article
+          className={styles.card}
+          initial={{ opacity: 0, y: 22 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: 'easeOut', delay: 0.07 }}
+        >
           <div className={styles.media}>
             <img src={getMediaUrl(event.image)} alt={event.title} className={styles.image} />
             <span className={styles.dateBadge}>
@@ -82,7 +100,7 @@ export default function EventDetailPage() {
               </div>
             )}
           </div>
-        </article>
+        </motion.article>
       </section>
     </>
   )

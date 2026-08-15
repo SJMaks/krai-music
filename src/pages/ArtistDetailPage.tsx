@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
@@ -9,8 +9,8 @@ import { artistsData, tracksData } from '../cms/data'
 import { useAudioStore } from '../store/audioStore'
 import styles from './ArtistDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
-import { motion } from 'framer-motion'
-import { FiArrowLeft, FiPlay } from 'react-icons/fi'
+import { motion, useReducedMotion } from 'framer-motion'
+import { FiArrowLeft, FiPlay, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import type { Track } from '../types/content'
 import { getMediaUrl } from '../shared/lib/media'
 
@@ -27,7 +27,15 @@ function formatDate(dateString?: string): string {
 export default function ArtistDetailPage() {
   const { id } = useParams()
   const [page, setPage] = useState(1)
+  const listRef = useRef<HTMLDivElement>(null)
+  const goToPage = (next: (value: number) => number) => {
+    setPage(next)
+    requestAnimationFrame(() => {
+      listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
   const playTrack = useAudioStore((state) => state.playTrack)
+  const reduceMotion = useReducedMotion()
 
   const artist = useMemo(() => artistsData.find((entry) => entry.id === id), [id])
 
@@ -51,7 +59,16 @@ export default function ArtistDetailPage() {
   }
 
   if (!artist) {
-    return <div className={styles.empty}>Артист не найден.</div>
+    return (
+      <motion.div
+        className={styles.empty}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+      >
+        Артист не найден.
+      </motion.div>
+    )
   }
 
   const socials = artist.socials ?? []
@@ -61,11 +78,22 @@ export default function ArtistDetailPage() {
     <>
       <Seo title={artist.nickname} description={`${artist.nickname} — артист Kray Music.`} />
       <section className={styles.page}>
-        <Link to="/artists" className={styles.backLink}>
-          <FiArrowLeft />
-          <span>К артистам</span>
-        </Link>
-        <section className={styles.hero}>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: 'easeOut' }}
+        >
+          <Link to="/artists" className={styles.backLink}>
+            <FiArrowLeft />
+            <span>К артистам</span>
+          </Link>
+        </motion.div>
+        <motion.section
+          className={styles.hero}
+          initial={{ opacity: 0, y: 22 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: 'easeOut', delay: 0.06 }}
+        >
           <img
             src={getMediaUrl(artist.squareImage || artist.verticalImage)}
             alt={artist.nickname}
@@ -83,7 +111,7 @@ export default function ArtistDetailPage() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
@@ -102,12 +130,13 @@ export default function ArtistDetailPage() {
               pagination={{ clickable: true }}
               breakpoints={{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}
             >
-              {videos.map((video) => (
+              {videos.map((video, videoIndex) => (
                 <SwiperSlide key={video.title} className={styles.swiperSlide}>
                   <motion.article
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 14 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, margin: '-30px' }}
+                    transition={{ duration: 0.45, delay: reduceMotion ? 0 : (videoIndex % 3) * 0.06, ease: 'easeOut' }}
                     className={styles.card}
                   >
                     <a href={video.url} target="_blank" rel="noreferrer">
@@ -137,9 +166,16 @@ export default function ArtistDetailPage() {
                 <p className={styles.eyebrow}>Треки</p>
                 <h2>Список треков</h2>
               </div>
-              <div className={styles.trackList}>
-                {pageTracks.map((track) => (
-                  <div key={track.id} className={styles.trackCard}>
+              <div className={styles.trackList} ref={listRef}>
+                {pageTracks.map((track, index) => (
+                  <motion.div
+                    key={track.id}
+                    className={styles.trackCard}
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-30px' }}
+                    transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
+                  >
                     <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.trackCover} />
                     <div>
                       <h3>{track.title}</h3>
@@ -155,29 +191,40 @@ export default function ArtistDetailPage() {
                       <FiPlay />
                       Воспроизвести
                     </button>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-              <div className={styles.pagination}>
+              <motion.div
+                className={styles.pagination}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+              >
                 <button
                   type="button"
-                  onClick={() => setPage((value) => Math.max(1, value - 1))}
-                  disabled={currentPage === 1}
+                  onClick={() => goToPage((value) => Math.max(1, value - 1))}
+                  disabled={currentPage === 1} aria-label="Назад"
                 >
-                  Назад
+                  <FiChevronLeft size={18} />
                 </button>
                 <span>{currentPage} / {totalPages}</span>
                 <button
                   type="button"
-                  onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
-                  disabled={currentPage === totalPages}
+                  onClick={() => goToPage((value) => Math.min(totalPages, value + 1))}
+                  disabled={currentPage === totalPages} aria-label="Вперёд"
                 >
-                  Вперёд
+                  <FiChevronRight size={18} />
                 </button>
-              </div>
+              </motion.div>
             </div>
 
-            <div className={styles.featuredTrackCard}>
+            <motion.div
+              className={styles.featuredTrackCard}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-30px' }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            >
               <div className={styles.featuredTrackHeader}>
                 <p className={styles.eyebrow}>Новый релиз</p>
               </div>
@@ -215,7 +262,7 @@ export default function ArtistDetailPage() {
               ) : (
                 <p>Пока нет доступных релизов.</p>
               )}
-            </div>
+            </motion.div>
           </div>
         </section>
       </section>

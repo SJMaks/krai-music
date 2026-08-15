@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { motion, useReducedMotion } from 'framer-motion'
 import { eventsData } from '../cms/data'
 import styles from './EventsPage.module.css'
 import { Seo } from '../shared/ui/Seo'
@@ -30,18 +31,31 @@ function formatBadge(dateString?: string): { day: string; month: string } {
 }
 
 export default function EventsPage() {
+  const reduceMotion = useReducedMotion()
   return (
     <>
       <Seo title="Мероприятия" description="Актуальные события и показы лейбла Kray Music." />
       <section className={styles.page}>
-        <div className={styles.header}>
+        <motion.div
+          className={styles.header}
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: 'easeOut' }}
+        >
           <p className={styles.eyebrow}>Мероприятия</p>
           <h1>Уникальные события</h1>
           <p className={styles.subtitle}>Приходите на концерты, вечеринки и батлы артистов лейбла — здесь рождается живой звук.</p>
-        </div>
+        </motion.div>
         <div className={styles.list}>
           {eventsData.map((event, index) => (
-            <article key={event.id} className={`${styles.card} ${index % 2 === 1 ? styles.reverse : ''}`}>
+            <motion.article
+              key={event.id}
+              className={`${styles.card} ${index % 2 === 1 ? styles.reverse : ''}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.55, delay: reduceMotion ? 0 : (index % 2) * 0.08, ease: 'easeOut' }}
+            >
               <div className={styles.media}>
                 <img src={getMediaUrl(event.image)} alt={event.title} className={styles.image} />
                 <span className={styles.dateBadge}>
@@ -67,7 +81,7 @@ export default function EventsPage() {
                   </Link>
                 </div>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </section>

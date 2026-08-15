@@ -155,11 +155,6 @@ export default function RadioPage() {
               <p className={styles.eyebrow}>{filter === 'Все' ? 'Коллекция' : filter}</p>
               <h2 className={styles.sectionTitle}>Релизы лейбла</h2>
             </div>
-            {filter !== 'Все' && (
-              <button type="button" className={styles.resetBtn} onClick={() => setFilter('Все')}>
-                Сбросить фильтр
-              </button>
-            )}
           </header>
 
           {filteredTracks.length > 0 ? (

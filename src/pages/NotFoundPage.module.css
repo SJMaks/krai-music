@@ -55,6 +55,7 @@
   text-decoration: none;
   font-weight: 600;
   box-shadow: 0 10px 26px rgba(199, 29, 27, 0.3);
+  border-radius: 999px;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
