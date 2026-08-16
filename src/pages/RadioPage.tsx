@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { artistsData, albumsData, tracksData, radioContentData } from '../cms/data'
+import { artistsData, tracksData, radioContentData } from '../cms/data'
 import { useAudioStore } from '../store/audioStore'
 import styles from './RadioPage.module.css'
 import { Seo } from '../shared/ui/Seo'
@@ -55,10 +55,11 @@ export default function RadioPage() {
   }, [filter])
 
   // «Релизы лейбла» — витрина: синглы и альбомы, выбор которых задаётся в
-  // Decap CMS (content/radio.json). Пустой список = показать всё лейбла.
+  // Decap CMS (content/radio.json). Для синглов пустой список = показать все;
+  // альбомы показываются только если явно выбраны в CMS.
   const labelReleases = useMemo(() => {
     const singles = radioContentData.releases.length > 0 ? radioContentData.releases : tracksData
-    const albums = radioContentData.albums.length > 0 ? radioContentData.albums : albumsData
+    const albums = radioContentData.albums
     const base: ReleaseItem[] = [...singles, ...albums]
     if (filter === 'Все') return base
     return base.filter((item) =>

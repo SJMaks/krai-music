@@ -307,8 +307,11 @@ var AlbumPreview = createClass({
       h('h1', {}, title),
       h('h3', {}, 'Дата релиза: ' + formatDate(releaseDate)),
       h('p', {}, description),
-      tracks.size > 0
-        ? h('h4', {}, 'Треки: ' + tracks.map(function (t) { return t.get('title'); }).join(', '))
+      (tracks && tracks.size > 0)
+        ? h('h4', {}, 'Треки: ' + tracks.map(function (t) {
+            if (!t) return '';
+            return (typeof t.get === 'function') ? (t.get('title') || '') : (t.title || t || '');
+          }).join(', '))
         : null
     );
   }
