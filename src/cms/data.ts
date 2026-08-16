@@ -1,6 +1,7 @@
-import type { Artist, Event, HomepageContent, Service, Track, ContactContent } from '../types/content'
+import type { Artist, Event, HomepageContent, RadioContent, Service, Track, ContactContent } from '../types/content'
 import homepageJson from '../../content/homepage.json'
 import contactsJson from '../../content/contacts.json'
+import radioJson from '../../content/radio.json'
 
 const artistModules = import.meta.glob('../../content/artists/*.json', { eager: true, import: 'default' })
 const trackModules = import.meta.glob('../../content/tracks/*.json', { eager: true, import: 'default' })
@@ -85,9 +86,20 @@ const contacts: ContactContent = {
   ],
 }
 
+const radioReleaseIds = (Array.isArray(radioJson.releases) ? radioJson.releases : []) as unknown as string[]
+
+const radioContent: RadioContent = {
+  releases: radioReleaseIds.map(id => {
+    const track = tracksMap.get(id)
+    if (!track) throw new Error(`Track with id "${id}" not found`)
+    return track
+  }),
+}
+
 export const artistsData = artistsWithFeatured
 export const tracksData = Array.from(tracksMap.values())
 export const eventsData = events
 export const servicesData = services
 export const homepageContentData = homepageContent
 export const contactData = contacts
+export const radioContentData = radioContent

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { artistsData, tracksData } from '../cms/data'
+import { artistsData, tracksData, radioContentData } from '../cms/data'
 import { useAudioStore } from '../store/audioStore'
 import styles from './RadioPage.module.css'
 import { Seo } from '../shared/ui/Seo'
@@ -44,6 +44,15 @@ export default function RadioPage() {
   const filteredTracks = useMemo(() => {
     if (filter === 'Все') return tracksData
     return tracksData.filter((track) =>
+      track.authors.some((author) => author.nickname === filter)
+    )
+  }, [filter])
+
+  // «Релизы лейбла» — витрина, список задаётся в Decap CMS (content/radio.json)
+  const labelReleases = useMemo(() => {
+    const base = radioContentData.releases.length > 0 ? radioContentData.releases : tracksData
+    if (filter === 'Все') return base
+    return base.filter((track) =>
       track.authors.some((author) => author.nickname === filter)
     )
   }, [filter])
@@ -157,9 +166,9 @@ export default function RadioPage() {
             </div>
           </header>
 
-          {filteredTracks.length > 0 ? (
+          {labelReleases.length > 0 ? (
             <div className={styles.shelf}>
-              {filteredTracks.map((track, index) => {
+              {labelReleases.map((track, index) => {
                 const active = isCurrent(track)
                 return (
                   <motion.article

@@ -73,6 +73,10 @@ export interface ContactContent {
   socials: SocialLink[]
 }
 
+export interface RadioContent {
+  releases: Track[]
+}
+
 export interface RadioPlaylist {
   orderedTracks: string[]
   artistFilters: string[]

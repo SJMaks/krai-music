@@ -138,3 +138,17 @@ collections:
           - { label: Номер телефона, name: phone, widget: string }
           - { label: Адрес, name: address, widget: string }
           - { label: Ссылки на соц. сети, name: socials, required: false, widget: list, fields: [{ label: Соц. сеть, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
+      - name: radio
+        label: Радио — релизы лейбла
+        file: content/radio.json
+        format: json
+        fields:
+          - label: Релизы лейбла
+            name: releases
+            widget: relation
+            collection: tracks
+            search_fields: [title]
+            value_field: id
+            display_fields: [title]
+            multiple: true
+            required: false
