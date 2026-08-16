@@ -5,7 +5,6 @@
   background: transparent;
   border-bottom: 1px solid rgba(207, 203, 203, 0.1);
   backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
 }
 
 .header::after {
