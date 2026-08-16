@@ -1,6 +1,15 @@
+export type SocialNetwork =
+  | 'vk'
+  | 'telegram'
+  | 'instagram'
+  | 'x'
+  | 'facebook'
+  | 'custom'
+
 export interface SocialLink {
   label: string
   url: string
+  type?: SocialNetwork
 }
 
 export interface Video {

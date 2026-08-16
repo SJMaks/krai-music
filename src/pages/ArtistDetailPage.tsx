@@ -11,8 +11,18 @@ import styles from './ArtistDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FiArrowLeft, FiPlay, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+import { FaVk, FaTelegram, FaInstagram, FaXTwitter, FaFacebookF } from 'react-icons/fa6'
+import type { IconType } from 'react-icons'
 import type { Track } from '../types/content'
 import { getMediaUrl } from '../shared/lib/media'
+
+const SOCIAL_META: Record<string, { Icon: IconType; defaultLabel: string }> = {
+  vk: { Icon: FaVk, defaultLabel: 'ВК' },
+  telegram: { Icon: FaTelegram, defaultLabel: 'Телеграм' },
+  instagram: { Icon: FaInstagram, defaultLabel: 'Инстаграм' },
+  x: { Icon: FaXTwitter, defaultLabel: 'X' },
+  facebook: { Icon: FaFacebookF, defaultLabel: 'Facebook' },
+}
 
 function formatDate(dateString?: string): string {
   if (!dateString) return 'Дата не указана'
@@ -104,11 +114,29 @@ export default function ArtistDetailPage() {
             <h1>{artist.nickname}</h1>
             <p>{artist.biography}</p>
             <div className={styles.socials}>
-              {socials.map((social) => (
-                <a key={social.label} href={social.url} target="_blank" rel="noreferrer">
-                  {social.label}
-                </a>
-              ))}
+              {socials.map((social, index) => {
+                const meta = social.type ? SOCIAL_META[social.type] : undefined
+                const Icon = meta?.Icon
+                const label = social.label?.trim() || meta?.defaultLabel || 'Ссылка'
+                const key = `${label}-${social.url}-${index}`
+                return Icon ? (
+                  <a
+                    key={key}
+                    href={social.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={styles.socialIcon}
+                    title={label}
+                    aria-label={label}
+                  >
+                    <Icon aria-hidden="true" />
+                  </a>
+                ) : (
+                  <a key={key} href={social.url} target="_blank" rel="noreferrer">
+                    {social.label}
+                  </a>
+                )
+              })}
             </div>
           </div>
         </motion.section>
