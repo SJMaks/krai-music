@@ -9,6 +9,10 @@
       "type": "vk",
       "label": "ВК",
       "url": "https://vk.ru/a.liink"
+    },
+    {
+      "type": "instagram",
+      "url": "https://instagram.com/alink"
     }
   ],
   "featuredTrack": "track_5e183427-8b3a-440b-b201-f9b26dcbf22e",
