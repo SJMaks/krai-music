@@ -6,9 +6,9 @@
   place-items: center;
   align-content: center;
   gap: 0.9rem;
+  padding: 5rem 0;
   text-align: center;
   min-height: calc(100vh - 24rem);
-  padding: 4rem 1.5rem;
   animation: pageIn 0.5s cubic-bezier(0.2, 0.8, 0.3, 1) both;
 }
 

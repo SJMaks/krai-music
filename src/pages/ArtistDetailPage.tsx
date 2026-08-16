@@ -252,9 +252,20 @@ export default function ArtistDetailPage() {
                       </div>
                       <div>
                         <h3>{track.title}</h3>
-                        <p>
-                          {track.authors.map((a) => a.nickname).join(', ')}
-                        </p>
+                        <div className={styles.trackAuthors}>
+                            {track.authors.map((author, authorIndex) => (
+                              <span key={author.id}>
+                                <Link
+                                  to={`/artists/${author.id}`}
+                                  className={styles.trackAuthorLink}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  {author.nickname}
+                                </Link>
+                                {authorIndex < track.authors.length - 1 && ', '}
+                              </span>
+                            ))}
+                          </div>
                       </div>
                       <button
                         type="button"
@@ -323,9 +334,16 @@ export default function ArtistDetailPage() {
                   </button>
                   <div className={styles.featuredTrackInfo}>
                     <h3>{featuredTrack.title}</h3>
-                    <p>
-                      {featuredTrack.authors.map((a) => a.nickname).join(', ')}
-                    </p>
+                    <div className={styles.albumAuthors}>
+                      {featuredTrack.authors.map((author, authorIndex) => (
+                        <span key={author.id}>
+                          <Link to={`/artists/${author.id}`} className={styles.albumAuthorLink}>
+                            {author.nickname}
+                          </Link>
+                          {authorIndex < featuredTrack.authors.length - 1 && ', '}
+                        </span>
+                      ))}
+                    </div>
                     <p>Дата релиза: {formatDate(featuredTrack.releaseDate)}</p>
                     <p>Тип релиза: {featuredTrack.releaseType}</p>
                     <p>{featuredTrack.description}</p>

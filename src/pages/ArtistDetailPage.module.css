@@ -408,6 +408,48 @@
   background: linear-gradient(135deg, rgba(199, 29, 27, 0.3), rgba(13, 13, 13, 0.55));
 }
 
+.trackAuthors {
+  margin-top: 0.1rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trackAuthorLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.trackAuthorLink:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.albumAuthors,
+.albumMeta {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.albumAuthors {
+  color: rgba(255, 255, 255, 0.62);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.albumAuthorLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.albumAuthorLink:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
 .trackCard h3 {
   margin: 0;
   font-size: 0.98rem;
@@ -585,7 +627,8 @@
 .featuredTrackCoverButton {
   position: relative;
   display: block;
-  width: 100%;
+  width: min(100%, 26rem);
+  justify-self: center;
   padding: 0;
   border: 0;
   background: transparent;
@@ -614,6 +657,11 @@
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, rgba(199, 29, 27, 0.28), rgba(13, 13, 13, 0.45));
+  transition: transform 0.35s ease;
+}
+
+.featuredTrackCoverButton:hover .featuredCoverEq {
+  transform: translateY(-3px);
 }
 
 .featuredCoverEq .eq {
