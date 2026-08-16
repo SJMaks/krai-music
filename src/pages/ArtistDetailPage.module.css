@@ -138,27 +138,47 @@
 
 .trackLayout {
   display: grid;
-  gap: 2.5rem;
+  grid-template-areas:
+    'trackColumn'
+    'featuredBody';
+  gap: 1.2rem;
   align-items: start;
+}
+
+.trackLayout .featuredTrackCard {
+  grid-area: featuredBody;
+  margin-top: 1.3rem;
+}
+
+.trackLayout.trackLayoutEmpty {
+  grid-template-areas:
+    'trackHeader'
+    'trackColumn'
+    'featuredBody';
+}
+
+.trackHeader {
+  display: grid;
+  gap: 0.4rem;
+  justify-items: start;
+}
+
+.trackLayout.trackLayoutEmpty > .trackHeader {
+  grid-area: trackHeader;
+}
+
+.trackHeader h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+  font-weight: 800;
+  color: #f5f2f2;
 }
 
 .trackColumn {
   display: grid;
   gap: 1.2rem;
   align-self: start;
-}
-
-.trackColumn > div:first-child {
-  display: grid;
-  gap: 0.4rem;
-  justify-items: start;
-}
-
-.trackColumn h2 {
-  margin: 0;
-  font-size: clamp(1.3rem, 2.4vw, 1.8rem);
-  font-weight: 800;
-  color: #f5f2f2;
+  grid-area: trackColumn;
 }
 
 /* ---------- Swiper ---------- */
@@ -173,14 +193,55 @@
 
 .swiper :global(.swiper-button-next),
 .swiper :global(.swiper-button-prev) {
-  color: #c71d1b;
-  width: 2.6rem;
-  height: 2.6rem;
+  top: calc(50% - 1.325rem);
+  transform: translateY(-50%);
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-top: 0;
   border-radius: 999px;
-  border: 1px solid rgba(207, 203, 203, 0.16);
-  background: rgba(17, 17, 17, 0.72);
-  backdrop-filter: blur(4px);
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  border: 1px solid rgba(207, 203, 203, 0.18);
+  background: rgba(13, 13, 13, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  color: #e8e5e5;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.swiper :global(.swiper-button-prev) {
+  left: 0.45rem;
+}
+
+.swiper :global(.swiper-button-next) {
+  right: 0.45rem;
+}
+
+.swiper :global(.swiper-button-next)::after,
+.swiper :global(.swiper-button-prev)::after {
+  content: '';
+  display: none;
+}
+
+.swiper :global(.swiper-button-next) svg,
+.swiper :global(.swiper-button-prev) svg {
+  display: none;
+}
+
+.swiper :global(.swiper-button-next)::before,
+.swiper :global(.swiper-button-prev)::before {
+  content: '';
+  width: 0.55rem;
+  height: 0.55rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+
+.swiper :global(.swiper-button-next)::before {
+  transform: rotate(45deg);
+}
+
+.swiper :global(.swiper-button-prev)::before {
+  transform: rotate(-135deg);
 }
 
 .swiper :global(.swiper-button-next):hover,
@@ -188,12 +249,7 @@
   background: #c71d1b;
   border-color: #c71d1b;
   color: #ffffff;
-}
-
-.swiper :global(.swiper-button-next)::after,
-.swiper :global(.swiper-button-prev)::after {
-  font-size: 1rem;
-  font-weight: 700;
+  box-shadow: 0 10px 26px rgba(199, 29, 27, 0.45);
 }
 
 .swiper :global(.swiper-button-disabled) {
@@ -435,6 +491,7 @@
   display: block;
   width: 100%;
   max-width: 26rem;
+  margin-inline: auto;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
@@ -477,5 +534,19 @@
 
   .trackLayout {
     grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    grid-template-areas:
+      'trackColumn featuredBody';
+    column-gap: 2.5rem;
+    row-gap: 1.2rem;
+  }
+
+  .trackLayout.trackLayoutEmpty {
+    grid-template-areas:
+      'trackHeader .'
+      'trackColumn featuredBody';
+  }
+
+  .trackLayout .featuredTrackCard {
+    margin-top: 0;
   }
 }

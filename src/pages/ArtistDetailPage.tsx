@@ -160,12 +160,20 @@ export default function ArtistDetailPage() {
         </section>
 
         <section className={styles.section}>
-          <div className={styles.trackLayout}>
-            <div className={styles.trackColumn}>
-              <div>
+          <div className={`${styles.trackLayout} ${featuredTrack ? '' : styles.trackLayoutEmpty}`}>
+            {!featuredTrack && (
+              <div className={styles.trackHeader}>
                 <p className={styles.eyebrow}>Треки</p>
                 <h2>Список треков</h2>
               </div>
+            )}
+            <div className={styles.trackColumn}>
+              {featuredTrack && (
+                <div className={styles.trackHeader}>
+                  <p className={styles.eyebrow}>Треки</p>
+                  <h2>Список треков</h2>
+                </div>
+              )}
               <div className={styles.trackList} ref={listRef}>
                 {pageTracks.map((track, index) => (
                   <motion.div
