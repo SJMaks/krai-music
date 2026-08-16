@@ -232,7 +232,6 @@ export default function ArtistDetailPage() {
                       onClick={() => handlePlayTrack(track)}
                     >
                       <FiPlay />
-                      Воспроизвести
                     </button>
                   </motion.div>
                 ))}
@@ -329,12 +328,12 @@ export default function ArtistDetailPage() {
                   viewport={{ once: true, margin: '-30px' }}
                   transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
                 >
-                  <Link to={`/albums/${album.id}`} className={styles.albumCoverLink}>
+                  <Link to={`/albums/${album.id}`} state={{ fromArtist: artist.id }} className={styles.albumCoverLink}>
                     <img src={getMediaUrl(album.cover)} alt={album.title} className={styles.albumCover} loading="lazy" />
                   </Link>
                   <div className={styles.albumBody}>
                     <h3>
-                      <Link to={`/albums/${album.id}`} className={styles.albumTitleLink}>
+                      <Link to={`/albums/${album.id}`} state={{ fromArtist: artist.id }} className={styles.albumTitleLink}>
                         {album.title}
                       </Link>
                     </h3>
@@ -342,7 +341,7 @@ export default function ArtistDetailPage() {
                       {album.tracks.length} {album.tracks.length === 1 ? 'трек' : album.tracks.length < 5 ? 'трека' : 'треков'} ·{' '}
                       {formatDate(album.releaseDate)}
                     </p>
-                    <Link to={`/albums/${album.id}`} className={styles.albumOpenLink}>
+                    <Link to={`/albums/${album.id}`} state={{ fromArtist: artist.id }} className={styles.albumOpenLink}>
                       Открыть альбом
                     </Link>
                   </div>

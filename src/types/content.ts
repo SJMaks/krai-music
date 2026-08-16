@@ -84,7 +84,6 @@ export interface ContactContent {
 }
 
 export interface RadioContent {
-  releases: Track[]
   albums: Album[]
 }
 

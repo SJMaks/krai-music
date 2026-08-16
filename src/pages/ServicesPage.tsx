@@ -3,6 +3,7 @@ import { servicesData } from '../cms/data'
 import styles from './ServicesPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { getMediaUrl } from '../shared/lib/media'
+import { scrollToFooterBottom } from '../shared/lib/footerScroll'
 import { FiArrowRight } from 'react-icons/fi'
 
 export default function ServicesPage() {
@@ -35,7 +36,16 @@ export default function ServicesPage() {
             <div className={styles.content}>
               <h2>{service.title}</h2>
               <p>{service.description}</p>
-              <a href="#footer" className={styles.link}>Связаться <FiArrowRight /></a>
+              <a
+                href="#footer"
+                className={styles.link}
+                onClick={(event) => {
+                  event.preventDefault()
+                  scrollToFooterBottom()
+                }}
+              >
+                Связаться <FiArrowRight />
+              </a>
             </div>
           </motion.article>
         ))}

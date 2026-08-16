@@ -429,7 +429,7 @@
 
 .swiper :global(.swiper-button-next),
 .swiper :global(.swiper-button-prev) {
-  top: calc(50% - 1.325rem);
+  top: 50%;
   transform: translateY(-50%);
   width: 2.75rem;
   height: 2.75rem;
@@ -466,10 +466,21 @@
 .swiper :global(.swiper-button-next)::before,
 .swiper :global(.swiper-button-prev)::before {
   content: '';
+  position: absolute;
+  top: 50%;
+  margin: -0.275rem 0 0 -0.275rem;
   width: 0.55rem;
   height: 0.55rem;
   border-top: 2px solid currentColor;
   border-right: 2px solid currentColor;
+}
+
+.swiper :global(.swiper-button-prev)::before {
+  left: 50%;
+}
+
+.swiper :global(.swiper-button-next)::before {
+  left: 45%;
 }
 
 .swiper :global(.swiper-button-next)::before {
@@ -811,6 +822,15 @@
   .dateBadgeMonth {
     font-size: 0.58rem;
     letter-spacing: 0.12em;
+  }
+
+  .playOverlay {
+    right: auto;
+    left: 50%;
+    bottom: auto;
+    top: 50%;
+    margin-left: -1.45rem;
+    margin-top: -1.45rem;
   }
 }
 

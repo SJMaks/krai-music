@@ -171,15 +171,6 @@ collections:
         file: content/radio.json
         format: json
         fields:
-          - label: Релизы лейбла
-            name: releases
-            widget: relation
-            collection: tracks
-            search_fields: [title]
-            value_field: id
-            display_fields: [title]
-            multiple: true
-            required: false
           - label: Альбомы лейбла
             name: albums
             widget: relation

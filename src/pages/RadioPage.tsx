@@ -1,5 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Pagination } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
 import { artistsData, tracksData, radioContentData } from '../cms/data'
 import { useAudioStore } from '../store/audioStore'
 import styles from './RadioPage.module.css'
@@ -7,14 +12,8 @@ import { Seo } from '../shared/ui/Seo'
 import { Link } from 'react-router-dom'
 import { getMediaUrl } from '../shared/lib/media'
 import logo from '../assets/logo.png'
-import { FiPlay, FiPause, FiShuffle, FiRadio } from 'react-icons/fi'
+import { FiPlay, FiPause, FiShuffle, FiRadio, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import type { Track, Album } from '../types/content'
-
-type ReleaseItem = Track | Album
-
-function isAlbum(item: ReleaseItem): item is Album {
-  return !('audio' in item)
-}
 
 function formatDate(dateString?: string): string {
   if (!dateString) return '—'
@@ -38,6 +37,8 @@ function Equalizer() {
 
 export default function RadioPage() {
   const [filter, setFilter] = useState('Все')
+  const [page, setPage] = useState(1)
+  const listRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
 
   const playTrack = useAudioStore((state) => state.playTrack)
@@ -54,18 +55,26 @@ export default function RadioPage() {
     )
   }, [filter])
 
-  // «Релизы лейбла» — витрина: синглы и альбомы, выбор которых задаётся в
-  // Decap CMS (content/radio.json). Для синглов пустой список = показать все;
-  // альбомы показываются только если явно выбраны в CMS.
-  const labelReleases = useMemo(() => {
-    const singles = radioContentData.releases.length > 0 ? radioContentData.releases : tracksData
-    const albums = radioContentData.albums
-    const base: ReleaseItem[] = [...singles, ...albums]
-    if (filter === 'Все') return base
-    return base.filter((item) =>
-      item.authors.some((author) => author.nickname === filter)
+  // «Альбомы лейбла» — витрина-карусель, выбор задаётся в Decap CMS (content/radio.json)
+  const labelAlbums = useMemo((): Album[] => {
+    if (filter === 'Все') return radioContentData.albums
+    return radioContentData.albums.filter((album) =>
+      album.authors.some((author) => author.nickname === filter)
     )
   }, [filter])
+
+  // Пагинация списка «Все треки» (как на странице артиста)
+  const perPage = 4
+  const totalPages = Math.max(1, Math.ceil(filteredTracks.length / perPage))
+  const currentPage = Math.min(page, totalPages)
+  const pageTracks = filteredTracks.slice((currentPage - 1) * perPage, currentPage * perPage)
+
+  const goToPage = (next: (value: number) => number) => {
+    setPage(next)
+    requestAnimationFrame(() => {
+      listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
 
   const isCurrent = (track: Track) => currentTrack?.id === track.id
   const firstTrack = filteredTracks[0]
@@ -90,6 +99,11 @@ export default function RadioPage() {
     if (shuffled.length > 0) {
       playTrack(shuffled[0], shuffled)
     }
+  }
+
+  const handleFilter = (value: string) => {
+    setPage(1)
+    setFilter(value)
   }
 
   return (
@@ -160,72 +174,35 @@ export default function RadioPage() {
               key={entry}
               type="button"
               className={entry === filter ? styles.active : ''}
-              onClick={() => setFilter(entry)}
+              onClick={() => handleFilter(entry)}
             >
               {entry}
             </button>
           ))}
         </div>
 
-        {/* ===== Коллекция релизов — сетка обложек ===== */}
+        {/* ===== Карусель альбомов лейбла ===== */}
         <section className={styles.section}>
           <header className={styles.sectionHead}>
             <div>
               <p className={styles.eyebrow}>{filter === 'Все' ? 'Коллекция' : filter}</p>
-              <h2 className={styles.sectionTitle}>Релизы лейбла</h2>
+              <h2 className={styles.sectionTitle}>Альбомы лейбла</h2>
             </div>
           </header>
 
-          {labelReleases.length > 0 ? (
-            <div className={styles.shelf}>
-              {labelReleases.map((item, index) => {
-                if (isAlbum(item)) {
-                  return (
-                    <motion.article
-                      key={item.id}
-                      className={styles.albumCard}
-                      initial={{ opacity: 0, y: 14 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: '-40px' }}
-                      transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
-                    >
-                      <div className={styles.albumCoverWrap}>
-                        <img src={getMediaUrl(item.cover)} alt={item.title} className={styles.albumCover} loading="lazy" />
-                        <Link
-                          to={`/albums/${item.id}`}
-                          className={styles.albumPlay}
-                          aria-label={`Открыть альбом: ${item.title}`}
-                        >
-                          <FiPlay size={16} />
-                        </Link>
-                      </div>
-                      <h3 className={styles.albumTitle}>
-                        <Link to={`/albums/${item.id}`} className={styles.albumAuthorLink}>
-                          {item.title}
-                        </Link>
-                      </h3>
-                      <div className={styles.albumAuthors}>
-                        {item.authors.map((author, authorIndex) => (
-                          <span key={author.id}>
-                            <Link to={`/artists/${author.id}`} className={styles.albumAuthorLink}>
-                              {author.nickname}
-                            </Link>
-                            {authorIndex < item.authors.length - 1 && ', '}
-                          </span>
-                        ))}
-                      </div>
-                      <p className={styles.albumMeta}>
-                        Альбом · {formatDate(item.releaseDate)}
-                      </p>
-                    </motion.article>
-                  )
-                }
-
-                const track = item
-                const active = isCurrent(track)
-                return (
+          {labelAlbums.length > 0 ? (
+            <Swiper
+              className={styles.swiper}
+              modules={[Navigation, Pagination]}
+              slidesPerView={1}
+              spaceBetween={16}
+              navigation
+              pagination={{ clickable: true }}
+              breakpoints={{ 480: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 } }}
+            >
+              {labelAlbums.map((album, index) => (
+                <SwiperSlide key={album.id} className={styles.swiperSlide}>
                   <motion.article
-                    key={track.id}
                     className={styles.albumCard}
                     initial={{ opacity: 0, y: 14 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -233,41 +210,39 @@ export default function RadioPage() {
                     transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
                   >
                     <div className={styles.albumCoverWrap}>
-                      <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.albumCover} loading="lazy" />
-                      {active && isPlaying && (
-                        <span className={styles.albumEq}>
-                          <Equalizer />
-                        </span>
-                      )}
-                      <button
-                        type="button"
-                        className={`${styles.albumPlay} ${active ? styles.albumPlayPinned : ''}`}
-                        onClick={() => handlePlayPause(track)}
-                        aria-label={active && isPlaying ? `Пауза: ${track.title}` : `Слушать: ${track.title}`}
+                      <img src={getMediaUrl(album.cover)} alt={album.title} className={styles.albumCover} loading="lazy" />
+                      <Link
+                        to={`/albums/${album.id}`}
+                        className={styles.albumPlay}
+                        aria-label={`Открыть альбом: ${album.title}`}
                       >
-                        {active && isPlaying ? <FiPause size={16} /> : <FiPlay size={16} />}
-                      </button>
+                        <FiPlay size={16} />
+                      </Link>
                     </div>
-                    <h3 className={styles.albumTitle}>{track.title}</h3>
+                    <h3 className={styles.albumTitle}>
+                      <Link to={`/albums/${album.id}`} className={styles.albumAuthorLink}>
+                        {album.title}
+                      </Link>
+                    </h3>
                     <div className={styles.albumAuthors}>
-                      {track.authors.map((author, authorIndex) => (
+                      {album.authors.map((author, authorIndex) => (
                         <span key={author.id}>
                           <Link to={`/artists/${author.id}`} className={styles.albumAuthorLink}>
                             {author.nickname}
                           </Link>
-                          {authorIndex < track.authors.length - 1 && ', '}
+                          {authorIndex < album.authors.length - 1 && ', '}
                         </span>
                       ))}
                     </div>
                     <p className={styles.albumMeta}>
-                      {track.releaseType} · {formatDate(track.releaseDate)}
+                      Альбом · {formatDate(album.releaseDate)}
                     </p>
                   </motion.article>
-                )
-              })}
-            </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           ) : (
-            <p className={styles.empty}>В этой подборке пока нет треков.</p>
+            <p className={styles.empty}>В этом разделе пока нет выбранных альбомов.</p>
           )}
         </section>
 
@@ -281,55 +256,84 @@ export default function RadioPage() {
           </header>
 
           {filteredTracks.length > 0 ? (
-            <div className={styles.trackList}>
-              {filteredTracks.map((track, index) => {
-                const active = isCurrent(track)
-                return (
-                  <div
-                    key={track.id}
-                    className={`${styles.trackRow} ${active ? styles.trackRowActive : ''}`}
-                    onClick={() => handlePlayPause(track)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault()
-                        handlePlayPause(track)
-                      }
-                    }}
-                  >
-                    <div className={styles.trackIndex}>
-                      {active && isPlaying ? <Equalizer /> : <span>{index + 1}</span>}
-                    </div>
-                    <div className={styles.trackMain}>
-                      <img src={getMediaUrl(track.cover)} alt="" className={styles.trackCover} loading="lazy" />
-                      <div className={styles.trackText}>
-                        <p className={styles.trackTitle}>{track.title}</p>
-                        <div className={styles.trackAuthors}>
-                          {track.authors.map((author, authorIndex) => (
-                            <span key={author.id}>
-                              <Link
-                                to={`/artists/${author.id}`}
-                                className={styles.trackAuthorLink}
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                {author.nickname}
-                              </Link>
-                              {authorIndex < track.authors.length - 1 && ', '}
-                            </span>
-                          ))}
+            <>
+              <div className={styles.trackList} ref={listRef}>
+                {pageTracks.map((track, index) => {
+                  const active = isCurrent(track)
+                  return (
+                    <div
+                      key={track.id}
+                      className={`${styles.trackRow} ${active ? styles.trackRowActive : ''}`}
+                      onClick={() => handlePlayPause(track)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          handlePlayPause(track)
+                        }
+                      }}
+                    >
+                      <div className={styles.trackIndex}>
+                        {active && isPlaying ? <Equalizer /> : <span>{index + 1}</span>}
+                      </div>
+                      <div className={styles.trackMain}>
+                        <img src={getMediaUrl(track.cover)} alt="" className={styles.trackCover} loading="lazy" />
+                        <div className={styles.trackText}>
+                          <p className={styles.trackTitle}>{track.title}</p>
+                          <div className={styles.trackAuthors}>
+                            {track.authors.map((author, authorIndex) => (
+                              <span key={author.id}>
+                                <Link
+                                  to={`/artists/${author.id}`}
+                                  className={styles.trackAuthorLink}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  {author.nickname}
+                                </Link>
+                                {authorIndex < track.authors.length - 1 && ', '}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
+                      <span className={styles.trackDate}>{formatDate(track.releaseDate)}</span>
+                      <span className={styles.trackType}>{track.releaseType}</span>
+                      <span className={styles.trackAction}>
+                        {active && isPlaying ? <FiPause size={15} /> : <FiPlay size={15} />}
+                      </span>
                     </div>
-                    <span className={styles.trackDate}>{formatDate(track.releaseDate)}</span>
-                    <span className={styles.trackType}>{track.releaseType}</span>
-                    <span className={styles.trackAction}>
-                      {active && isPlaying ? <FiPause size={15} /> : <FiPlay size={15} />}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
+                  )
+                })}
+              </div>
+
+              <motion.div
+                className={styles.pagination}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+              >
+                <button
+                  type="button"
+                  onClick={() => goToPage((value) => Math.max(1, value - 1))}
+                  disabled={currentPage === 1}
+                  aria-label="Предыдущая страница"
+                >
+                  <FiChevronLeft size={18} />
+                </button>
+                <span>
+                  {currentPage} / {totalPages}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => goToPage((value) => Math.min(totalPages, value + 1))}
+                  disabled={currentPage === totalPages}
+                  aria-label="Следующая страница"
+                >
+                  <FiChevronRight size={18} />
+                </button>
+              </motion.div>
+            </>
           ) : (
             <p className={styles.empty}>В этой подборке пока нет треков.</p>
           )}

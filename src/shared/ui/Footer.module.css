@@ -68,6 +68,13 @@
 }
 
 .section {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.sectionInner {
+  width: fit-content;
   display: grid;
   gap: 1rem;
   justify-items: start;
@@ -185,6 +192,12 @@
   .container {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: start;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    justify-content: start;
   }
 }
 

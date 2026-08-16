@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, useLocation, Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { albumsData } from '../cms/data'
 import { useAudioStore } from '../store/audioStore'
@@ -39,7 +39,10 @@ function Equalizer() {
 
 export default function AlbumDetailPage() {
   const { id } = useParams()
+  const location = useLocation()
   const reduceMotion = useReducedMotion()
+
+  const fromArtist = (location.state as { fromArtist?: string } | null)?.fromArtist
 
   const playTrack = useAudioStore((state) => state.playTrack)
   const currentTrack = useAudioStore((state) => state.currentTrack)
@@ -92,9 +95,9 @@ return (
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: 'easeOut' }}
         >
-          <Link to="/radio" className={styles.backLink}>
+          <Link to={fromArtist ? `/artists/${fromArtist}` : '/radio'} className={styles.backLink}>
             <FiArrowLeft />
-            <span>К радио</span>
+            <span>{fromArtist ? 'К артисту' : 'К радио'}</span>
           </Link>
         </motion.div>
 

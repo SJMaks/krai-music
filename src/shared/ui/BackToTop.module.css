@@ -77,6 +77,13 @@
   }
 }
 
+/* На мобильных устройств кнопка «Наверх» не нужна */
+@media (max-width: 640px) {
+  .button {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .button,
   .button svg,

@@ -554,6 +554,145 @@
   margin-top: 0.2rem;
 }
 
+/* ===== Карусель альбомов ===== */
+.swiper {
+  width: 100%;
+  padding: 0.35rem 0 3rem;
+}
+
+.swiperSlide {
+  height: auto;
+}
+
+.swiper :global(.swiper-button-next),
+.swiper :global(.swiper-button-prev) {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-top: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(207, 203, 203, 0.18);
+  background: rgba(13, 13, 13, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  color: #e8e5e5;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.swiper :global(.swiper-button-prev) {
+  left: 0.45rem;
+}
+
+.swiper :global(.swiper-button-next) {
+  right: 0.45rem;
+}
+
+.swiper :global(.swiper-button-next)::after,
+.swiper :global(.swiper-button-prev)::after {
+  content: '';
+  display: none;
+}
+
+.swiper :global(.swiper-button-next) svg,
+.swiper :global(.swiper-button-prev) svg {
+  display: none;
+}
+
+.swiper :global(.swiper-button-next)::before,
+.swiper :global(.swiper-button-prev)::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -0.275rem 0 0 -0.275rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+
+.swiper :global(.swiper-button-next)::before {
+  transform: rotate(45deg);
+}
+
+.swiper :global(.swiper-button-prev)::before {
+  transform: rotate(-135deg);
+}
+
+.swiper :global(.swiper-button-next):hover,
+.swiper :global(.swiper-button-prev):hover {
+  background: #c71d1b;
+  border-color: #c71d1b;
+  color: #ffffff;
+  box-shadow: 0 10px 26px rgba(199, 29, 27, 0.45);
+}
+
+.swiper :global(.swiper-button-disabled) {
+  opacity: 0.35;
+}
+
+.swiper :global(.swiper-pagination-bullet) {
+  background: rgba(207, 203, 203, 0.4);
+  opacity: 1;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  transition: width 0.2s ease, background-color 0.2s ease;
+}
+
+.swiper :global(.swiper-pagination-bullet-active) {
+  background: #c71d1b;
+  width: 1.4rem;
+}
+
+.swiper :global(.swiper-pagination) {
+  bottom: 0.35rem;
+}
+
+/* ===== Пагинация ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.35rem;
+}
+
+.pagination button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  background: transparent;
+  color: #cfcbcb;
+  border: 1px solid rgba(207, 203, 203, 0.24);
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  border-color: #c71d1b;
+  color: #ffffff;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  min-width: 4.5rem;
+  text-align: center;
+  color: rgba(207, 203, 203, 0.8);
+  font-weight: 600;
+}
+
 /* ===== Список треков ===== */
 .trackList {
   border: 1px solid rgba(255, 255, 255, 0.08);

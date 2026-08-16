@@ -113,15 +113,9 @@ const contacts: ContactContent = {
   ],
 }
 
-const radioReleaseIds = (Array.isArray(radioJson.releases) ? radioJson.releases : []) as unknown as string[]
 const radioAlbumIds = (Array.isArray(radioJson.albums) ? radioJson.albums : []) as unknown as string[]
 
 const radioContent: RadioContent = {
-  releases: radioReleaseIds.map(id => {
-    const track = tracksMap.get(id)
-    if (!track) throw new Error(`Track with id "${id}" not found`)
-    return track
-  }),
   albums: radioAlbumIds.map(id => {
     const album = albumsMap.get(id)
     if (!album) throw new Error(`Album with id "${id}" not found`)

@@ -1,10 +1,25 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useSyncExternalStore } from 'react'
 import type { CSSProperties } from 'react'
 import { FiPause, FiPlay, FiSkipBack, FiSkipForward, FiVolume2, FiVolumeX, FiRepeat, FiShuffle, FiX } from 'react-icons/fi'
 import styles from './Player.module.css'
 import { useAudioStore } from '../../store/audioStore'
 import { Link } from 'react-router-dom'
 import { getMediaUrl } from '../../shared/lib/media'
+
+// Мобильная версия: ползунок громкости скрыт, звук всегда на максимуме
+function subscribeToViewport(callback: () => void): () => void {
+  const mql = window.matchMedia('(max-width: 620px)')
+  mql.addEventListener('change', callback)
+  return () => mql.removeEventListener('change', callback)
+}
+
+function getMobileSnapshot(): boolean {
+  return window.matchMedia('(max-width: 620px)').matches
+}
+
+function useIsMobile(): boolean {
+  return useSyncExternalStore(subscribeToViewport, getMobileSnapshot, () => false)
+}
 
 export function Player() {
   const {
@@ -31,7 +46,12 @@ export function Player() {
     setProgress,
   } = useAudioStore()
 
+  const isMobile = useIsMobile()
   const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  // Фактическая громкость: на мобильных всегда максимум, без беззвучного режима
+  const effectiveVolume = isMobile ? 1 : volume
+  const effectiveMuted = isMobile ? false : muted
 
   // Главный эффект: управление источником и воспроизведением
   useEffect(() => {
@@ -73,9 +93,9 @@ export function Player() {
   useEffect(() => {
     const audio = audioRef.current
     if (!audio) return
-    audio.volume = volume
-    audio.muted = muted
-  }, [volume, muted])
+    audio.volume = effectiveVolume
+    audio.muted = effectiveMuted
+  }, [effectiveVolume, effectiveMuted])
 
   const handleSeek = (value: number) => {
     const audio = audioRef.current
@@ -98,15 +118,15 @@ export function Player() {
     const audio = audioRef.current
     if (!audio) return
     setDuration(audio.duration || 0)
-    audio.volume = volume
-    audio.muted = muted
+    audio.volume = effectiveVolume
+    audio.muted = effectiveMuted
   }
 
   const handleCanPlay = () => {
     const audio = audioRef.current
     if (!audio) return
-    audio.volume = volume
-    audio.muted = muted
+    audio.volume = effectiveVolume
+    audio.muted = effectiveMuted
   }
 
   if (!currentTrack || !isVisible) {

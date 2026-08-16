@@ -16,59 +16,65 @@ export function Footer() {
       </div>
       <div className={styles.container}>
         <div className={styles.section}>
-          <h2 className={styles.head}>Разделы сайта</h2>
-          <nav className={styles.nav} aria-label="Основная навигация">
-            {links.filter(item => item.to !== '/contacts').map((link) => (
+          <div className={styles.sectionInner}>
+            <h2 className={styles.head}>Разделы сайта</h2>
+            <nav className={styles.nav} aria-label="Основная навигация">
+              {links.filter(item => item.to !== '/contacts').map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  className={styles.link}
+                >
+                  {link.label}
+                </NavLink>
+              ))}
+            </nav>
+          </div>
+        </div>
+        <div className={styles.section}>
+          <div className={styles.sectionInner}>
+            <h2 className={styles.head}>Информация</h2>
+            <nav className={styles.nav} aria-label="Основная навигация">
               <NavLink
-                key={link.to}
-                to={link.to}
+                key='/privacy_policy'
+                to='/privacy_policy'
                 className={styles.link}
               >
-                {link.label}
+                Политика конфиденциальности
               </NavLink>
-            ))}
-          </nav>
+              <NavLink
+                key='/use_rules'
+                to='/use_rules'
+                className={styles.link}
+              >
+                Условия использования
+              </NavLink>
+            </nav>
+          </div>
         </div>
         <div className={styles.section}>
-          <h2 className={styles.head}>Информация</h2>
-          <nav className={styles.nav} aria-label="Основная навигация">
-            <NavLink
-              key='/privacy_policy'
-              to='/privacy_policy'
-              className={styles.link}
-            >
-              Политика конфиденциальности
-            </NavLink>
-            <NavLink
-              key='/use_rules'
-              to='/use_rules'
-              className={styles.link}
-            >
-              Условия использования
-            </NavLink>
-          </nav>
-        </div>
-        <div className={styles.section}>
-          <h2 className={styles.head}>Контакты</h2>
-          <div className={styles.details}>
-            <a href={`mailto:${contact?.email}`} className={styles.item}>
-              <FiMail />
-              <span>{contact?.email}</span>
-            </a>
-            <a href={`tel:${contact?.phone}`} className={styles.item}>
-              <FiPhone />
-              <span>{contact?.phone}</span>
-            </a>
-            <div className={styles.item}>
-              <FiMapPin />
-              <span>{contact?.address}</span>
-            </div>
-            {contact.socials.map((social) => (
-              <a href={social.url} className={styles.item}>
-                <FaVk />
-                <span>{social?.label}</span>
+          <div className={styles.sectionInner}>
+            <h2 className={styles.head}>Контакты</h2>
+            <div className={styles.details}>
+              <a href={`mailto:${contact?.email}`} className={styles.item}>
+                <FiMail />
+                <span>{contact?.email}</span>
               </a>
-            ))}
+              <a href={`tel:${contact?.phone}`} className={styles.item}>
+                <FiPhone />
+                <span>{contact?.phone}</span>
+              </a>
+              <div className={styles.item}>
+                <FiMapPin />
+                <span>{contact?.address}</span>
+              </div>
+              {contact.socials.map((social) => (
+                <a href={social.url} className={styles.item}>
+                  <FaVk />
+                  <span>{social?.label}</span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>

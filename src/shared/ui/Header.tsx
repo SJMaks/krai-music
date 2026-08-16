@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import styles from './Header.module.css'
 import logo from '../../assets/logo.png'
 import { useContent } from '../../hooks/useContent'
+import { scrollToFooterBottom } from '../lib/footerScroll'
 
 export function Header() {
   const [open, setOpen] = useState(false)
@@ -18,7 +19,7 @@ export function Header() {
 
   const handleContactsClick = () => {
     setOpen(false)
-    document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    scrollToFooterBottom()
   }
 
   return (
