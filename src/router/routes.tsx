@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import { Layout } from '../app/layout/Layout'
 import {
   ArtistDetailPage,
+  AlbumDetailPage,
   ArtistsPage,
   EventDetailPage,
   EventsPage,
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
       { index: true, element: <Suspense fallback={<PageSkeleton />}><HomePage /></Suspense> },
       { path: 'artists', element: <Suspense fallback={<PageSkeleton />}><ArtistsPage /></Suspense> },
       { path: 'artists/:id', element: <Suspense fallback={<PageSkeleton />}><ArtistDetailPage /></Suspense> },
+      { path: 'albums/:id', element: <Suspense fallback={<PageSkeleton />}><AlbumDetailPage /></Suspense> },
       { path: 'events', element: <Suspense fallback={<PageSkeleton />}><EventsPage /></Suspense> },
       { path: 'events/:id', element: <Suspense fallback={<PageSkeleton />}><EventDetailPage /></Suspense> },
       { path: 'services', element: <Suspense fallback={<PageSkeleton />}><ServicesPage /></Suspense> },

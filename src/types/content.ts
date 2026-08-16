@@ -41,6 +41,16 @@ export interface Track {
   description: string
 }
 
+export interface Album {
+  id: string
+  title: string
+  authors: Artist[]
+  cover: string
+  releaseDate: string
+  description: string
+  tracks: Track[]
+}
+
 export interface Event {
   id: string
   title: string
@@ -75,6 +85,7 @@ export interface ContactContent {
 
 export interface RadioContent {
   releases: Track[]
+  albums: Album[]
 }
 
 export interface RadioPlaylist {

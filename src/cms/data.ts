@@ -1,16 +1,23 @@
-import type { Artist, Event, HomepageContent, RadioContent, Service, Track, ContactContent } from '../types/content'
+import type { Album, Artist, Event, HomepageContent, RadioContent, Service, Track, ContactContent } from '../types/content'
 import homepageJson from '../../content/homepage.json'
 import contactsJson from '../../content/contacts.json'
 import radioJson from '../../content/radio.json'
 
 const artistModules = import.meta.glob('../../content/artists/*.json', { eager: true, import: 'default' })
 const trackModules = import.meta.glob('../../content/tracks/*.json', { eager: true, import: 'default' })
+const albumModules = import.meta.glob('../../content/albums/*.json', { eager: true, import: 'default' })
 const eventModules = import.meta.glob('../../content/events/*.json', { eager: true, import: 'default' })
 const serviceModules = import.meta.glob('../../content/services/*.json', { eager: true, import: 'default' })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rawArtists = Object.values(artistModules) as any[]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rawTracks = Object.values(trackModules) as any[]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const rawAlbums = Object.values(albumModules) as any[]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rawEvents = Object.values(eventModules) as any[]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rawServices = Object.values(serviceModules) as any[]
 
 const artistsMap = new Map<string, Omit<Artist, 'featuredTrack'>>()
@@ -33,6 +40,26 @@ rawTracks.forEach(track => {
   })
   const fullTrack: Track = { ...track, authors }
   tracksMap.set(track.id, fullTrack)
+})
+
+const albumsMap = new Map<string, Album>()
+rawAlbums.forEach(album => {
+  const authors = (album.authors || []).map((id: string) => {
+    const artist = artistsMap.get(id)
+    if (!artist) {
+      throw new Error(`Artist with id "${id}" not found for album "${album.id}"`)
+    }
+    return artist as Artist
+  })
+  const tracks = (album.tracks || []).map((id: string) => {
+    const track = tracksMap.get(id)
+    if (!track) {
+      throw new Error(`Track with id "${id}" not found for album "${album.id}"`)
+    }
+    return track as Track
+  })
+  const fullAlbum: Album = { ...album, authors, tracks }
+  albumsMap.set(album.id, fullAlbum)
 })
 
 const artistsWithFeatured: Artist[] = rawArtists.map(artist => {
@@ -87,6 +114,7 @@ const contacts: ContactContent = {
 }
 
 const radioReleaseIds = (Array.isArray(radioJson.releases) ? radioJson.releases : []) as unknown as string[]
+const radioAlbumIds = (Array.isArray(radioJson.albums) ? radioJson.albums : []) as unknown as string[]
 
 const radioContent: RadioContent = {
   releases: radioReleaseIds.map(id => {
@@ -94,10 +122,16 @@ const radioContent: RadioContent = {
     if (!track) throw new Error(`Track with id "${id}" not found`)
     return track
   }),
+  albums: radioAlbumIds.map(id => {
+    const album = albumsMap.get(id)
+    if (!album) throw new Error(`Album with id "${id}" not found`)
+    return album
+  }),
 }
 
 export const artistsData = artistsWithFeatured
 export const tracksData = Array.from(tracksMap.values())
+export const albumsData = Array.from(albumsMap.values())
 export const eventsData = events
 export const servicesData = services
 export const homepageContentData = homepageContent

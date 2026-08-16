@@ -3,6 +3,7 @@ import { lazy } from 'react'
 export const HomePage = lazy(async () => import('../pages/HomePage'))
 export const ArtistsPage = lazy(async () => import('../pages/ArtistsPage'))
 export const ArtistDetailPage = lazy(async () => import('../pages/ArtistDetailPage'))
+export const AlbumDetailPage = lazy(async () => import('../pages/AlbumDetailPage'))
 export const EventsPage = lazy(async () => import('../pages/EventsPage'))
 export const EventDetailPage = lazy(async () => import('../pages/EventDetailPage'))
 export const ServicesPage = lazy(async () => import('../pages/ServicesPage'))

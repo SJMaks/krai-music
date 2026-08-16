@@ -281,6 +281,38 @@ var TrackPreview = createClass({
     );
   }
 });
+var AlbumPreview = createClass({
+  render: function () {
+    var entry = this.props.entry;
+    var data = entry.get('data');
+    var title = data.get('title') || '';
+    var cover = this.props.getAsset(data.get('cover'));
+    var description = data.get('description') || '';
+    var releaseDate = data.get('releaseDate') || '';
+    var tracks = data.get('tracks') || [];
+
+    function formatDate(dateString) {
+      if (!dateString) return 'Дата не указана';
+      var date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      var day = String(date.getDate()).padStart(2, '0');
+      var month = String(date.getMonth() + 1).padStart(2, '0');
+      var year = date.getFullYear();
+      return day + '.' + month + '.' + year;
+    }
+
+    return h('div', { className: 'container' },
+      cover ? h('img', { className: 'squareImage', src: getImageUrl(cover), alt: title }) : null,
+      h('p', { className: 'eyebrow' }, 'Альбом'),
+      h('h1', {}, title),
+      h('h3', {}, 'Дата релиза: ' + formatDate(releaseDate)),
+      h('p', {}, description),
+      tracks.size > 0
+        ? h('h4', {}, 'Треки: ' + tracks.map(function (t) { return t.get('title'); }).join(', '))
+        : null
+    );
+  }
+});
 
 var EventPreview = createClass({
   render: function () {
@@ -399,6 +431,7 @@ var ContactsPreview = createClass({
 
 CMS.registerPreviewTemplate('artists', ArtistPreview);
 CMS.registerPreviewTemplate('tracks', TrackPreview);
+CMS.registerPreviewTemplate('albums', AlbumPreview);
 CMS.registerPreviewTemplate('events', EventPreview);
 CMS.registerPreviewTemplate('services', ServicePreview);
 

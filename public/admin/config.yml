@@ -67,6 +67,34 @@ collections:
       - { label: Тип релиза, name: releaseType, widget: string }
       - { label: Описание, name: description, widget: text }
 
+  - name: albums
+    label: Альбомы
+    folder: "content/albums"
+    create: true
+    format: json
+    fields:
+      - { label: ID, name: id, widget: "uuid", prefix: 'album_'}
+      - { label: Название, name: title, widget: string }
+      - label: Авторы
+        name: authors
+        widget: relation
+        collection: artists
+        search_fields: [nickname]
+        value_field: id
+        display_fields: [nickname]
+        multiple: true
+      - { label: Обложка, name: cover, widget: image }
+      - { label: Дата релиза, name: releaseDate, widget: datetime }
+      - { label: Описание, name: description, widget: text }
+      - label: Треки
+        name: tracks
+        widget: relation
+        collection: tracks
+        search_fields: [title]
+        value_field: id
+        display_fields: [title]
+        multiple: true
+
   - name: events
     label: Мероприятия
     folder: "content/events"
@@ -147,6 +175,15 @@ collections:
             name: releases
             widget: relation
             collection: tracks
+            search_fields: [title]
+            value_field: id
+            display_fields: [title]
+            multiple: true
+            required: false
+          - label: Альбомы лейбла
+            name: albums
+            widget: relation
+            collection: albums
             search_fields: [title]
             value_field: id
             display_fields: [title]

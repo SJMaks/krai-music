@@ -5,15 +5,15 @@ import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-import { artistsData, tracksData } from '../cms/data'
+import { artistsData, albumsData, tracksData } from '../cms/data'
 import { useAudioStore } from '../store/audioStore'
 import styles from './ArtistDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { motion, useReducedMotion } from 'framer-motion'
-import { FiArrowLeft, FiPlay, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+import { FiArrowLeft, FiPlay, FiChevronLeft, FiChevronRight, FiDisc } from 'react-icons/fi'
 import { FaVk, FaTelegram, FaInstagram, FaXTwitter, FaFacebookF } from 'react-icons/fa6'
 import type { IconType } from 'react-icons'
-import type { Track } from '../types/content'
+import type { Track, Album } from '../types/content'
 import { getMediaUrl } from '../shared/lib/media'
 
 const SOCIAL_META: Record<string, { Icon: IconType; defaultLabel: string }> = {
@@ -53,6 +53,13 @@ export default function ArtistDetailPage() {
     if (!artist) return []
     return tracksData.filter((track) =>
       track.authors.some((author) => author.id === artist.id)
+    )
+  }, [artist])
+
+  const artistAlbums = useMemo(() => {
+    if (!artist) return [] as Album[]
+    return albumsData.filter((album) =>
+      album.authors.some((author) => author.id === artist.id)
     )
   }, [artist])
 
@@ -300,6 +307,51 @@ export default function ArtistDetailPage() {
               )}
             </motion.div>
           </div>
+        </section>
+<section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <p className={styles.eyebrow}>
+                <FiDisc size={14} />
+                Альбомы
+              </p>
+              <h2>Альбомы артиста</h2>
+            </div>
+          </div>
+          {artistAlbums.length > 0 ? (
+            <div className={styles.albumGrid}>
+              {artistAlbums.map((album, index) => (
+                <motion.article
+                  key={album.id}
+                  className={styles.albumCard}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-30px' }}
+                  transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
+                >
+                  <Link to={`/albums/${album.id}`} className={styles.albumCoverLink}>
+                    <img src={getMediaUrl(album.cover)} alt={album.title} className={styles.albumCover} loading="lazy" />
+                  </Link>
+                  <div className={styles.albumBody}>
+                    <h3>
+                      <Link to={`/albums/${album.id}`} className={styles.albumTitleLink}>
+                        {album.title}
+                      </Link>
+                    </h3>
+                    <p className={styles.albumMeta}>
+                      {album.tracks.length} {album.tracks.length === 1 ? 'трек' : album.tracks.length < 5 ? 'трека' : 'треков'} ·{' '}
+                      {formatDate(album.releaseDate)}
+                    </p>
+                    <Link to={`/albums/${album.id}`} className={styles.albumOpenLink}>
+                      Открыть альбом
+                    </Link>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          ) : (
+            <p className={styles.empty}>У этого артиста пока нет альбомов.</p>
+          )}
         </section>
       </section>
     </>

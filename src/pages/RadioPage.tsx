@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { artistsData, tracksData, radioContentData } from '../cms/data'
+import { artistsData, albumsData, tracksData, radioContentData } from '../cms/data'
 import { useAudioStore } from '../store/audioStore'
 import styles from './RadioPage.module.css'
 import { Seo } from '../shared/ui/Seo'
@@ -8,7 +8,13 @@ import { Link } from 'react-router-dom'
 import { getMediaUrl } from '../shared/lib/media'
 import logo from '../assets/logo.png'
 import { FiPlay, FiPause, FiShuffle, FiRadio } from 'react-icons/fi'
-import type { Track } from '../types/content'
+import type { Track, Album } from '../types/content'
+
+type ReleaseItem = Track | Album
+
+function isAlbum(item: ReleaseItem): item is Album {
+  return !('audio' in item)
+}
 
 function formatDate(dateString?: string): string {
   if (!dateString) return '—'
@@ -48,12 +54,15 @@ export default function RadioPage() {
     )
   }, [filter])
 
-  // «Релизы лейбла» — витрина, список задаётся в Decap CMS (content/radio.json)
+  // «Релизы лейбла» — витрина: синглы и альбомы, выбор которых задаётся в
+  // Decap CMS (content/radio.json). Пустой список = показать всё лейбла.
   const labelReleases = useMemo(() => {
-    const base = radioContentData.releases.length > 0 ? radioContentData.releases : tracksData
+    const singles = radioContentData.releases.length > 0 ? radioContentData.releases : tracksData
+    const albums = radioContentData.albums.length > 0 ? radioContentData.albums : albumsData
+    const base: ReleaseItem[] = [...singles, ...albums]
     if (filter === 'Все') return base
-    return base.filter((track) =>
-      track.authors.some((author) => author.nickname === filter)
+    return base.filter((item) =>
+      item.authors.some((author) => author.nickname === filter)
     )
   }, [filter])
 
@@ -168,7 +177,50 @@ export default function RadioPage() {
 
           {labelReleases.length > 0 ? (
             <div className={styles.shelf}>
-              {labelReleases.map((track, index) => {
+              {labelReleases.map((item, index) => {
+                if (isAlbum(item)) {
+                  return (
+                    <motion.article
+                      key={item.id}
+                      className={styles.albumCard}
+                      initial={{ opacity: 0, y: 14 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '-40px' }}
+                      transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
+                    >
+                      <div className={styles.albumCoverWrap}>
+                        <img src={getMediaUrl(item.cover)} alt={item.title} className={styles.albumCover} loading="lazy" />
+                        <Link
+                          to={`/albums/${item.id}`}
+                          className={styles.albumPlay}
+                          aria-label={`Открыть альбом: ${item.title}`}
+                        >
+                          <FiPlay size={16} />
+                        </Link>
+                      </div>
+                      <h3 className={styles.albumTitle}>
+                        <Link to={`/albums/${item.id}`} className={styles.albumAuthorLink}>
+                          {item.title}
+                        </Link>
+                      </h3>
+                      <div className={styles.albumAuthors}>
+                        {item.authors.map((author, authorIndex) => (
+                          <span key={author.id}>
+                            <Link to={`/artists/${author.id}`} className={styles.albumAuthorLink}>
+                              {author.nickname}
+                            </Link>
+                            {authorIndex < item.authors.length - 1 && ', '}
+                          </span>
+                        ))}
+                      </div>
+                      <p className={styles.albumMeta}>
+                        Альбом · {formatDate(item.releaseDate)}
+                      </p>
+                    </motion.article>
+                  )
+                }
+
+                const track = item
                 const active = isCurrent(track)
                 return (
                   <motion.article
