@@ -139,6 +139,15 @@ collections:
             display_fields: [nickname]
             multiple: true
             required: false
+          - label: Недавние альбомы
+            name: featuredAlbums
+            widget: relation
+            collection: albums
+            search_fields: [title]
+            value_field: id
+            display_fields: [title]
+            multiple: true
+            required: false
           - label: Выделенные треки
             name: featuredTracks
             widget: relation

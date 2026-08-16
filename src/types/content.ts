@@ -72,6 +72,7 @@ export interface HomepageContent {
   heroTitle: string
   heroSubtitle: string
   featuredArtists: Artist[]
+  featuredAlbums: Album[]
   featuredTracks: Track[]
   featuredEvents: Event[]
 }

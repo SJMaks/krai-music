@@ -539,6 +539,13 @@
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.34);
 }
 
+.cardActive,
+.cardActive:hover {
+  border-color: rgba(199, 29, 27, 0.75);
+  background: linear-gradient(180deg, rgba(199, 29, 27, 0.16), #121212);
+  box-shadow: 0 20px 44px rgba(199, 29, 27, 0.2);
+}
+
 .cardMedia {
   position: relative;
   overflow: hidden;
@@ -654,7 +661,51 @@
   text-transform: uppercase;
   backdrop-filter: blur(6px);
 }
-.playOverlay {
+.coverEq {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(199, 29, 27, 0.32), rgba(13, 13, 13, 0.55));
+}
+
+/* ---------- Equalizer ---------- */
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 0.9rem;
+}
+
+.eq span {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #ff9d9d, #e64545);
+  transform-origin: bottom;
+  animation: eqBounce 0.9s ease-in-out infinite;
+}
+
+.eq span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.eq span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes eqBounce {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.playOverlay,
+.openOverlay {
   position: absolute;
   right: 0.9rem;
   bottom: 0.9rem;
@@ -667,6 +718,7 @@
   background: linear-gradient(135deg, #e23330, #a51614);
   color: #ffffff;
   cursor: pointer;
+  text-decoration: none;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -676,12 +728,18 @@
   margin-left: 2px;
 }
 
-.playOverlay:hover {
+.openOverlay svg {
+  font-size: 1.15rem;
+}
+
+.playOverlay:hover,
+.openOverlay:hover {
   transform: scale(1.1);
   box-shadow: 0 14px 30px rgba(199, 29, 27, 0.45);
 }
 
-.card:hover .playOverlay {
+.card:hover .playOverlay,
+.card:hover .openOverlay {
   transform: scale(1.07);
 }
 
@@ -824,7 +882,8 @@
     letter-spacing: 0.12em;
   }
 
-  .playOverlay {
+  .playOverlay,
+  .openOverlay {
     right: auto;
     left: 50%;
     bottom: auto;
@@ -903,7 +962,8 @@
   .vinyl,
   .vinylRing,
   .marqueeTrack,
-  .onAirDot {
+  .onAirDot,
+  .eq span {
     animation: none;
   }
 }

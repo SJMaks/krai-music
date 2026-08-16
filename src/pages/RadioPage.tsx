@@ -12,7 +12,7 @@ import { Seo } from '../shared/ui/Seo'
 import { Link } from 'react-router-dom'
 import { getMediaUrl } from '../shared/lib/media'
 import logo from '../assets/logo.png'
-import { FiPlay, FiPause, FiShuffle, FiRadio, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+import { FiPlay, FiPause, FiShuffle, FiRadio, FiChevronLeft, FiChevronRight, FiArrowRight } from 'react-icons/fi'
 import type { Track, Album } from '../types/content'
 
 function formatDate(dateString?: string): string {
@@ -216,7 +216,7 @@ export default function RadioPage() {
                         className={styles.albumPlay}
                         aria-label={`Открыть альбом: ${album.title}`}
                       >
-                        <FiPlay size={16} />
+                        <FiArrowRight size={18} />
                       </Link>
                     </div>
                     <h3 className={styles.albumTitle}>

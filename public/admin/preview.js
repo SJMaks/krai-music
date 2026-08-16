@@ -385,6 +385,24 @@ var HomepagePreview = createClass({
     var data = entry.get('data');
     var heroTitle = data.get('heroTitle') || '';
     var heroSubtitle = data.get('heroSubtitle') || '';
+    var featuredAlbums = data.get('featuredAlbums') || [];
+    var featuredTracks = data.get('featuredTracks') || [];
+
+    function releaseLabel(item) {
+      if (!item) return '';
+      if (typeof item.get === 'function') return item.get('title') || item.get('id') || '';
+      if (typeof item === 'object') return item.title || item.id || '';
+      return String(item);
+    }
+
+    function listLabel(list) {
+      if (!list || list.size === 0) return 'не выбраны';
+      return list.map(function (item) {
+        return releaseLabel(item);
+      }).filter(function (label) {
+        return label;
+      }).join(', ');
+    }
 
     return h('div', { className: 'homepage' },
       h('h1', { className: 'title' }, heroTitle),
@@ -392,7 +410,10 @@ var HomepagePreview = createClass({
         '«', h('span', { style: { color: '#c71d1b' } }, 'Край'),
         h('span', { style: { color: '#fff' } }, 'Music'),
         '»', heroSubtitle
-      )
+      ),
+      h('h3', {}, 'Недавние релизы'),
+      h('h4', {}, 'Альбомы: ' + listLabel(featuredAlbums)),
+      h('h4', {}, 'Треки: ' + listLabel(featuredTracks))
     );
   }
 });

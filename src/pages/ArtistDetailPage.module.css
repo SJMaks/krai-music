@@ -379,11 +379,33 @@
   border-color: rgba(199, 29, 27, 0.45);
 }
 
-.trackCover {
+.trackCardActive,
+.trackCardActive:hover {
+  border-color: rgba(199, 29, 27, 0.7);
+  background: linear-gradient(180deg, rgba(199, 29, 27, 0.16), rgba(199, 29, 27, 0.08));
+  box-shadow: 0 10px 26px rgba(199, 29, 27, 0.14);
+}
+
+.trackCoverWrap {
+  position: relative;
   width: 3rem;
   height: 3rem;
+  flex-shrink: 0;
+}
+
+.trackCover {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   background: #0e0e0e;
+}
+
+.coverEq {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(199, 29, 27, 0.3), rgba(13, 13, 13, 0.55));
 }
 
 .trackCard h3 {
@@ -424,6 +446,57 @@
 
 .playButton svg {
   color: #c71d1b;
+}
+
+.playButtonActive {
+  border-color: #c71d1b;
+  background: #c71d1b;
+  color: #ffffff;
+  box-shadow: 0 8px 22px rgba(199, 29, 27, 0.4);
+}
+
+.playButtonActive:hover {
+  background: #c71d1b;
+  color: #ffffff;
+}
+
+.playButtonActive svg {
+  color: #ffffff;
+}
+
+/* ---------- Equalizer ---------- */
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 0.9rem;
+}
+
+.eq span {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #ff9d9d, #e64545);
+  transform-origin: bottom;
+  animation: eqBounce 0.9s ease-in-out infinite;
+}
+
+.eq span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.eq span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes eqBounce {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
 }
 
 .secondaryButton {
@@ -496,6 +569,13 @@
   padding: 1.25rem;
   background: linear-gradient(180deg, #171717, #121212);
   border: 1px solid rgba(199, 29, 27, 0.35);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.featuredTrackCardActive,
+.featuredTrackCardActive:hover {
+  border-color: rgba(199, 29, 27, 0.9);
+  box-shadow: 0 18px 44px rgba(199, 29, 27, 0.22);
 }
 
 .featuredTrackCard .eyebrow {
@@ -503,6 +583,7 @@
 }
 
 .featuredTrackCoverButton {
+  position: relative;
   display: block;
   width: 100%;
   padding: 0;
@@ -525,6 +606,18 @@
 .featuredTrackCoverButton:hover .featuredTrackCover {
   transform: translateY(-3px);
   box-shadow: 0 24px 50px rgba(199, 29, 27, 0.25);
+}
+
+.featuredCoverEq {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(199, 29, 27, 0.28), rgba(13, 13, 13, 0.45));
+}
+
+.featuredCoverEq .eq {
+  height: 1.35rem;
 }
 
 .featuredTrackInfo {
@@ -660,5 +753,11 @@
 
   .trackLayout .featuredTrackCard {
     margin-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eq span {
+    animation: none;
   }
 }

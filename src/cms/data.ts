@@ -81,6 +81,7 @@ const services: Service[] = rawServices as Service[]
 const homepageData = homepageJson as Partial<HomepageContent> & Record<string, unknown>
 
 const featuredArtistIds = (Array.isArray(homepageData.featuredArtists) ? homepageData.featuredArtists : []) as unknown as string[]
+const featuredAlbumIds = (Array.isArray(homepageData.featuredAlbums) ? homepageData.featuredAlbums : []) as unknown as string[]
 const featuredTrackIds = (Array.isArray(homepageData.featuredTracks) ? homepageData.featuredTracks : []) as unknown as string[]
 const featuredEventIds = (Array.isArray(homepageData.featuredEvents) ? homepageData.featuredEvents : []) as unknown as string[]
 
@@ -91,6 +92,11 @@ const homepageContent: HomepageContent = {
     const artist = artistsMapFinal.get(id)
     if (!artist) throw new Error(`Artist with id "${id}" not found`)
     return artist
+  }),
+  featuredAlbums: featuredAlbumIds.map(id => {
+    const album = albumsMap.get(id)
+    if (!album) throw new Error(`Album with id "${id}" not found`)
+    return album
   }),
   featuredTracks: featuredTrackIds.map(id => {
     const track = tracksMap.get(id)

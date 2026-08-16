@@ -5,13 +5,14 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { useAudioStore } from '../store/audioStore'
-import { homepageContentData, artistsData, tracksData, eventsData } from '../cms/data'
+import { homepageContentData, artistsData, albumsData, tracksData, eventsData } from '../cms/data'
 import styles from './HomePage.module.css'
 import logo from '../assets/logo.png'
 import { Link } from 'react-router-dom'
 import { Seo } from '../shared/ui/Seo'
-import { FiArrowRight, FiCalendar, FiMapPin, FiPlay, FiHeadphones } from 'react-icons/fi'
+import { FiArrowRight, FiCalendar, FiMapPin, FiPlay, FiPause, FiHeadphones } from 'react-icons/fi'
 import { getMediaUrl } from '../shared/lib/media'
+import type { Track } from '../types/content'
 
 function formatDate(dateString?: string): string {
   if (!dateString) return 'Дата не указана';
@@ -35,6 +36,17 @@ function formatDayMonth(dateString?: string): { day: string; month: string } {
     day: String(date.getDate()).padStart(2, '0'),
     month: SHORT_MONTHS[date.getMonth()],
   }
+}
+
+// Анимированный эквалайзер (как на страницах радио и альбома)
+function Equalizer() {
+  return (
+    <span className={styles.eq} aria-hidden="true">
+      <span />
+      <span />
+      <span />
+    </span>
+  )
 }
 
 const EQ_HEIGHTS = [22, 40, 30, 48, 34, 54, 26, 42, 36, 50, 30, 44]
@@ -65,14 +77,28 @@ function SectionHead({ eyebrow, title, to, linkLabel }: SectionHeadProps) {
 
 export default function HomePage() {
   const playTrack = useAudioStore((state) => state.playTrack)
+  const currentTrack = useAudioStore((state) => state.currentTrack)
+  const isPlaying = useAudioStore((state) => state.isPlaying)
+  const togglePlay = useAudioStore((state) => state.togglePlay)
   const queue = useAudioStore((state) => state.queue)
   const reduceMotion = useReducedMotion()
 
-  const { heroTitle, heroSubtitle, featuredArtists, featuredTracks, featuredEvents } = homepageContentData
+  const { heroTitle, heroSubtitle, featuredArtists, featuredAlbums, featuredTracks, featuredEvents } = homepageContentData
 
   const displayArtists = featuredArtists.length > 0 ? featuredArtists : artistsData.slice(0, 3)
+  const displayAlbums = featuredAlbums.length > 0 ? featuredAlbums : albumsData.slice(0, 3)
   const displayTracks = featuredTracks.length > 0 ? featuredTracks : tracksData.slice(0, 3)
   const displayEvents = featuredEvents.length > 0 ? featuredEvents : eventsData.slice(0, 3)
+
+  const isCurrent = (track: Track) => currentTrack?.id === track.id
+
+  const handlePlayPause = (track: Track) => {
+    if (isCurrent(track)) {
+      togglePlay()
+      return
+    }
+    playTrack(track, queue)
+  }
 
   return (
     <>
@@ -227,8 +253,8 @@ export default function HomePage() {
             pagination={{ clickable: true }}
             breakpoints={{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}
           >
-            {displayTracks.map((track) => (
-              <SwiperSlide key={track.id} className={styles.swiperSlide}>
+            {displayAlbums.map((album) => (
+              <SwiperSlide key={album.id} className={styles.swiperSlide}>
                 <motion.article
                   className={styles.card}
                   initial={{ opacity: 0, y: 16 }}
@@ -237,26 +263,28 @@ export default function HomePage() {
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                 >
                   <div className={styles.cardMedia}>
-                    <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.trackImage} loading="lazy" />
-                    {track.releaseType ? <span className={styles.chip}>{track.releaseType}</span> : null}
-                    <button
-                      type="button"
-                      className={styles.playOverlay}
-                      onClick={() => playTrack(track, queue)}
-                      aria-label={`Слушать: ${track.title}`}
+                    <Link to={`/albums/${album.id}`} state={{ fromHome: true }} className={styles.cardImageLink}>
+                      <img src={getMediaUrl(album.cover)} alt={album.title} className={styles.trackImage} loading="lazy" />
+                    </Link>
+                    <span className={styles.chip}>Альбом</span>
+                    <Link
+                      to={`/albums/${album.id}`}
+                      state={{ fromHome: true }}
+                      className={styles.openOverlay}
+                      aria-label={`Открыть альбом: ${album.title}`}
                     >
-                      <FiPlay />
-                    </button>
+                      <FiArrowRight />
+                    </Link>
                   </div>
                   <div className={styles.cardBody}>
-                    <h3>{track.title}</h3>
+                    <h3>{album.title}</h3>
                     <p className={styles.cardText}>
-                      {track.authors.map((author, index) => (
+                      {album.authors.map((author, index) => (
                         <span key={author.id}>
                           <Link to={`/artists/${author.id}`} className={styles.authorLink}>
                             {author.nickname}
                           </Link>
-                          {index < track.authors.length - 1 ? ', ' : ''}
+                          {index < album.authors.length - 1 ? ', ' : ''}
                         </span>
                       ))}
                     </p>
@@ -264,6 +292,51 @@ export default function HomePage() {
                 </motion.article>
               </SwiperSlide>
             ))}
+            {displayTracks.map((track) => {
+              const active = isCurrent(track)
+              return (
+                <SwiperSlide key={track.id} className={styles.swiperSlide}>
+                  <motion.article
+                    className={`${styles.card} ${active ? styles.cardActive : ''}`}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                  >
+                    <div className={styles.cardMedia}>
+                      <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.trackImage} loading="lazy" />
+                      {active && isPlaying ? (
+                        <span className={styles.coverEq} aria-hidden="true">
+                          <Equalizer />
+                        </span>
+                      ) : null}
+                      {track.releaseType ? <span className={styles.chip}>{track.releaseType}</span> : null}
+                      <button
+                        type="button"
+                        className={styles.playOverlay}
+                        onClick={() => handlePlayPause(track)}
+                        aria-label={active && isPlaying ? `Пауза: ${track.title}` : `Слушать: ${track.title}`}
+                      >
+                        {active && isPlaying ? <FiPause /> : <FiPlay />}
+                      </button>
+                    </div>
+                    <div className={styles.cardBody}>
+                      <h3>{track.title}</h3>
+                      <p className={styles.cardText}>
+                        {track.authors.map((author, index) => (
+                          <span key={author.id}>
+                            <Link to={`/artists/${author.id}`} className={styles.authorLink}>
+                              {author.nickname}
+                            </Link>
+                            {index < track.authors.length - 1 ? ', ' : ''}
+                          </span>
+                        ))}
+                      </p>
+                    </div>
+                  </motion.article>
+                </SwiperSlide>
+              )
+            })}
           </Swiper>
         </section>
 

@@ -10,7 +10,7 @@ import { useAudioStore } from '../store/audioStore'
 import styles from './ArtistDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { motion, useReducedMotion } from 'framer-motion'
-import { FiArrowLeft, FiPlay, FiChevronLeft, FiChevronRight, FiDisc } from 'react-icons/fi'
+import { FiArrowLeft, FiPlay, FiPause, FiChevronLeft, FiChevronRight, FiDisc } from 'react-icons/fi'
 import { FaVk, FaTelegram, FaInstagram, FaXTwitter, FaFacebookF } from 'react-icons/fa6'
 import type { IconType } from 'react-icons'
 import type { Track, Album } from '../types/content'
@@ -34,6 +34,17 @@ function formatDate(dateString?: string): string {
   return `${day}.${month}.${year}`
 }
 
+// Анимированный эквалайзер — как на страницах радио и альбома
+function Equalizer() {
+  return (
+    <span className={styles.eq} aria-hidden="true">
+      <span />
+      <span />
+      <span />
+    </span>
+  )
+}
+
 export default function ArtistDetailPage() {
   const { id } = useParams()
   const [page, setPage] = useState(1)
@@ -45,6 +56,9 @@ export default function ArtistDetailPage() {
     })
   }
   const playTrack = useAudioStore((state) => state.playTrack)
+  const currentTrack = useAudioStore((state) => state.currentTrack)
+  const isPlaying = useAudioStore((state) => state.isPlaying)
+  const togglePlay = useAudioStore((state) => state.togglePlay)
   const reduceMotion = useReducedMotion()
 
   const artist = useMemo(() => artistsData.find((entry) => entry.id === id), [id])
@@ -64,13 +78,20 @@ export default function ArtistDetailPage() {
   }, [artist])
 
   const featuredTrack = artist?.featuredTrack ?? null
+  const featuredActive = featuredTrack != null && currentTrack?.id === featuredTrack.id
 
   const perPage = 4
   const totalPages = Math.max(1, Math.ceil(artistTracks.length / perPage))
   const currentPage = Math.min(page, totalPages)
   const pageTracks = artistTracks.slice((currentPage - 1) * perPage, currentPage * perPage)
 
-  const handlePlayTrack = (track: Track) => {
+  const isCurrent = (track: Track) => currentTrack?.id === track.id
+
+  const handlePlayPause = (track: Track) => {
+    if (isCurrent(track)) {
+      togglePlay()
+      return
+    }
     const nextQueue = artistTracks.length > 0 ? artistTracks : [track]
     playTrack(track, nextQueue)
   }
@@ -210,31 +231,42 @@ export default function ArtistDetailPage() {
                 </div>
               )}
               <div className={styles.trackList} ref={listRef}>
-                {pageTracks.map((track, index) => (
-                  <motion.div
-                    key={track.id}
-                    className={styles.trackCard}
-                    initial={{ opacity: 0, y: 14 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-30px' }}
-                    transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
-                  >
-                    <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.trackCover} />
-                    <div>
-                      <h3>{track.title}</h3>
-                      <p>
-                        {track.authors.map((a) => a.nickname).join(', ')}
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      className={styles.playButton}
-                      onClick={() => handlePlayTrack(track)}
+                {pageTracks.map((track, index) => {
+                  const active = isCurrent(track)
+                  return (
+                    <motion.div
+                      key={track.id}
+                      className={`${styles.trackCard} ${active ? styles.trackCardActive : ''}`}
+                      initial={{ opacity: 0, y: 14 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '-30px' }}
+                      transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
                     >
-                      <FiPlay />
-                    </button>
-                  </motion.div>
-                ))}
+                      <div className={styles.trackCoverWrap}>
+                        <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.trackCover} />
+                        {active && isPlaying ? (
+                          <span className={styles.coverEq} aria-hidden="true">
+                            <Equalizer />
+                          </span>
+                        ) : null}
+                      </div>
+                      <div>
+                        <h3>{track.title}</h3>
+                        <p>
+                          {track.authors.map((a) => a.nickname).join(', ')}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        className={`${styles.playButton} ${active ? styles.playButtonActive : ''}`}
+                        onClick={() => handlePlayPause(track)}
+                        aria-label={active && isPlaying ? 'Пауза' : 'Слушать'}
+                      >
+                        {active && isPlaying ? <FiPause /> : <FiPlay />}
+                      </button>
+                    </motion.div>
+                  )
+                })}
               </div>
               <motion.div
                 className={styles.pagination}
@@ -261,7 +293,7 @@ export default function ArtistDetailPage() {
             </div>
 
             <motion.div
-              className={styles.featuredTrackCard}
+              className={`${styles.featuredTrackCard} ${featuredActive ? styles.featuredTrackCardActive : ''}`}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-30px' }}
@@ -275,13 +307,19 @@ export default function ArtistDetailPage() {
                   <button
                     type="button"
                     className={styles.featuredTrackCoverButton}
-                    onClick={() => handlePlayTrack(featuredTrack)}
+                    onClick={() => handlePlayPause(featuredTrack)}
+                    aria-label={featuredActive && isPlaying ? 'Пауза' : 'Слушать'}
                   >
                     <img
                       src={getMediaUrl(featuredTrack.cover)}
                       alt={featuredTrack.title}
                       className={styles.featuredTrackCover}
                     />
+                    {featuredActive && isPlaying ? (
+                      <span className={styles.featuredCoverEq} aria-hidden="true">
+                        <Equalizer />
+                      </span>
+                    ) : null}
                   </button>
                   <div className={styles.featuredTrackInfo}>
                     <h3>{featuredTrack.title}</h3>
@@ -294,10 +332,10 @@ export default function ArtistDetailPage() {
                     <button
                       type="button"
                       className={styles.secondaryButton}
-                      onClick={() => handlePlayTrack(featuredTrack)}
+                      onClick={() => handlePlayPause(featuredTrack)}
                     >
-                      <FiPlay />
-                      Слушать
+                      {featuredActive && isPlaying ? <FiPause /> : <FiPlay />}
+                      {featuredActive && isPlaying ? 'Пауза' : 'Слушать'}
                     </button>
                   </div>
                 </>

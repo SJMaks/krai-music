@@ -43,6 +43,7 @@ export default function AlbumDetailPage() {
   const reduceMotion = useReducedMotion()
 
   const fromArtist = (location.state as { fromArtist?: string } | null)?.fromArtist
+  const fromHome = (location.state as { fromHome?: boolean } | null)?.fromHome
 
   const playTrack = useAudioStore((state) => state.playTrack)
   const currentTrack = useAudioStore((state) => state.currentTrack)
@@ -95,9 +96,9 @@ return (
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: 'easeOut' }}
         >
-          <Link to={fromArtist ? `/artists/${fromArtist}` : '/radio'} className={styles.backLink}>
+          <Link to={fromArtist ? `/artists/${fromArtist}` : fromHome ? '/' : '/radio'} className={styles.backLink}>
             <FiArrowLeft />
-            <span>{fromArtist ? 'К артисту' : 'К радио'}</span>
+            <span>{fromArtist ? 'К артисту' : fromHome ? 'На главную' : 'К радио'}</span>
           </Link>
         </motion.div>
 
