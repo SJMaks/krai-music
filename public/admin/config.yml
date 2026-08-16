@@ -139,7 +139,7 @@ collections:
           - { label: Адрес, name: address, widget: string }
           - { label: Ссылки на соц. сети, name: socials, required: false, widget: list, fields: [{ label: Соц. сеть, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
       - name: radio
-        label: Радио — релизы лейбла
+        label: Радио
         file: content/radio.json
         format: json
         fields:
