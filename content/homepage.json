@@ -5,6 +5,15 @@
     "album_5e0b1c2f-0c1a-4b3d-9f6e-1a2b3c4d5e6f"
   ],
   "featuredArtists": [
-    "artist_04fe2e26-09a3-4505-8690-4f40fb327199"
+    "artist_04fe2e26-09a3-4505-8690-4f40fb327199",
+    "artist_0d22887c-9967-481d-9c99-c4e94485cced"
+  ],
+  "featuredTracks": [
+    "track_5e183427-8b3a-440b-b201-f9b26dcbf22e",
+    "track_9fb6d40c-013d-45cf-91d3-c260de9d67ec"
+  ],
+  "featuredEvents": [
+    "event_15b91357-0ce8-4ffc-a955-28e50b3a052d",
+    "event_56be7855-c4ba-45d4-b851-55cb9988d823"
   ]
 }
