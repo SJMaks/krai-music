@@ -9,6 +9,19 @@ const albumModules = import.meta.glob('../../content/albums/*.json', { eager: tr
 const eventModules = import.meta.glob('../../content/events/*.json', { eager: true, import: 'default' })
 const serviceModules = import.meta.glob('../../content/services/*.json', { eager: true, import: 'default' })
 
+/**
+ * Raw shape of content/homepage.json as authored in the CMS:
+ * featured* fields hold string ids that are resolved to entities below.
+ */
+interface HomepageJson {
+  heroTitle?: string
+  heroSubtitle?: string
+  featuredArtists?: string[]
+  featuredAlbums?: string[]
+  featuredTracks?: string[]
+  featuredEvents?: string[]
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rawArtists = Object.values(artistModules) as any[]
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -78,12 +91,12 @@ artistsWithFeatured.forEach(a => artistsMapFinal.set(a.id, a))
 const events: Event[] = rawEvents as Event[]
 const services: Service[] = rawServices as Service[]
 
-const homepageData = homepageJson as Partial<HomepageContent> & Record<string, unknown>
+const homepageData = homepageJson as HomepageJson
 
-const featuredArtistIds = (Array.isArray(homepageData.featuredArtists) ? homepageData.featuredArtists : []) as unknown as string[]
-const featuredAlbumIds = (Array.isArray(homepageData.featuredAlbums) ? homepageData.featuredAlbums : []) as unknown as string[]
-const featuredTrackIds = (Array.isArray(homepageData.featuredTracks) ? homepageData.featuredTracks : []) as unknown as string[]
-const featuredEventIds = (Array.isArray(homepageData.featuredEvents) ? homepageData.featuredEvents : []) as unknown as string[]
+const featuredArtistIds = Array.isArray(homepageData.featuredArtists) ? homepageData.featuredArtists : []
+const featuredAlbumIds = Array.isArray(homepageData.featuredAlbums) ? homepageData.featuredAlbums : []
+const featuredTrackIds = Array.isArray(homepageData.featuredTracks) ? homepageData.featuredTracks : []
+const featuredEventIds = Array.isArray(homepageData.featuredEvents) ? homepageData.featuredEvents : []
 
 const homepageContent: HomepageContent = {
   heroTitle: homepageData.heroTitle ?? '— Добро пожаловать! —',
