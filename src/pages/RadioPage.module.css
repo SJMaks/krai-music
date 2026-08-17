@@ -360,11 +360,28 @@
 /* ===== Фильтры-пилюли ===== */
 .filters {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.65rem;
+  /* Одна строка без переноса: длинный список скроллится по горизонтали */
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  /* Скроллбар скрываем: он съедает место снизу и вместе с краем контейнера обрезает
+     тень активной пилюли. Пролистывание доступно трекпадом, свайпом или Shift+колесо. */
+  scrollbar-width: none;
+  padding-top: 0.5rem;
+  padding-bottom: 1.25rem;
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
 }
 
 .filters button {
+  flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.045);
   color: rgba(255, 255, 255, 0.78);
@@ -386,7 +403,9 @@
   background: linear-gradient(135deg, #f25c5c, #a51614);
   border-color: transparent;
   color: #ffffff;
-  box-shadow: 0 8px 22px rgba(199, 29, 27, 0.35);
+  /* Компактное свечение, чтобы оно целиком помещалось в нижний отступ
+     скролл-области и не обрезалось её краем */
+  box-shadow: 0 4px 14px rgba(199, 29, 27, 0.48);
 }
 
 /* ===== Заголовки секций ===== */

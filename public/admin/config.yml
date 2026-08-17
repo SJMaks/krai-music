@@ -35,7 +35,7 @@ collections:
           - { label: Соц. сеть, name: type, widget: select, default: custom, options: [{ value: 'vk', label: 'ВК' }, { value: 'telegram', label: 'Телеграм' }, { value: 'instagram', label: 'Инстаграм' }, { value: 'x', label: 'X (Twitter)' }, { value: 'facebook', label: 'Facebook' }, { value: 'custom', label: 'Свой вариант (текстом)' }] }
           - { label: Подпись (для своего варианта), name: label, required: false, widget: string, hint: 'Запишите произвольный текст — ссылка отобразится текстовой кнопкой. Для сети из списка подпись подставляется автоматически.' }
           - { label: Ссылка, name: url, widget: string }
-      - { label: Видео, name: videos, required: false, widget: list, fields: [{ label: Название, name: title, widget: string, pattern: ['^.{1,80}$', 'Максимум 80 символов'] }, { label: Описание, name: description, widget: text, pattern: ['^[\s\S]{0,300}$', 'Максимум 300 символов'] }, { label: Ссылка, name: url, widget: string }, { label: Обложка, name: cover, widget: image }] }
+      - { label: Видео, name: videos, required: false, widget: list, fields: [{ label: Название, name: title, widget: string, pattern: ['^.{1,40}$', 'Максимум 40 символов'] }, { label: Описание, name: description, widget: text, pattern: ['^[\s\S]{0,300}$', 'Максимум 300 символов'] }, { label: Ссылка, name: url, widget: string }, { label: Обложка, name: cover, widget: image }] }
       - label: Выделенный трек
         name: featuredTrack
         required: false
@@ -118,7 +118,7 @@ collections:
       - { label: Описание, name: description, widget: text, pattern: ['^[\s\S]{0,300}$', 'Максимум 300 символов'] }
       - { label: Изображение, name: image, widget: image }
       - { label: Дата, name: date, widget: datetime }
-      - { label: Место, name: location, widget: string }
+      - { label: Место, name: location, widget: string, pattern: ['^.{1,60}$', "Максимум 60 символов"] }
       - { label: Ссылки, name: links, required: false, widget: list, fields: [{ label: Название, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
 
   - name: services
