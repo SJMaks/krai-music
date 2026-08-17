@@ -209,7 +209,7 @@ return (
                     </div>
                     <span className={styles.trackDuration}>{formatDate(track.releaseDate)}</span>
                     <span className={styles.trackAction}>
-                      {active && isPlaying ? <FiPause size={15} /> : <FiPlay size={15} />}
+                      {active && isPlaying ? <FiPause className={styles.pauseIcon} size={15} /> : <FiPlay className={styles.playIcon} size={15} />}
                     </span>
                   </motion.div>
                 )

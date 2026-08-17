@@ -363,6 +363,15 @@
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+.trackAction .playIcon {
+  font-size: 1.05rem;
+  margin-left: 2px;
+}
+
+.trackAction .pauseIcon {
+  font-size: 1.05rem;
+}
+
 .trackRow:hover .trackAction {
   background: rgba(199, 29, 27, 0.25);
   color: #ffffff;

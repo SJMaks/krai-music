@@ -21,7 +21,7 @@ collections:
     identifier_field: nickname
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'artist_'}
-      - { label: Никнейм, name: nickname, widget: string, pattern: ['.{1,80}', 'Максимум 80 символов'] }
+      - { label: Никнейм, name: nickname, widget: string, pattern: ['.{1,40}', "Максимум 40 символов"] }
       - { label: Биография, name: biography, widget: text, pattern: ['[\s\S]{0,300}', 'Максимум 300 символов'] }
       - { label: Фото 4/6, name: verticalImage, widget: image }
       - { label: Фото 1/1, name: squareImage, required: false, widget: image }
@@ -63,7 +63,7 @@ collections:
     slug: '{{fields.id}}'
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'track_'}
-      - { label: Название, name: title, widget: string, pattern: ['.{1,80}', 'Максимум 80 символов'] }
+      - { label: Название, name: title, widget: string, pattern: ['.{1,40}', "Максимум 40 символов"] }
       - label: Авторы
         name: authors
         widget: relation
@@ -85,7 +85,7 @@ collections:
     slug: '{{fields.id}}'
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'album_'}
-      - { label: Название, name: title, widget: string, pattern: ['.{1,80}', 'Максимум 80 символов'] }
+      - { label: Название, name: title, widget: string, pattern: ['.{1,40}', "Максимум 40 символов"] }
       - label: Авторы
         name: authors
         widget: relation
@@ -114,7 +114,7 @@ collections:
     slug: '{{fields.id}}'
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'event_'}
-      - { label: Название, name: title, widget: string, pattern: ['.{1,80}', 'Максимум 80 символов'] }
+      - { label: Название, name: title, widget: string, pattern: ['.{1,40}', "Максимум 40 символов"] }
       - { label: Описание, name: description, widget: text, pattern: ['[\s\S]{0,300}', 'Максимум 300 символов'] }
       - { label: Изображение, name: image, widget: image }
       - { label: Дата, name: date, widget: datetime }
@@ -129,7 +129,7 @@ collections:
     slug: '{{fields.id}}'
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'service_'}
-      - { label: Название, name: title, widget: string, pattern: ['.{1,80}', 'Максимум 80 символов'] }
+      - { label: Название, name: title, widget: string, pattern: ['.{1,40}', "Максимум 40 символов"] }
       - { label: Описание, name: description, widget: text, pattern: ['[\s\S]{0,300}', 'Максимум 300 символов'] }
       - { label: Изображение, name: image, widget: image }
 
@@ -141,7 +141,7 @@ collections:
         file: content/homepage.json
         format: json
         fields:
-          - { label: Заголовок, name: heroTitle, widget: string, pattern: ['.{1,80}', 'Максимум 80 символов'] }
+          - { label: Заголовок, name: heroTitle, widget: string, pattern: ['.{1,40}', "Максимум 40 символов"] }
           - { label: Подзаголовок, name: heroSubtitle, widget: text, pattern: ['[\s\S]{0,300}', 'Максимум 300 символов'] }
           - label: Выделенные артисты
             name: featuredArtists
