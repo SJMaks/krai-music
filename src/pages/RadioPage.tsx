@@ -242,7 +242,7 @@ export default function RadioPage() {
               ))}
             </Swiper>
           ) : (
-            <p className={styles.empty}>В этом разделе пока нет выбранных альбомов.</p>
+            <p className={styles.empty}>В этой подборке пока нет альбомов.</p>
           )}
         </section>
 
