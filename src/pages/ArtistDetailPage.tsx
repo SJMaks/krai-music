@@ -326,6 +326,7 @@ export default function ArtistDetailPage() {
                 <>
                   <Link
                     to={`/albums/${featuredAlbum.id}`}
+                    state={{ fromArtist: artist.id }}
                     className={styles.featuredTrackCoverButton}
                     aria-label={`Открыть альбом: ${featuredAlbum.title}`}
                   >
@@ -337,7 +338,7 @@ export default function ArtistDetailPage() {
                   </Link>
                   <div className={styles.featuredTrackInfo}>
                     <h3>
-                      <Link to={`/albums/${featuredAlbum.id}`} className={styles.albumTitleLink}>
+                      <Link to={`/albums/${featuredAlbum.id}`} state={{ fromArtist: artist.id }} className={styles.albumTitleLink}>
                         {featuredAlbum.title}
                       </Link>
                     </h3>
@@ -353,7 +354,7 @@ export default function ArtistDetailPage() {
                     </div>
                     <p>Дата релиза: {formatDate(featuredAlbum.releaseDate)}</p>
                     <ExpandableText text={featuredAlbum.description} lines={5} />
-                    <Link to={`/albums/${featuredAlbum.id}`} className={styles.albumOpenLink}>
+                    <Link to={`/albums/${featuredAlbum.id}`} state={{ fromArtist: artist.id }}  className={styles.albumOpenLink}>
                       Открыть альбом
                     </Link>
                   </div>

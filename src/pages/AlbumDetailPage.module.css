@@ -372,6 +372,25 @@
   font-size: 1.05rem;
 }
 
+.trackAuthors {
+  margin-top: 0.1rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trackAuthorLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.trackAuthorLink:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
 .trackRow:hover .trackAction {
   background: rgba(199, 29, 27, 0.25);
   color: #ffffff;

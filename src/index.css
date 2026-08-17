@@ -24,6 +24,13 @@ body {
   min-width: 320px;
   background: #111111;
   color: #cfcbcb;
+  /* Очень длинные слова (URL-ы, ники, технические термины) не должны вылезать
+     за пределы своего блока — переносим их там, где без этого был бы overflow.
+     anywhere учитывает перенос и при расчёте минимальной ширины flex/grid-элементов;
+     break-word и word-break — фолбэки для браузеров без поддержки anywhere. */
+  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 img {

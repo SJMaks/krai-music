@@ -203,7 +203,18 @@ return (
                       <div className={styles.trackText}>
                         <p className={styles.trackTitle}>{track.title}</p>
                         <p className={styles.trackAuthors}>
-                          {track.authors.map((author) => author.nickname).join(', ')}
+                          {track.authors.map((author, authorIndex) => (
+                              <span key={author.id}>
+                                <Link
+                                  to={`/artists/${author.id}`}
+                                  className={styles.trackAuthorLink}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  {author.nickname}
+                                </Link>
+                                {authorIndex < track.authors.length - 1 && ', '}
+                              </span>
+                            ))}
                         </p>
                       </div>
                     </div>
