@@ -1,9 +1,18 @@
+import { useEffect } from 'react'
 import styles from './PageSkeleton.module.css'
 import logo from '../assets/logo.png'
+import { useLayoutContext } from '../app/layout/LayoutContext'
 
 const EQ_HEIGHTS = [14, 18, 17, 26, 19, 24, 13]
 
 export function PageSkeleton() {
+  const { setFullBleed } = useLayoutContext()
+
+  useEffect(() => {
+    setFullBleed(true)
+    return () => setFullBleed(false)
+  }, [setFullBleed])
+
   return (
     <div className={styles.page} role="status">
       <div className={styles.vinyl} aria-hidden="true">

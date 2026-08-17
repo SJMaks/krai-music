@@ -230,77 +230,84 @@ export default function ArtistDetailPage() {
                   <h2>Список треков</h2>
                 </div>
               )}
-              <div className={styles.trackList} ref={listRef}>
-                {pageTracks.map((track, index) => {
-                  const active = isCurrent(track)
-                  return (
-                    <motion.div
-                      key={track.id}
-                      className={`${styles.trackCard} ${active ? styles.trackCardActive : ''}`}
-                      initial={{ opacity: 0, y: 14 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: '-30px' }}
-                      transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
-                    >
-                      <div className={styles.trackCoverWrap}>
-                        <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.trackCover} />
-                        {active && isPlaying ? (
-                          <span className={styles.coverEq} aria-hidden="true">
-                            <Equalizer />
-                          </span>
-                        ) : null}
-                      </div>
-                      <div>
-                        <h3>{track.title}</h3>
-                        <div className={styles.trackAuthors}>
-                            {track.authors.map((author, authorIndex) => (
-                              <span key={author.id}>
-                                <Link
-                                  to={`/artists/${author.id}`}
-                                  className={styles.trackAuthorLink}
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  {author.nickname}
-                                </Link>
-                                {authorIndex < track.authors.length - 1 && ', '}
+              {pageTracks.length > 0 ? (
+                <>
+                  <div className={styles.trackList} ref={listRef}>
+                    {pageTracks.map((track, index) => {
+                      const active = isCurrent(track)
+                      return (
+                        <motion.div
+                          key={track.id}
+                          className={`${styles.trackCard} ${active ? styles.trackCardActive : ''}`}
+                          initial={{ opacity: 0, y: 14 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: '-30px' }}
+                          transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
+                        >
+                          <div className={styles.trackCoverWrap}>
+                            <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.trackCover} />
+                            {active && isPlaying ? (
+                              <span className={styles.coverEq} aria-hidden="true">
+                                <Equalizer />
                               </span>
-                            ))}
+                            ) : null}
                           </div>
-                      </div>
-                      <button
-                        type="button"
-                        className={`${styles.playButton} ${active ? styles.playButtonActive : ''}`}
-                        onClick={() => handlePlayPause(track)}
-                        aria-label={active && isPlaying ? 'Пауза' : 'Слушать'}
-                      >
-                        {active && isPlaying ? <FiPause /> : <FiPlay />}
-                      </button>
-                    </motion.div>
-                  )
-                })}
-              </div>
-              <motion.div
-                className={styles.pagination}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.1 }}
-              >
-                <button
-                  type="button"
-                  onClick={() => goToPage((value) => Math.max(1, value - 1))}
-                  disabled={currentPage === 1} aria-label="Назад"
-                >
-                  <FiChevronLeft size={18} />
-                </button>
-                <span>{currentPage} / {totalPages}</span>
-                <button
-                  type="button"
-                  onClick={() => goToPage((value) => Math.min(totalPages, value + 1))}
-                  disabled={currentPage === totalPages} aria-label="Вперёд"
-                >
-                  <FiChevronRight size={18} />
-                </button>
-              </motion.div>
+                          <div>
+                            <h3>{track.title}</h3>
+                            <div className={styles.trackAuthors}>
+                              {track.authors.map((author, authorIndex) => (
+                                <span key={author.id}>
+                                  <Link
+                                    to={`/artists/${author.id}`}
+                                    className={styles.trackAuthorLink}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {author.nickname}
+                                  </Link>
+                                  {authorIndex < track.authors.length - 1 && ', '}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            className={`${styles.playButton} ${active ? styles.playButtonActive : ''}`}
+                            onClick={() => handlePlayPause(track)}
+                            aria-label={active && isPlaying ? 'Пауза' : 'Слушать'}
+                          >
+                            {active && isPlaying ? <FiPause /> : <FiPlay />}
+                          </button>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
+
+                  <motion.div
+                    className={styles.pagination}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4, delay: 0.1 }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => goToPage((value) => Math.max(1, value - 1))}
+                      disabled={currentPage === 1} aria-label="Назад"
+                    >
+                      <FiChevronLeft size={18} />
+                    </button>
+                    <span>{currentPage} / {totalPages}</span>
+                    <button
+                      type="button"
+                      onClick={() => goToPage((value) => Math.min(totalPages, value + 1))}
+                      disabled={currentPage === totalPages} aria-label="Вперёд"
+                    >
+                      <FiChevronRight size={18} />
+                    </button>
+                  </motion.div>
+                </>
+              ) : (
+                <p className={styles.emptyTracks}>У этого артиста пока нет треков.</p>
+              )}
             </div>
 
             <motion.div
@@ -363,7 +370,7 @@ export default function ArtistDetailPage() {
             </motion.div>
           </div>
         </section>
-<section className={styles.section}>
+        <section className={styles.section}>
           <div className={styles.sectionHeader}>
             <div>
               <p className={styles.eyebrow}>

@@ -6,12 +6,22 @@
 }
 
 .main {
-  padding: 0rem;
+  padding: 0 1.5rem 7rem;
 }
 
 .container {
   width: min(1200px, 100%);
   margin: 0 auto;
+}
+
+/* Full-bleed (например, экран загрузки PageSkeleton) — без padding и без ограничения ширины */
+.main.mainFullBleed {
+  padding: 0;
+}
+
+.containerFullBleed {
+  width: 100%;
+  max-width: none;
 }
 
 .section {

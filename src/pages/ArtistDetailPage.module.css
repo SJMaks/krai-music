@@ -55,6 +55,24 @@
   line-height: 1.6;
 }
 
+.emptyTracks {
+  display: grid;
+  place-items: center;
+  flex: 1 1 auto;
+  width: 100%;
+  padding: 2rem 1.25rem;
+  border: 1px dashed rgba(207, 203, 203, 0.18);
+  color: rgba(207, 203, 203, 0.7);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.trackColumn:has(.emptyTracks) {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
 /* ---------- Hero ---------- */
 .hero {
   display: grid;
