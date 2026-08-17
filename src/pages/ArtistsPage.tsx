@@ -5,6 +5,7 @@ import { artistsData } from '../cms/data'
 import styles from './ArtistsPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { getMediaUrl } from '../shared/lib/media'
+import { ExpandableText } from '../shared/ui/ExpandableText'
 import { FiArrowRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 export default function ArtistsPage() {
@@ -68,7 +69,7 @@ export default function ArtistsPage() {
           >
             <Link to={`/artists/${artist.id}`}><img src={getMediaUrl(artist.verticalImage)} alt={artist.nickname} className={styles.image} /></Link>
             <h2>{artist.nickname}</h2>
-            <p>{artist.biography}</p>
+            <ExpandableText text={artist.biography} lines={3} />
             <Link to={`/artists/${artist.id}`} className={styles.cardLink}>
               Открыть профиль
               <FiArrowRight />

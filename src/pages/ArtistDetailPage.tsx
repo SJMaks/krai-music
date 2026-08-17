@@ -15,6 +15,7 @@ import { FaVk, FaTelegram, FaInstagram, FaXTwitter, FaFacebookF } from 'react-ic
 import type { IconType } from 'react-icons'
 import type { Track, Album } from '../types/content'
 import { getMediaUrl } from '../shared/lib/media'
+import { ExpandableText } from '../shared/ui/ExpandableText'
 
 const SOCIAL_META: Record<string, { Icon: IconType; defaultLabel: string }> = {
   vk: { Icon: FaVk, defaultLabel: 'ВК' },
@@ -78,6 +79,7 @@ export default function ArtistDetailPage() {
   }, [artist])
 
   const featuredTrack = artist?.featuredTrack ?? null
+  const featuredAlbum = artist?.featuredAlbum ?? null
   const featuredActive = featuredTrack != null && currentTrack?.id === featuredTrack.id
 
   const perPage = 4
@@ -140,7 +142,7 @@ export default function ArtistDetailPage() {
           <div>
             <p className={styles.eyebrow}>Профиль артиста</p>
             <h1>{artist.nickname}</h1>
-            <p>{artist.biography}</p>
+            <ExpandableText text={artist.biography} lines={5} />
             <div className={styles.socials}>
               {socials.map((social, index) => {
                 const meta = social.type ? SOCIAL_META[social.type] : undefined
@@ -199,7 +201,7 @@ export default function ArtistDetailPage() {
                       <img src={getMediaUrl(video.cover)} alt={video.title} className={styles.image} />
                     </a>
                     <h3>{video.title}</h3>
-                    <p>{video.description}</p>
+                    <ExpandableText text={video.description} lines={3} />
                     <a href={video.url} target="_blank" rel="noreferrer">
                       <button type="button" className={styles.secondaryButton}>
                         <FiPlay />
@@ -320,7 +322,43 @@ export default function ArtistDetailPage() {
               <div className={styles.featuredTrackHeader}>
                 <p className={styles.eyebrow}>Новый релиз</p>
               </div>
-              {featuredTrack ? (
+              {featuredAlbum ? (
+                <>
+                  <Link
+                    to={`/albums/${featuredAlbum.id}`}
+                    className={styles.featuredTrackCoverButton}
+                    aria-label={`Открыть альбом: ${featuredAlbum.title}`}
+                  >
+                    <img
+                      src={getMediaUrl(featuredAlbum.cover)}
+                      alt={featuredAlbum.title}
+                      className={styles.featuredTrackCover}
+                    />
+                  </Link>
+                  <div className={styles.featuredTrackInfo}>
+                    <h3>
+                      <Link to={`/albums/${featuredAlbum.id}`} className={styles.albumTitleLink}>
+                        {featuredAlbum.title}
+                      </Link>
+                    </h3>
+                    <div className={styles.albumAuthors}>
+                      {featuredAlbum.authors.map((author, authorIndex) => (
+                        <span key={author.id}>
+                          <Link to={`/artists/${author.id}`} className={styles.albumAuthorLink}>
+                            {author.nickname}
+                          </Link>
+                          {authorIndex < featuredAlbum.authors.length - 1 && ', '}
+                        </span>
+                      ))}
+                    </div>
+                    <p>Дата релиза: {formatDate(featuredAlbum.releaseDate)}</p>
+                    <ExpandableText text={featuredAlbum.description} lines={5} />
+                    <Link to={`/albums/${featuredAlbum.id}`} className={styles.albumOpenLink}>
+                      Открыть альбом
+                    </Link>
+                  </div>
+                </>
+              ) : featuredTrack ? (
                 <>
                   <button
                     type="button"
@@ -352,8 +390,7 @@ export default function ArtistDetailPage() {
                       ))}
                     </div>
                     <p>Дата релиза: {formatDate(featuredTrack.releaseDate)}</p>
-                    <p>Тип релиза: {featuredTrack.releaseType}</p>
-                    <p>{featuredTrack.description}</p>
+                    <ExpandableText text={featuredTrack.description} lines={5} />
                     <button
                       type="button"
                       className={styles.secondaryButton}

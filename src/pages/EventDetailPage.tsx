@@ -6,6 +6,7 @@ import styles from './EventDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { FiCalendar, FiMapPin, FiArrowLeft } from 'react-icons/fi'
 import { getMediaUrl } from '../shared/lib/media'
+import { ExpandableText } from '../shared/ui/ExpandableText'
 
 function formatDate(dateString?: string): string {
   if (!dateString) return 'Дата не указана';
@@ -81,7 +82,7 @@ export default function EventDetailPage() {
           <div className={styles.content}>
             <p className={styles.eyebrow}>Мероприятие</p>
             <h1>{event.title}</h1>
-            <p className={styles.description}>{event.description}</p>
+            <ExpandableText text={event.description} className={styles.description} lines={5} />
             <div className={styles.item}>
               <FiCalendar />
               <span>{formatDate(event.date)}</span>
@@ -90,15 +91,17 @@ export default function EventDetailPage() {
               <FiMapPin />
               <span>{event.location}</span>
             </div>
-            {event.links.length > 0 && (
-              <div className={styles.links}>
-                {event.links.map((link) => (
-                  <a key={link.label} href={link.url} target="_blank" rel="noreferrer">
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            )}
+            {event.links ? (
+              event.links.length > 0 && (
+                <div className={styles.links}>
+                  {event.links.map((link) => (
+                    <a key={link.label} href={link.url} target="_blank" rel="noreferrer">
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              )
+            ) : (<></>)}
           </div>
         </motion.article>
       </section>

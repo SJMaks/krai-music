@@ -723,9 +723,13 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.playOverlay svg {
+.playOverlay .playOverlayPlayIcon {
   font-size: 1.05rem;
   margin-left: 2px;
+}
+
+.playOverlay .playOverlayPauseIcon {
+  font-size: 1.05rem;
 }
 
 .openOverlay svg {

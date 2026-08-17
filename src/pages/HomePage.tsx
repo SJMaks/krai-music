@@ -310,14 +310,14 @@ export default function HomePage() {
                           <Equalizer />
                         </span>
                       ) : null}
-                      {track.releaseType ? <span className={styles.chip}>{track.releaseType}</span> : null}
+                      <span className={styles.chip}>Сингл</span>
                       <button
                         type="button"
                         className={styles.playOverlay}
                         onClick={() => handlePlayPause(track)}
                         aria-label={active && isPlaying ? `Пауза: ${track.title}` : `Слушать: ${track.title}`}
                       >
-                        {active && isPlaying ? <FiPause /> : <FiPlay />}
+                        {active && isPlaying ? <FiPause className={styles.playOverlayPauseIcon} /> : <FiPlay className={styles.playOverlayPlayIcon} />}
                       </button>
                     </div>
                     <div className={styles.cardBody}>

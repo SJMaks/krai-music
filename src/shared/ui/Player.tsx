@@ -1,4 +1,4 @@
-import { useEffect, useRef, useSyncExternalStore } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import type { CSSProperties } from 'react'
 import { FiPause, FiPlay, FiSkipBack, FiSkipForward, FiVolume2, FiVolumeX, FiRepeat, FiShuffle, FiX } from 'react-icons/fi'
 import styles from './Player.module.css'
@@ -44,10 +44,40 @@ export function Player() {
     setCurrentTime,
     setDuration,
     setProgress,
+    playbackRevision,
   } = useAudioStore()
 
   const isMobile = useIsMobile()
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  // Счётчик «явного» (пере)запуска воспроизведения — см. playbackRevision в audioStore.
+  // По нему главный эффект ниже понимает, что currentTrack не изменился, но трек всё равно
+  // нужно запустить заново (next/previous в очереди из одного трека, повторное «Слушать»).
+  const handledRevisionRef = useRef(useAudioStore.getState().playbackRevision)
+
+  // Длинное название трека: определяем, помещается ли оно в свою колонку.
+  // Если не помещается — включаем marquee-прокрутку и считаем дистанцию прокрутки.
+  const titleRef = useRef<HTMLParagraphElement | null>(null)
+  const [isTitleOverflowing, setIsTitleOverflowing] = useState(false)
+
+  useEffect(() => {
+    const el = titleRef.current
+    if (!el) return
+    const update = () => {
+      // Название считается «длинным», если его содержимое шире видимой области
+      const overflow = el.scrollWidth > el.clientWidth + 1
+      setIsTitleOverflowing(overflow)
+      el.style.setProperty('--marquee-distance', `${Math.max(0, el.scrollWidth - el.clientWidth)}px`)
+    }
+    update()
+    // Пересчитываем при изменении размеров (окно, шрифты, раскладка), а не только при смене трека
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    window.addEventListener('resize', update)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', update)
+    }
+  }, [currentTrack])
 
   // Фактическая громкость: на мобильных всегда максимум, без беззвучного режима
   const effectiveVolume = isMobile ? 1 : volume
@@ -58,18 +88,18 @@ export function Player() {
     const audio = audioRef.current
     if (!audio || !currentTrack) return
 
-    // Определяем, нужна ли загрузка источника:
-    // 1) на свежем <audio> (после закрытия плеера) src пуст → грузим заново,
-    //    даже если выбран «тот же самый» трек;
-    // 2) трек не менялся, но store сбросил время в 0 (повторное нажатие «Слушать»),
-    //    а звук всё ещё в середине → перезапускаем источник.
+    // Определяем, нужен ли (пере)запуск источника:
+    // 1) в <audio> загружен другой трек (или на свежем <audio> после закрытия плеера
+    //    src пуст) → грузим заново, даже если выбран «тот же самый» трек;
+    // 2) источник тот же, но пользователь явно попросил начать трек с начала
+    //    (next/previous в очереди из одного трека, повторное «Слушать» и т.п.).
+    //    Про рост playbackRevision это видно надёжнее, чем по времени в сторе: его
+    //    успевает «вернуть» событие timeupdate до того, как эффект выполнится.
     const url = getMediaUrl(currentTrack.audio)
-    // Читаем время из стора без реактивной подписки, чтобы не перезапускать эффект
-    const restartRequested =
-      audio.dataset.src === url &&
-      audio.currentTime > 0 &&
-      useAudioStore.getState().currentTime === 0
-    if (audio.dataset.src !== url || restartRequested) {
+    const isSameSource = audio.dataset.src === url
+    const revisionChanged = playbackRevision !== handledRevisionRef.current
+    if (!isSameSource || revisionChanged) {
+      handledRevisionRef.current = playbackRevision
       audio.dataset.src = url
       audio.src = url
       audio.load()
@@ -87,7 +117,7 @@ export function Player() {
     } else {
       audio.pause()
     }
-  }, [currentTrack, isPlaying, setCurrentTime, setProgress, setDuration])
+  }, [currentTrack, isPlaying, playbackRevision, setCurrentTime, setProgress, setDuration])
 
   // Эффект для громкости
   useEffect(() => {
@@ -173,7 +203,13 @@ export function Player() {
               <img src={getMediaUrl(currentTrack.cover)} alt={currentTrack.title} className={styles.cover} />
             )}
             <div className={styles.trackMeta}>
-              <p className={styles.title}>{currentTrack.title}</p>
+              <p
+                ref={titleRef}
+                className={`${styles.title} ${isTitleOverflowing ? styles.scrolling : ''}`}
+                title={currentTrack.title}
+              >
+                <span className={styles.marqueeInner}>{currentTrack.title}</span>
+              </p>
               <div className={styles.authors}>
                 {authors.length > 0 ? (
                   authors.map((author, index) => (

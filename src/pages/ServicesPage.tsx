@@ -4,6 +4,7 @@ import styles from './ServicesPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { getMediaUrl } from '../shared/lib/media'
 import { scrollToFooterBottom } from '../shared/lib/footerScroll'
+import { ExpandableText } from '../shared/ui/ExpandableText'
 import { FiArrowRight } from 'react-icons/fi'
 
 export default function ServicesPage() {
@@ -35,7 +36,7 @@ export default function ServicesPage() {
             <img src={getMediaUrl(service.image)} alt={service.title} className={styles.image} />
             <div className={styles.content}>
               <h2>{service.title}</h2>
-              <p>{service.description}</p>
+              <ExpandableText text={service.description} lines={5} />
               <a
                 href="#footer"
                 className={styles.link}

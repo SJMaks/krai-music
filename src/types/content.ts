@@ -28,6 +28,7 @@ export interface Artist {
   socials: SocialLink[]
   videos: Video[]
   featuredTrack?: Track | null
+  featuredAlbum?: Album | null
 }
 
 export interface Track {
@@ -37,7 +38,6 @@ export interface Track {
   cover: string
   audio: string
   releaseDate: string
-  releaseType: string
   description: string
 }
 

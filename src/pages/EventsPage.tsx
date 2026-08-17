@@ -65,7 +65,7 @@ export default function EventsPage() {
               </div>
               <div className={styles.content}>
                 <h2>{event.title}</h2>
-                <p>{event.description}</p>
+                <p className={styles.cardText}>{event.description}</p>
                 <div className={styles.item}>
                   <FiCalendar />
                   <p>{formatDate(event.date)}</p>

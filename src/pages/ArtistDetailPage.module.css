@@ -375,6 +375,12 @@
   padding-top: 0.6rem;
 }
 
+/* Кнопка «Развернуть» от ExpandableText — прямой потомок карточки.
+   Выравниваем её по левому краю с тем же отступом, что и у текста описания. */
+.card > button {
+  margin-left: 1.15rem;
+}
+
 /* ---------- Tracks ---------- */
 .trackList {
   display: grid;
@@ -474,6 +480,14 @@
   line-height: 1.3;
   font-weight: 700;
   color: #f0eded;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Контейнер с текстом внутри карточки не должен мешать колонке сужаться при длинном названии */
+.trackCard > div:not(.trackCoverWrap) {
+  min-width: 0;
 }
 
 .trackCard p {

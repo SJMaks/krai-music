@@ -33,13 +33,14 @@ const rawEvents = Object.values(eventModules) as any[]
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rawServices = Object.values(serviceModules) as any[]
 
-const artistsMap = new Map<string, Omit<Artist, 'featuredTrack'>>()
+const artistsMap = new Map<string, Omit<Artist, 'featuredTrack' | 'featuredAlbum'>>()
 const tracksMap = new Map<string, Track>()
 
 rawArtists.forEach(artist => {
   artistsMap.set(artist.id, {
     ...artist,
     featuredTrack: null,
+    featuredAlbum: null,
   })
 })
 
@@ -79,9 +80,12 @@ const artistsWithFeatured: Artist[] = rawArtists.map(artist => {
   const base = artistsMap.get(artist.id)!
   const featuredTrackId = artist.featuredTrack as string | undefined | null
   const featuredTrack = featuredTrackId ? tracksMap.get(featuredTrackId) || null : null
+  const featuredAlbumId = artist.featuredAlbum as string | undefined | null
+  const featuredAlbum = featuredAlbumId ? albumsMap.get(featuredAlbumId) || null : null
   return {
     ...base,
     featuredTrack,
+    featuredAlbum,
   }
 }) as Artist[]
 

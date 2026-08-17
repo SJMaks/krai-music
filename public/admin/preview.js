@@ -258,7 +258,6 @@ var TrackPreview = createClass({
     var cover = this.props.getAsset(data.get('cover'));
     var description = data.get('description') || '';
     var releaseDate = data.get('releaseDate') || '';
-    var releaseType = data.get('releaseType') || '';
 
     function formatDate(dateString) {
       if (!dateString) return 'Дата не указана';
@@ -274,7 +273,6 @@ var TrackPreview = createClass({
       cover ? h('img', { className: 'squareImage', src: getImageUrl(cover), alt: title }) : null,
       h('p', { className: 'eyebrow' }, 'Новый релиз'),
       h('h1', {}, title),
-      h('h3', {}, 'Тип релиза: ' + releaseType),
       h('h3', {}, 'Дата релиза: ' + formatDate(releaseDate)),
       h('p', {}, description),
       h('a', { className: 'secondaryLink' }, 'Слушать')

@@ -1,11 +1,11 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams, useLocation, Link } from 'react-router-dom'
-import { motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { albumsData } from '../cms/data'
 import { useAudioStore } from '../store/audioStore'
 import styles from './AlbumDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
-import { FiArrowLeft, FiPlay, FiPause, FiDisc } from 'react-icons/fi'
+import { FiArrowLeft, FiPlay, FiPause, FiDisc, FiInfo, FiX } from 'react-icons/fi'
 import type { Track } from '../types/content'
 import { getMediaUrl } from '../shared/lib/media'
 
@@ -41,6 +41,21 @@ export default function AlbumDetailPage() {
   const { id } = useParams()
   const location = useLocation()
   const reduceMotion = useReducedMotion()
+  const [infoOpen, setInfoOpen] = useState(false)
+
+  useEffect(() => {
+    if (!infoOpen) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setInfoOpen(false)
+    }
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [infoOpen])
 
   const fromArtist = (location.state as { fromArtist?: string } | null)?.fromArtist
   const fromHome = (location.state as { fromHome?: boolean } | null)?.fromHome
@@ -116,7 +131,20 @@ return (
               <FiDisc size={15} />
               Альбом
             </p>
-            <h1>{album.title}</h1>
+            <div className={styles.titleRow}>
+              <h1>{album.title}</h1>
+              {album.description && (
+                <button
+                  type="button"
+                  className={styles.infoButton}
+                  onClick={() => setInfoOpen(true)}
+                  aria-label="Подробнее об альбоме"
+                  title="Подробнее об альбоме"
+                >
+                  <FiInfo aria-hidden="true" />
+                </button>
+              )}
+            </div>
             <p className={styles.authors}>
               {album.authors.map((author, index) => (
                 <span key={author.id}>
@@ -130,7 +158,6 @@ return (
             <p className={styles.meta}>
               {tracks.length} {pluralize(tracks.length, 'трек', 'трека', 'треков')} · {formatDate(album.releaseDate)}
             </p>
-            {album.description ? <p className={styles.description}>{album.description}</p> : null}
             <button type="button" className={styles.playAllBtn} onClick={handlePlayAll}>
               {allActive && isPlaying ? <FiPause /> : <FiPlay />}
               {allActive && isPlaying ? 'Пауза' : 'Слушать все'}
@@ -192,6 +219,44 @@ return (
             <p className={styles.empty}>В этом альбоме пока нет треков.</p>
           )}
         </section>
+
+        <AnimatePresence>
+          {infoOpen && (
+            <motion.div
+              className={styles.modalOverlay}
+              role="presentation"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setInfoOpen(false)}
+            >
+              <motion.div
+                className={styles.modal}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Описание альбома"
+                initial={reduceMotion ? false : { opacity: 0, y: 16, scale: 0.97 }}
+                animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+                exit={reduceMotion ? undefined : { opacity: 0, y: 16, scale: 0.97 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className={styles.modalHeader}>
+                  <h2>{album.title}</h2>
+                  <button
+                    type="button"
+                    className={styles.modalClose}
+                    onClick={() => setInfoOpen(false)}
+                    aria-label="Закрыть"
+                  >
+                    <FiX aria-hidden="true" />
+                  </button>
+                </div>
+                <p>{album.description}</p>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </section>
     </>
   )

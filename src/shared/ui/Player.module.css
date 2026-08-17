@@ -87,6 +87,7 @@
   align-items: center;
   gap: 0.8rem;
   min-width: 0;
+  flex: 1 1 auto;
 }
 
 .coverLink {
@@ -98,6 +99,9 @@
 .cover {
   width: 3.35rem;
   height: 3.35rem;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  max-width: none;
   border-radius: 10px;
   object-fit: cover;
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
@@ -111,6 +115,7 @@
 
 .trackMeta {
   min-width: 0;
+  flex: 1 1 auto;
 }
 
 .title {
@@ -121,6 +126,28 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  /* Ограничиваем ширину, чтобы длинное название не вылезало за колонку */
+  max-width: 100%;
+}
+
+/* ----- Marquee-прокрутка длинного названия ----- */
+.marqueeInner {
+  display: inline-block;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.scrolling .marqueeInner {
+  animation: marqueePingPong 8s linear infinite alternate;
+}
+
+@keyframes marqueePingPong {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(var(--marquee-distance, 12rem) * -1));
+  }
 }
 
 .authors {
@@ -226,7 +253,9 @@
   align-items: center;
   gap: 0.9rem;
   min-width: 0;
-  justify-self: start;
+  justify-self: stretch;
+  /* Тень обложки не должна обрезаться сверху/снизу: текст уже обрезается
+     внутри .title (ellipsis) и .trackMeta, поэтому здесь clipping не нужен. */
 }
 
 .rightGroup {
@@ -235,7 +264,7 @@
   justify-content: flex-end;
   gap: 0.9rem;
   min-width: 0;
-  justify-self: end;
+  justify-self: stretch;
 }
 
 .timeText {
@@ -354,6 +383,9 @@
     grid-row: 1;
     justify-content: flex-start;
     gap: 0.6rem;
+    min-width: 0;
+    /* Название уже обрезается внутри .title (ellipsis) и .trackMeta,
+       так что обложка может свободно «светиться» тенью по вертикали. */
   }
 
   .center {
@@ -412,6 +444,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .player {
+    animation: none;
+  }
+
+  .scrolling .marqueeInner {
     animation: none;
   }
 }

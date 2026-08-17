@@ -13,11 +13,13 @@ import {
   ServicesPage,
 } from './pageComponents'
 import { PageSkeleton } from './PageSkeleton'
+import ErrorPage from '../pages/ErrorPage'
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Suspense fallback={<PageSkeleton />}><HomePage /></Suspense> },
       { path: 'artists', element: <Suspense fallback={<PageSkeleton />}><ArtistsPage /></Suspense> },
