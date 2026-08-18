@@ -1,4 +1,4 @@
-import type { Album, Artist, Event, HomepageContent, RadioContent, Service, Track, ContactContent } from '../types/content'
+import type { Album, Artist, Event, HomepageContent, RadioContent, Service, Track, ContactContent, SocialLink } from '../types/content'
 import homepageJson from '../../content/homepage.json'
 import contactsJson from '../../content/contacts.json'
 import radioJson from '../../content/radio.json'
@@ -131,9 +131,7 @@ const contacts: ContactContent = {
   email: contactsJson.email ?? 'vovabreshko@mail.ru',
   phone: contactsJson.phone ?? '+79620751111',
   address: contactsJson.address ?? 'Красноярск, ул. Курчатова, 11А',
-  socials: contactsJson.socials ?? [
-
-  ],
+  socials: (contactsJson.socials ?? []) as SocialLink[],
 }
 
 const radioAlbumIds = (Array.isArray(radioJson.albums) ? radioJson.albums : []) as unknown as string[]

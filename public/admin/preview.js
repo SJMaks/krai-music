@@ -218,11 +218,18 @@ var SOCIAL_ICON_PATH = {
 function renderSocialLink(s) {
   var url = s.get('url');
   var label = s.get('label') || '';
-  var d = SOCIAL_ICON_PATH[s.get('type')];
+  var type = s.get('type');
+  var d = SOCIAL_ICON_PATH[type];
   if (d) {
     return h('a', { href: url, className: 'socialIcon', title: label },
       h('svg', { xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 448 512', width: 18, height: 18, fill: 'currentColor' },
         h('path', { d: d })));
+  }
+  if (type === 'custom') {
+    return h('a', { href: url, className: 'socialIcon', title: label },
+      h('svg', { xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 24 24', width: 18, height: 18, fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' },
+        h('path', { d: 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71' }),
+        h('path', { d: 'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71' })));
   }
   return h('a', { href: url }, label);
 }
@@ -444,7 +451,7 @@ var ContactsPreview = createClass({
           address || 'Адрес не указан'
         ),
         socials.size > 0 ? h('div', { className: 'socials' }, socials.map(function (s) {
-          return h('a', { href: s.get('url') }, s.get('label'));
+          return renderSocialLink(s);
         })) : null
       )
     );

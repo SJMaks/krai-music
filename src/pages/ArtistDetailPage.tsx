@@ -11,19 +11,10 @@ import styles from './ArtistDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FiArrowLeft, FiPlay, FiPause, FiChevronLeft, FiChevronRight, FiDisc } from 'react-icons/fi'
-import { FaVk, FaTelegram, FaInstagram, FaXTwitter, FaFacebookF } from 'react-icons/fa6'
-import type { IconType } from 'react-icons'
 import type { Track, Album } from '../types/content'
 import { getMediaUrl } from '../shared/lib/media'
 import { ExpandableText } from '../shared/ui/ExpandableText'
-
-const SOCIAL_META: Record<string, { Icon: IconType; defaultLabel: string }> = {
-  vk: { Icon: FaVk, defaultLabel: 'ВК' },
-  telegram: { Icon: FaTelegram, defaultLabel: 'Телеграм' },
-  instagram: { Icon: FaInstagram, defaultLabel: 'Инстаграм' },
-  x: { Icon: FaXTwitter, defaultLabel: 'X' },
-  facebook: { Icon: FaFacebookF, defaultLabel: 'Facebook' },
-}
+import { SOCIAL_META } from '../shared/lib/socials'
 
 function formatDate(dateString?: string): string {
   if (!dateString) return 'Дата не указана'

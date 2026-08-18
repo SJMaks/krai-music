@@ -1,7 +1,7 @@
-import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi'
-import { FaVk } from "react-icons/fa"
+import { FiMail, FiPhone, FiMapPin, FiLink } from 'react-icons/fi'
 import styles from './Footer.module.css'
 import { useContent } from '../../hooks/useContent'
+import { SOCIAL_META } from '../lib/socials'
 import logo from '../../assets/logo.png'
 import { NavLink } from 'react-router-dom'
 
@@ -68,12 +68,25 @@ export function Footer() {
                 <FiMapPin />
                 <span>{contact?.address}</span>
               </div>
-              {contact.socials.map((social) => (
-                <a href={social.url} className={styles.item}>
-                  <FaVk />
-                  <span>{social?.label}</span>
-                </a>
-              ))}
+              {contact.socials.map((social, index) => {
+                const meta = social.type ? SOCIAL_META[social.type] : undefined
+                const Icon = meta?.Icon
+                const label = social.label?.trim() || meta?.defaultLabel || 'Ссылка'
+                const key = `${label}-${social.url}-${index}`
+                return (
+                  <a
+                    key={key}
+                    href={social.url}
+                    className={styles.item}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={label}
+                  >
+                    {Icon ? <Icon aria-hidden="true" className={styles.socialIcon} /> : <FiLink aria-hidden="true" />}
+                    <span>{label}</span>
+                  </a>
+                )
+              })}
             </div>
           </div>
         </div>

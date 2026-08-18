@@ -187,7 +187,16 @@ collections:
           - { label: Email, name: email, widget: string }
           - { label: Номер телефона, name: phone, widget: string }
           - { label: Адрес, name: address, widget: string }
-          - { label: Ссылки на соц. сети, name: socials, required: false, widget: list, fields: [{ label: Соц. сеть, name: label, widget: string }, { label: Ссылка, name: url, widget: string }] }
+          - { label: 'Ссылки на соц. сети' }
+            name: socials
+            required: false
+            widget: list
+            collapsed: true
+            summary: '{{fields.type}} · {{fields.url}}'
+            fields:
+              - { label: Соц. сеть, name: type, widget: select, default: custom, options: [{ value: 'vk', label: 'ВК' }, { value: 'telegram', label: 'Телеграм' }, { value: 'instagram', label: 'Инстаграм' }, { value: 'x', label: 'X (Twitter)' }, { value: 'facebook', label: 'Facebook' }, { value: 'custom', label: 'Свой вариант (иконка ссылки)' }] }
+              - { label: Подпись, name: label, required: false, widget: string, hint: 'Отображается рядом с иконкой. Для сети из списка можно оставить пустым — подпись подставится автоматически.' }
+              - { label: Ссылка, name: url, widget: string }
       - name: radio
         label: Радио
         file: content/radio.json

@@ -4,6 +4,7 @@
     "address": "Красноярск, ул. Курчатова, 11А",
     "socials": [
         {
+            "type": "vk",
             "label": "Группа ВК",
             "url": "https://vk.ru/kraymusic24"
         }
