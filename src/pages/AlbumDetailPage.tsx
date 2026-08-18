@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useParams, useLocation, Link } from 'react-router-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { albumsData } from '../cms/data'
@@ -43,6 +43,11 @@ export default function AlbumDetailPage() {
   const reduceMotion = useReducedMotion()
   const [infoOpen, setInfoOpen] = useState(false)
 
+  // Заголовок и кнопка «инфо»: центр иконки выравнивается по центру строки
+  // заголовка измерением DOM (см. эффект ниже).
+  const titleRef = useRef<HTMLHeadingElement | null>(null)
+  const infoBtnRef = useRef<HTMLButtonElement | null>(null)
+
   useEffect(() => {
     if (!infoOpen) return
     const onKeyDown = (e: KeyboardEvent) => {
@@ -56,6 +61,33 @@ export default function AlbumDetailPage() {
       window.removeEventListener('keydown', onKeyDown)
     }
   }, [infoOpen])
+
+  // Иконка «инфо» должна быть ровно по центру вертикально относительно заголовка.
+  // Положение букв в строке зависит от метрик шрифта, которые отличаются на разных
+  // устройствах (на реальном телефоне используется системный шрифт/фолбэк), поэтому
+  // статичная настройка в em «плывёт». Высота строки задана жёстко (line-height 1.05),
+  // значит геометрический центр строки стабилен — по нему и выравниваем иконку.
+  useLayoutEffect(() => {
+    const update = () => {
+      const title = titleRef.current
+      const btn = infoBtnRef.current
+      if (!title || !btn) return
+      const t = title.getBoundingClientRect()
+      const titleCenter = t.top + t.height / 2
+      const b = btn.getBoundingClientRect()
+      const delta = titleCenter - (b.top + b.height / 2)
+      btn.style.setProperty('--title-align', `${delta}px`)
+    }
+    update()
+    window.addEventListener('resize', update)
+    const ro = new ResizeObserver(update)
+    if (titleRef.current) ro.observe(titleRef.current)
+    if (infoBtnRef.current) ro.observe(infoBtnRef.current)
+    return () => {
+      window.removeEventListener('resize', update)
+      ro.disconnect()
+    }
+  }, [id])
 
   const fromArtist = (location.state as { fromArtist?: string } | null)?.fromArtist
   const fromHome = (location.state as { fromHome?: boolean } | null)?.fromHome
@@ -132,9 +164,10 @@ return (
               Альбом
             </p>
             <div className={styles.titleRow}>
-              <h1>{album.title}</h1>
+              <h1 ref={titleRef}>{album.title}</h1>
               {album.description && (
                 <button
+                  ref={infoBtnRef}
                   type="button"
                   className={styles.infoButton}
                   onClick={() => setInfoOpen(true)}
