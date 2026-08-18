@@ -5,6 +5,7 @@ import styles from './Player.module.css'
 import { useAudioStore } from '../../store/audioStore'
 import { Link } from 'react-router-dom'
 import { getMediaUrl } from '../../shared/lib/media'
+import { Media } from './Media'
 
 // Мобильная версия: ползунок громкости скрыт, звук всегда на максимуме
 function subscribeToViewport(callback: () => void): () => void {
@@ -197,10 +198,10 @@ export function Player() {
           <div className={styles.trackInfo}>
             {authors.length > 0 ? (
               <Link to={`/artists/${authors[0].id}`} className={styles.coverLink} aria-label={`Открыть страницу ${authors[0].nickname}`}>
-                <img src={getMediaUrl(currentTrack.cover)} alt={currentTrack.title} className={styles.cover} />
+                <Media src={currentTrack.cover} alt={currentTrack.title} className={styles.cover} />
               </Link>
             ) : (
-              <img src={getMediaUrl(currentTrack.cover)} alt={currentTrack.title} className={styles.cover} />
+              <Media src={currentTrack.cover} alt={currentTrack.title} className={styles.cover} />
             )}
             <div className={styles.trackMeta}>
               <p

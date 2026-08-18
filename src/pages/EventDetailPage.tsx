@@ -5,7 +5,7 @@ import { eventsData } from '../cms/data'
 import styles from './EventDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { FiCalendar, FiMapPin, FiArrowLeft } from 'react-icons/fi'
-import { getMediaUrl } from '../shared/lib/media'
+import { Media } from '../shared/ui/Media'
 import { ExpandableText } from '../shared/ui/ExpandableText'
 
 function formatDate(dateString?: string): string {
@@ -73,7 +73,7 @@ export default function EventDetailPage() {
           transition={{ duration: 0.55, ease: 'easeOut', delay: 0.07 }}
         >
           <div className={styles.media}>
-            <img src={getMediaUrl(event.image)} alt={event.title} className={styles.image} />
+            <Media src={event.image} alt={event.title} className={styles.image} />
             <span className={styles.dateBadge}>
               <span className={styles.dateBadgeDay}>{formatBadge(event.date).day}</span>
               <span className={styles.dateBadgeMonth}>{formatBadge(event.date).month}</span>

@@ -12,7 +12,7 @@ import { Seo } from '../shared/ui/Seo'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FiArrowLeft, FiPlay, FiPause, FiChevronLeft, FiChevronRight, FiDisc } from 'react-icons/fi'
 import type { Track, Album } from '../types/content'
-import { getMediaUrl } from '../shared/lib/media'
+import { Media } from '../shared/ui/Media'
 import { ExpandableText } from '../shared/ui/ExpandableText'
 import { SOCIAL_META } from '../shared/lib/socials'
 
@@ -125,10 +125,11 @@ export default function ArtistDetailPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: 'easeOut', delay: 0.06 }}
         >
-          <img
-            src={getMediaUrl(artist.squareImage || artist.verticalImage)}
+          <Media
+            src={artist.squareImage || artist.verticalImage}
             alt={artist.nickname}
             className={styles.heroImage}
+            wrapClassName={styles.heroImageWrap}
           />
           <div>
             <p className={styles.eyebrow}>Профиль артиста</p>
@@ -189,7 +190,7 @@ export default function ArtistDetailPage() {
                     className={styles.card}
                   >
                     <a href={video.url} target="_blank" rel="noreferrer">
-                      <img src={getMediaUrl(video.cover)} alt={video.title} className={styles.image} />
+                      <Media src={video.cover} alt={video.title} className={styles.image} />
                     </a>
                     <h3>{video.title}</h3>
                     <ExpandableText text={video.description} lines={3} />
@@ -238,7 +239,7 @@ export default function ArtistDetailPage() {
                           transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
                         >
                           <div className={styles.trackCoverWrap}>
-                            <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.trackCover} />
+                            <Media src={track.cover} alt={track.title} className={styles.trackCover} fill />
                             {active && isPlaying ? (
                               <span className={styles.coverEq} aria-hidden="true">
                                 <Equalizer />
@@ -321,8 +322,8 @@ export default function ArtistDetailPage() {
                     className={styles.featuredTrackCoverButton}
                     aria-label={`Открыть альбом: ${featuredAlbum.title}`}
                   >
-                    <img
-                      src={getMediaUrl(featuredAlbum.cover)}
+                    <Media
+                      src={featuredAlbum.cover}
                       alt={featuredAlbum.title}
                       className={styles.featuredTrackCover}
                     />
@@ -358,8 +359,8 @@ export default function ArtistDetailPage() {
                     onClick={() => handlePlayPause(featuredTrack)}
                     aria-label={featuredActive && isPlaying ? 'Пауза' : 'Слушать'}
                   >
-                    <img
-                      src={getMediaUrl(featuredTrack.cover)}
+                    <Media
+                      src={featuredTrack.cover}
                       alt={featuredTrack.title}
                       className={styles.featuredTrackCover}
                     />
@@ -421,7 +422,7 @@ export default function ArtistDetailPage() {
                   transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
                 >
                   <Link to={`/albums/${album.id}`} state={{ fromArtist: artist.id }} className={styles.albumCoverLink}>
-                    <img src={getMediaUrl(album.cover)} alt={album.title} className={styles.albumCover} loading="lazy" />
+                    <Media src={album.cover} alt={album.title} className={styles.albumCover} lazy />
                   </Link>
                   <div className={styles.albumBody}>
                     <h3>

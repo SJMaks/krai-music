@@ -10,7 +10,7 @@ import { useAudioStore } from '../store/audioStore'
 import styles from './RadioPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { Link } from 'react-router-dom'
-import { getMediaUrl } from '../shared/lib/media'
+import { Media } from '../shared/ui/Media'
 import logo from '../assets/logo.png'
 import { FiPlay, FiPause, FiShuffle, FiRadio, FiChevronLeft, FiChevronRight, FiArrowRight } from 'react-icons/fi'
 import type { Track, Album } from '../types/content'
@@ -210,7 +210,7 @@ export default function RadioPage() {
                     transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
                   >
                     <div className={styles.albumCoverWrap}>
-                      <img src={getMediaUrl(album.cover)} alt={album.title} className={styles.albumCover} loading="lazy" />
+                      <Media src={album.cover} alt={album.title} className={styles.albumCover} lazy />
                       <Link
                         to={`/albums/${album.id}`}
                         className={styles.albumPlay}
@@ -278,7 +278,7 @@ export default function RadioPage() {
                         {active && isPlaying ? <Equalizer /> : <span>{index + 1}</span>}
                       </div>
                       <div className={styles.trackMain}>
-                        <img src={getMediaUrl(track.cover)} alt="" className={styles.trackCover} loading="lazy" />
+                        <Media src={track.cover} alt="" className={styles.trackCover} lazy />
                         <div className={styles.trackText}>
                           <p className={styles.trackTitle}>{track.title}</p>
                           <div className={styles.trackAuthors}>

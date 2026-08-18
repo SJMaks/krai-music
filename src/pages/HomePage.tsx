@@ -11,7 +11,7 @@ import logo from '../assets/logo.png'
 import { Link } from 'react-router-dom'
 import { Seo } from '../shared/ui/Seo'
 import { FiArrowRight, FiCalendar, FiMapPin, FiPlay, FiPause, FiHeadphones } from 'react-icons/fi'
-import { getMediaUrl } from '../shared/lib/media'
+import { Media } from '../shared/ui/Media'
 import type { Track } from '../types/content'
 
 function formatDate(dateString?: string): string {
@@ -225,7 +225,7 @@ export default function HomePage() {
                 >
                   <div className={styles.cardMedia}>
                     <Link to={`/artists/${artist.id}`} className={styles.cardImageLink}>
-                      <img src={getMediaUrl(artist.verticalImage)} alt={artist.nickname} className={styles.artistImage} loading="lazy" />
+                      <Media src={artist.verticalImage} alt={artist.nickname} className={styles.artistImage} lazy />
                     </Link>
                   </div>
                   <div className={styles.cardBody}>
@@ -264,7 +264,7 @@ export default function HomePage() {
                 >
                   <div className={styles.cardMedia}>
                     <Link to={`/albums/${album.id}`} state={{ fromHome: true }} className={styles.cardImageLink}>
-                      <img src={getMediaUrl(album.cover)} alt={album.title} className={styles.trackImage} loading="lazy" />
+                      <Media src={album.cover} alt={album.title} className={styles.trackImage} lazy />
                     </Link>
                     <span className={styles.chip}>Альбом</span>
                     <Link
@@ -304,7 +304,7 @@ export default function HomePage() {
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                   >
                     <div className={styles.cardMedia}>
-                      <img src={getMediaUrl(track.cover)} alt={track.title} className={styles.trackImage} loading="lazy" />
+                      <Media src={track.cover} alt={track.title} className={styles.trackImage} lazy />
                       {active && isPlaying ? (
                         <span className={styles.coverEq} aria-hidden="true">
                           <Equalizer />
@@ -363,7 +363,7 @@ export default function HomePage() {
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                   >
                     <div className={styles.cardMedia}>
-                      <img src={getMediaUrl(event.image)} alt={event.title} className={styles.eventImage} loading="lazy" />
+                      <Media src={event.image} alt={event.title} className={styles.eventImage} lazy />
                       <span className={styles.dateBadge}>
                         <span className={styles.dateBadgeDay}>{day}</span>
                         <span className={styles.dateBadgeMonth}>{month}</span>

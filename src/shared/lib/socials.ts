@@ -1,4 +1,5 @@
-import { FaVk, FaTelegram, FaInstagram, FaXTwitter, FaFacebookF } from 'react-icons/fa6'
+import { FaVk, FaTelegram, FaInstagram, FaFacebookF } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
 import { FiLink } from 'react-icons/fi'
 import type { IconType } from 'react-icons'
 

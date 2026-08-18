@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { servicesData } from '../cms/data'
 import styles from './ServicesPage.module.css'
 import { Seo } from '../shared/ui/Seo'
-import { getMediaUrl } from '../shared/lib/media'
+import { Media } from '../shared/ui/Media'
 import { scrollToFooterBottom } from '../shared/lib/footerScroll'
 import { ExpandableText } from '../shared/ui/ExpandableText'
 import { FiArrowRight } from 'react-icons/fi'
@@ -33,7 +33,7 @@ export default function ServicesPage() {
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.55, delay: reduceMotion ? 0 : (index % 2) * 0.08, ease: 'easeOut' }}
           >
-            <img src={getMediaUrl(service.image)} alt={service.title} className={styles.image} />
+            <Media src={service.image} alt={service.title} className={styles.image} />
             <div className={styles.content}>
               <h2>{service.title}</h2>
               <ExpandableText text={service.description} lines={5} />

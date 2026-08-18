@@ -80,6 +80,12 @@
   align-items: start;
 }
 
+.heroImageWrap {
+  justify-self: center;
+  width: 100%;
+  max-width: 26rem;
+}
+
 .heroImage {
   width: 100%;
   max-width: 26rem;

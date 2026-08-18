@@ -7,7 +7,7 @@ import styles from './AlbumDetailPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { FiArrowLeft, FiPlay, FiPause, FiDisc, FiInfo, FiX } from 'react-icons/fi'
 import type { Track } from '../types/content'
-import { getMediaUrl } from '../shared/lib/media'
+import { Media } from '../shared/ui/Media'
 
 function formatDate(dateString?: string): string {
   if (!dateString) return 'Дата не указана'
@@ -124,7 +124,7 @@ return (
           transition={{ duration: 0.5, ease: 'easeOut', delay: 0.05 }}
         >
           <div className={styles.coverWrap}>
-            <img src={getMediaUrl(album.cover)} alt={album.title} className={styles.cover} />
+            <Media src={album.cover} alt={album.title} className={styles.cover} />
           </div>
           <div className={styles.heroContent}>
             <p className={styles.eyebrow}>
@@ -199,7 +199,7 @@ return (
                       {active && isPlaying ? <Equalizer /> : <span>{index + 1}</span>}
                     </div>
                     <div className={styles.trackMain}>
-                      <img src={getMediaUrl(track.cover)} alt="" className={styles.trackCover} loading="lazy" />
+                      <Media src={track.cover} alt="" className={styles.trackCover} lazy />
                       <div className={styles.trackText}>
                         <p className={styles.trackTitle}>{track.title}</p>
                         <p className={styles.trackAuthors}>
