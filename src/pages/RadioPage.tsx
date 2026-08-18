@@ -72,7 +72,12 @@ export default function RadioPage() {
   const goToPage = (next: (value: number) => number) => {
     setPage(next)
     requestAnimationFrame(() => {
-      listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const list = listRef.current
+      // Автопрокрутка к верху списка нужна только когда его содержимое
+      // не помещается на экран целиком. Если всё видно — скроллить не нужно.
+      if (list && list.scrollHeight > window.innerHeight) {
+        list.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
     })
   }
 
@@ -275,7 +280,7 @@ export default function RadioPage() {
                       }}
                     >
                       <div className={styles.trackIndex}>
-                        {active && isPlaying ? <Equalizer /> : <span>{index + 1}</span>}
+                        {active && isPlaying ? <Equalizer /> : <span>{((currentPage - 1) * perPage) + index + 1}</span>}
                       </div>
                       <div className={styles.trackMain}>
                         <Media src={track.cover} alt="" className={styles.trackCover} lazy />

@@ -187,7 +187,7 @@ collections:
           - { label: Email, name: email, widget: string }
           - { label: Номер телефона, name: phone, widget: string }
           - { label: Адрес, name: address, widget: string }
-          - { label: 'Ссылки на соц. сети' }
+          - label: 'Ссылки на соц. сети'
             name: socials
             required: false
             widget: list

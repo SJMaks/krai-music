@@ -138,15 +138,29 @@
 }
 
 .scrolling .marqueeInner {
-  animation: marqueePingPong 8s linear infinite alternate;
+  animation: marqueePingPong 18s linear infinite;
 }
 
+/* Бегущая строка с паузой ~1 сек на каждом краю:
+   0–6%   — пауза в начале,
+   6–50%  — прокат к концу,
+   50–56% — пауза в конце,
+   56–100% — возврат к началу. */
 @keyframes marqueePingPong {
-  from {
+  0% {
     transform: translateX(0);
   }
-  to {
+  6% {
+    transform: translateX(0);
+  }
+  50% {
     transform: translateX(calc(var(--marquee-distance, 12rem) * -1));
+  }
+  56% {
+    transform: translateX(calc(var(--marquee-distance, 12rem) * -1));
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 

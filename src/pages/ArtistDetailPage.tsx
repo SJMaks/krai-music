@@ -44,7 +44,12 @@ export default function ArtistDetailPage() {
   const goToPage = (next: (value: number) => number) => {
     setPage(next)
     requestAnimationFrame(() => {
-      listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const list = listRef.current
+      // Автопрокрутка к верху списка нужна только когда его содержимое
+      // не помещается на экран целиком. Если всё видно — скроллить не нужно.
+      if (list && list.scrollHeight > window.innerHeight) {
+        list.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
     })
   }
   const playTrack = useAudioStore((state) => state.playTrack)
