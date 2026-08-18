@@ -107,27 +107,21 @@
   border: 0;
   background: none;
   padding: 0;
-  color: #f5f2f2; /* как у заголовка */
+  color: #f5f2f2;
   cursor: pointer;
-  /* Такой же font-size, как у заголовка, — иконка масштабируется вместе с ним */
   font-size: clamp(2rem, 5vw, 3rem);
-  /* Вертикальное центрирование по заголовку задаётся из JS (--title-align): центр
-     иконки совмещается с центром строки заголовка на любом устройстве, независимо
-     от метрик шрифта (подгонка в em «плывёт» на разных шрифтах). */
-  --title-align: 0px;
-  transform: translateY(var(--title-align));
+  transform: translateY(-1px);
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .infoButton svg {
-  display: block;
   width: 100%;
   height: 100%;
 }
 
 .infoButton:hover {
   color: #c71d1b;
-  transform: translateY(calc(var(--title-align, 0px) - 0.05em));
+  transform: translateY(calc(var(--title-align, -0.175em) - 0.05em));
 }
 
 .authors {

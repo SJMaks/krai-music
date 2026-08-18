@@ -43,8 +43,8 @@ export default function AlbumDetailPage() {
   const reduceMotion = useReducedMotion()
   const [infoOpen, setInfoOpen] = useState(false)
 
-  // Заголовок и кнопка «инфо»: центр иконки выравнивается по центру строки
-  // заголовка измерением DOM (см. эффект ниже).
+  // Заголовок и кнопка «инфо»: центр иконки выравнивается по оптическому центру
+  // отрисованного текста заголовка (см. эффект ниже).
   const titleRef = useRef<HTMLHeadingElement | null>(null)
   const infoBtnRef = useRef<HTMLButtonElement | null>(null)
 
@@ -62,29 +62,44 @@ export default function AlbumDetailPage() {
     }
   }, [infoOpen])
 
-  // Иконка «инфо» должна быть ровно по центру вертикально относительно заголовка.
-  // Положение букв в строке зависит от метрик шрифта, которые отличаются на разных
-  // устройствах (на реальном телефоне используется системный шрифт/фолбэк), поэтому
-  // статичная настройка в em «плывёт». Высота строки задана жёстко (line-height 1.05),
-  // значит геометрический центр строки стабилен — по нему и выравниваем иконку.
+  // Кнопка «инфо» должна стоять по центру вертикально относительно заголовка.
+  // Оптический центр букв зависит от метрик шрифта (на десктопе и телефоне разные),
+  // поэтому измеряем реальные границы отрисованного текста через Range и ставим
+  // центр иконки по центру этих границ — так выравнивание корректно на любом
+  // устройстве. Пересчитываем только при изменении размеров заголовка/кнопки
+  // и загрузке шрифтов (без window.resize — чтобы не дёргаться при показе/скрытии
+  // адресной строки в мобильных браузерах, когда меняется только высота окна).
   useLayoutEffect(() => {
+    let cancelled = false
     const update = () => {
       const title = titleRef.current
       const btn = infoBtnRef.current
       if (!title || !btn) return
-      const t = title.getBoundingClientRect()
-      const titleCenter = t.top + t.height / 2
+      const range = document.createRange()
+      range.selectNodeContents(title)
+      const rects = range.getClientRects()
+      let top = Infinity
+      let bottom = -Infinity
+      for (const rect of rects) {
+        if (rect.height === 0) continue
+        top = Math.min(top, rect.top)
+        bottom = Math.max(bottom, rect.bottom)
+      }
+      if (top === Infinity) return
+      const textCenter = (top + bottom) / 2
       const b = btn.getBoundingClientRect()
-      const delta = titleCenter - (b.top + b.height / 2)
+      const delta = textCenter - (b.top + b.height / 2)
       btn.style.setProperty('--title-align', `${delta}px`)
     }
     update()
-    window.addEventListener('resize', update)
     const ro = new ResizeObserver(update)
     if (titleRef.current) ro.observe(titleRef.current)
     if (infoBtnRef.current) ro.observe(infoBtnRef.current)
+    document.fonts?.ready?.then(() => {
+      if (!cancelled) update()
+    })
     return () => {
-      window.removeEventListener('resize', update)
+      cancelled = true
       ro.disconnect()
     }
   }, [id])
