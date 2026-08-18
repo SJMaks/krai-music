@@ -109,7 +109,7 @@
   padding: 0;
   color: #f5f2f2;
   cursor: pointer;
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(1.75rem, 5vw, 3rem);
   transform: translateY(-5px);
   transition: color 0.2s ease, transform 0.2s ease;
 }
