@@ -119,9 +119,7 @@
 }
 
 .title {
-  /* Цвет контейнера = цвет серого фрагмента, чтобы многоточие (наследует цвет
-     контейнера) не оставалось белым при обрезке длинного названия. */
-  color: #9a9a9a;
+  color: #ffffff;
   font-weight: 600;
   font-size: 0.95rem;
   line-height: 1.25;
@@ -132,6 +130,13 @@
   max-width: 100%;
 }
 
+/* Многоточие наследует цвет контейнера. Если в названии есть серый фрагмент,
+   контейнер получает data-tagged="true" — красим его в серый, чтобы обрезанное
+   «…» было серым. Без фрагмента контейнер белый, и «…» остаётся белым. */
+.title[data-tagged='true'] {
+  color: #9a9a9a;
+}
+
 /* ----- Marquee-прокрутка длинного названия ----- */
 .marqueeInner {
   display: inline-block;
@@ -140,7 +145,7 @@
 }
 
 .scrolling .marqueeInner {
-  animation: marqueePingPong 12s linear infinite;
+  animation: marqueePingPong 8s ease-in-out infinite;
 }
 
 /* Бегущая строка с паузой ~1 сек на каждом краю:

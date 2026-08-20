@@ -15,6 +15,7 @@ import type { Track, Album } from '../types/content'
 import { Media } from '../shared/ui/Media'
 import { ExpandableText } from '../shared/ui/ExpandableText'
 import { TrackTitle } from '../shared/ui/TrackTitle'
+import { hasTitleTag } from '../shared/lib/titleTag'
 import { makeDeeperState, makeBackTargetState, backLinkLabel, type BackLinkState } from '../shared/lib/backNav'
 import { isFirstItemVisible, scrollListToStart } from '../shared/lib/paginationScroll'
 import { SOCIAL_META } from '../shared/lib/socials'
@@ -272,7 +273,7 @@ export default function ArtistDetailPage() {
                             ) : null}
                           </div>
                           <div>
-                            <h3><TrackTitle title={track.title} /></h3>
+                            <h3 data-tagged={hasTitleTag(track.title)}><TrackTitle title={track.title} /></h3>
                             <div className={styles.trackAuthors}>
                               {track.authors.map((author, authorIndex) => (
                                 <span key={author.id}>

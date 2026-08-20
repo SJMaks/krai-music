@@ -8,6 +8,7 @@ import { getMediaUrl } from '../../shared/lib/media'
 import { makeBackLinkState } from '../../shared/lib/backNav'
 import { Media } from './Media'
 import { TrackTitle } from './TrackTitle'
+import { hasTitleTag } from '../../shared/lib/titleTag'
 
 // Мобильная версия: ползунок громкости скрыт, звук всегда на максимуме
 function subscribeToViewport(callback: () => void): () => void {
@@ -227,6 +228,7 @@ export function Player() {
                 ref={titleRef}
                 className={`${styles.title} ${isTitleOverflowing ? styles.scrolling : ''}`}
                 title={currentTrack.title}
+                data-tagged={hasTitleTag(currentTrack.title)}
               >
                 <span className={styles.marqueeInner}><TrackTitle title={currentTrack.title} /></span>
               </p>

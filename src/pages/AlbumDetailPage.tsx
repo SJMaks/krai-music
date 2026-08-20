@@ -9,6 +9,7 @@ import { FiArrowLeft, FiPlay, FiPause, FiDisc, FiInfo, FiX } from 'react-icons/f
 import type { Track } from '../types/content'
 import { Media } from '../shared/ui/Media'
 import { TrackTitle } from '../shared/ui/TrackTitle'
+import { hasTitleTag } from '../shared/lib/titleTag'
 import { makeDeeperState, makeBackTargetState, backLinkLabel, type BackLinkState } from '../shared/lib/backNav'
 
 function formatDate(dateString?: string): string {
@@ -215,7 +216,7 @@ return (
                     <div className={styles.trackMain}>
                       <Media src={track.cover} alt="" className={styles.trackCover} lazy />
                       <div className={styles.trackText}>
-                        <p className={styles.trackTitle}><TrackTitle title={track.title} /></p>
+                        <p className={styles.trackTitle} data-tagged={hasTitleTag(track.title)}><TrackTitle title={track.title} /></p>
                         <p className={styles.trackAuthors}>
                           {track.authors.map((author, authorIndex) => (
                               <span key={author.id}>

@@ -14,6 +14,7 @@ import { makeBackLinkState } from '../shared/lib/backNav'
 import { FiArrowRight, FiCalendar, FiMapPin, FiPlay, FiPause, FiHeadphones } from 'react-icons/fi'
 import { Media } from '../shared/ui/Media'
 import { TrackTitle } from '../shared/ui/TrackTitle'
+import { hasTitleTag } from '../shared/lib/titleTag'
 import type { Track } from '../types/content'
 
 function formatDate(dateString?: string): string {
@@ -326,7 +327,7 @@ export default function HomePage() {
                       </button>
                     </div>
                     <div className={styles.cardBody}>
-                      <h3 className={styles.trackTitle}><TrackTitle title={track.title} /></h3>
+                      <h3 className={styles.trackTitle} data-tagged={hasTitleTag(track.title)}><TrackTitle title={track.title} /></h3>
                       <p className={styles.cardText}>
                         {track.authors.map((author, index) => (
                           <span key={author.id}>

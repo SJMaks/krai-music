@@ -838,15 +838,19 @@
 }
 
 .trackTitle {
-  /* Многоточие наследует цвет контейнера; серый цвет нужен, чтобы «…» не белело
-     на сером фрагменте при обрезке названия. */
-  color: #9a9a9a;
+  color: #ffffff;
   font-weight: 600;
   font-size: 0.92rem;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Многоточие наследует цвет контейнера: серое только когда в названии есть
+   серый фрагмент (контейнер получил data-tagged="true"), иначе — белое. */
+.trackTitle[data-tagged='true'] {
+  color: #9a9a9a;
 }
 
 .trackAuthors {
