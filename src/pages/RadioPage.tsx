@@ -90,7 +90,7 @@ export default function RadioPage() {
   }, [filter])
 
   // Пагинация списка «Все треки» (как на странице артиста)
-  const perPage = 4
+  const perPage = 8
   const totalPages = Math.max(1, Math.ceil(filteredTracks.length / perPage))
   const currentPage = Math.min(page, totalPages)
   const pageTracks = filteredTracks.slice((currentPage - 1) * perPage, currentPage * perPage)
