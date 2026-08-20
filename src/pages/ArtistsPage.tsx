@@ -5,6 +5,7 @@ import { artistsData } from '../cms/data'
 import styles from './ArtistsPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { Media } from '../shared/ui/Media'
+import { isFirstItemVisible, scrollListToStart } from '../shared/lib/paginationScroll'
 import { FiArrowRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 // Параметры состояния, которые передаются на страницу артиста и возвращаются
@@ -45,15 +46,15 @@ export default function ArtistsPage() {
   const perPage = isDesktop ? 6 : 4
   const listRef = useRef<HTMLDivElement>(null)
   const goToPage = (next: (value: number) => number) => {
+    // Скроллим к первому элементу только если он сейчас не виден (пользователь проматывал)
+    const list = listRef.current
+    const shouldScroll = list ? !isFirstItemVisible(list) : false
     setPage(next)
-    requestAnimationFrame(() => {
-      const list = listRef.current
-      // Автопрокрутка к верху списка нужна только когда его содержимое
-      // не помещается на экран целиком. Если всё видно — скроллить не нужно.
-      if (list && list.scrollHeight > window.innerHeight) {
-        list.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
-    })
+    if (shouldScroll) {
+      requestAnimationFrame(() => {
+        scrollListToStart(listRef.current)
+      })
+    }
   }
 
   const filteredArtists = useMemo(() => {

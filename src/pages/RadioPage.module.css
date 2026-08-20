@@ -776,6 +776,7 @@
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.025);
   overflow: hidden;
+  scroll-margin-top: 5rem;
 }
 
 .trackRow {

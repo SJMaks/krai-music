@@ -16,6 +16,7 @@ import { Media } from '../shared/ui/Media'
 import { ExpandableText } from '../shared/ui/ExpandableText'
 import { TrackTitle } from '../shared/ui/TrackTitle'
 import { makeDeeperState, makeBackTargetState, backLinkLabel, type BackLinkState } from '../shared/lib/backNav'
+import { isFirstItemVisible, scrollListToStart } from '../shared/lib/paginationScroll'
 import { SOCIAL_META } from '../shared/lib/socials'
 
 function formatDate(dateString?: string): string {
@@ -57,15 +58,15 @@ export default function ArtistDetailPage() {
   const [page, setPage] = useState(1)
   const listRef = useRef<HTMLDivElement>(null)
   const goToPage = (next: (value: number) => number) => {
+    // Скроллим к первому элементу только если он сейчас не виден (пользователь проматывал)
+    const list = listRef.current
+    const shouldScroll = list ? !isFirstItemVisible(list) : false
     setPage(next)
-    requestAnimationFrame(() => {
-      const list = listRef.current
-      // Автопрокрутка к верху списка нужна только когда его содержимое
-      // не помещается на экран целиком. Если всё видно — скроллить не нужно.
-      if (list && list.scrollHeight > window.innerHeight) {
-        list.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
-    })
+    if (shouldScroll) {
+      requestAnimationFrame(() => {
+        scrollListToStart(listRef.current)
+      })
+    }
   }
   const playTrack = useAudioStore((state) => state.playTrack)
   const currentTrack = useAudioStore((state) => state.currentTrack)

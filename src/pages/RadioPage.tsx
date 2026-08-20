@@ -13,6 +13,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { Media } from '../shared/ui/Media'
 import { TrackTitle } from '../shared/ui/TrackTitle'
 import { makeBackLinkState } from '../shared/lib/backNav'
+import { isFirstItemVisible, scrollListToStart } from '../shared/lib/paginationScroll'
 import logo from '../assets/logo.png'
 import { FiPlay, FiPause, FiShuffle, FiRadio, FiChevronLeft, FiChevronRight, FiChevronDown, FiArrowRight } from 'react-icons/fi'
 import type { Track, Album } from '../types/content'
@@ -96,15 +97,16 @@ export default function RadioPage() {
   const pageTracks = filteredTracks.slice((currentPage - 1) * perPage, currentPage * perPage)
 
   const goToPage = (next: (value: number) => number) => {
+    // Проверяем видимость первого элемента ДО смены страницы: если он виден —
+    // прокручивать не нужно, если нет (пользователь проматывал) — скроллим к началу.
+    const list = listRef.current
+    const shouldScroll = list ? !isFirstItemVisible(list) : false
     setPage(next)
-    requestAnimationFrame(() => {
-      const list = listRef.current
-      // Автопрокрутка к верху списка нужна только когда его содержимое
-      // не помещается на экран целиком. Если всё видно — скроллить не нужно.
-      if (list && list.scrollHeight > window.innerHeight) {
-        list.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
-    })
+    if (shouldScroll) {
+      requestAnimationFrame(() => {
+        scrollListToStart(listRef.current)
+      })
+    }
   }
 
   const isCurrent = (track: Track) => currentTrack?.id === track.id
