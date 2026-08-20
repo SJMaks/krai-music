@@ -373,13 +373,14 @@ var ServicePreview = createClass({
     var data = entry.get('data');
     var title = data.get('title') || '';
     var description = data.get('description') || '';
+    var shortDescription = data.get('shortDescription') || '';
     var image = this.props.getAsset(data.get('image'));
 
     return h('div', { className: 'container' },
       image ? h('img', { className: 'squareImage', src: getImageUrl(image), alt: title }) : null,
       h('p', { className: 'eyebrow' }, 'Услуга'),
       h('h1', {}, title),
-      h('p', {}, description)
+      h('p', {}, shortDescription || description)
     );
   }
 });

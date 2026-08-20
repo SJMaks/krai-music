@@ -64,6 +64,9 @@ export interface Event {
 export interface Service {
   id: string
   title: string
+  /** Короткое описание для карточки на странице «Услуги». */
+  shortDescription?: string
+  /** Подробное описание в разметке richtext-редактора CMS (CommonMark). */
   description: string
   image: string
 }

@@ -75,7 +75,7 @@ collections:
       - { label: Обложка, name: cover, widget: image }
       - { label: Аудио, name: audio, widget: file }
       - { label: Дата релиза, name: releaseDate, widget: datetime }
-      - { label: Описание, name: description, widget: text, pattern: ['^[\s\S]{0,300}$', 'Максимум 300 символов'] }
+      - { label: Описание, name: description, required: false, widget: text, pattern: ['^[\s\S]{0,300}$', 'Максимум 300 символов'] }
 
   - name: albums
     label: Альбомы
@@ -96,7 +96,7 @@ collections:
         multiple: true
       - { label: Обложка, name: cover, widget: image }
       - { label: Дата релиза, name: releaseDate, widget: datetime }
-      - { label: Описание, name: description, widget: text, pattern: ['^[\s\S]{0,300}$', 'Максимум 300 символов'] }
+      - { label: Описание, name: description, widget: text, pattern: ['^[\s\S]{0,500}$', 'Максимум 500 символов'] }
       - label: Треки
         name: tracks
         widget: relation
@@ -114,8 +114,8 @@ collections:
     slug: '{{fields.id}}'
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'event_'}
-      - { label: Название, name: title, widget: string, pattern: ['^.{1,40}$', "Максимум 40 символов"] }
-      - { label: Описание, name: description, widget: text, pattern: ['^[\s\S]{0,300}$', 'Максимум 300 символов'] }
+      - { label: Название, name: title, widget: string, pattern: ['^.{1,60}$', "Максимум 60 символов"] }
+      - { label: Описание, name: description, widget: text, pattern: ['^[\s\S]{0,1000}$', 'Максимум 1000 символов'] }
       - { label: Изображение, name: image, widget: image }
       - { label: Дата, name: date, widget: datetime }
       - { label: Место, name: location, widget: string, pattern: ['^.{1,60}$', "Максимум 60 символов"] }
@@ -130,7 +130,8 @@ collections:
     fields:
       - { label: ID, name: id, widget: "uuid", prefix: 'service_'}
       - { label: Название, name: title, widget: string, pattern: ['^.{1,40}$', "Максимум 40 символов"] }
-      - { label: Описание, name: description, widget: text, pattern: ['^[\s\S]{0,300}$', 'Максимум 300 символов'] }
+      - { label: Короткое описание (на карточке), name: shortDescription, widget: text, pattern: ['^.{1,100}$', "Максимум 100 символов"], required: false, hint: 'Краткое описание услуги, отображается на странице «Услуги» рядом с кнопкой «Подробнее».' }
+      - { label: Подробное описание, name: description, widget: richtext, minimal: true, hint: 'Полное описание услуги. Открывается во всплывающем окне по кнопке «Подробнее».' }
       - { label: Изображение, name: image, widget: image }
 
   - name: homepage

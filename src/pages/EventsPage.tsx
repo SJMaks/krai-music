@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { eventsData } from '../cms/data'
 import styles from './EventsPage.module.css'
 import { Seo } from '../shared/ui/Seo'
-import { FiMapPin, FiCalendar, FiArrowRight } from 'react-icons/fi'
+import { FiMapPin, FiCalendar } from 'react-icons/fi'
 import { Media } from '../shared/ui/Media'
+import { ExpandableText } from '../shared/ui/ExpandableText'
 
 function formatDate(dateString?: string): string {
   if (!dateString) return 'Дата не указана';
@@ -65,7 +65,7 @@ export default function EventsPage() {
               </div>
               <div className={styles.content}>
                 <h2>{event.title}</h2>
-                <p className={styles.cardText}>{event.description}</p>
+                <ExpandableText text={event.description} className={styles.cardText} lines={4} />
                 <div className={styles.item}>
                   <FiCalendar />
                   <p>{formatDate(event.date)}</p>
@@ -74,12 +74,15 @@ export default function EventsPage() {
                   <FiMapPin />
                   <p>{event.location}</p>
                 </div>
-                <div className={styles.links}>
-                  <Link to={`/events/${event.id}`} className={styles.primaryAction}>
-                    Подробнее
-                    <FiArrowRight />
-                  </Link>
-                </div>
+                {event.links && event.links.length > 0 && (
+                  <div className={styles.links}>
+                    {event.links.map((link) => (
+                      <a key={link.label} href={link.url} target="_blank" rel="noreferrer">
+                        {link.label}
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
             </motion.article>
           ))}

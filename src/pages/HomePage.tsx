@@ -386,10 +386,15 @@ export default function HomePage() {
                         <FiMapPin />
                         <span>{event.location}</span>
                       </div>
-                      <Link to={`/events/${event.id}`} className={styles.buttonOutline}>
-                        Подробнее
-                        <FiArrowRight />
-                      </Link>
+                      {event.links && event.links.length > 0 && (
+                        <div className={styles.eventLinks}>
+                          {event.links.map((link) => (
+                            <a key={link.label} href={link.url} target="_blank" rel="noreferrer">
+                              {link.label}
+                            </a>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </motion.article>
                 </SwiperSlide>
