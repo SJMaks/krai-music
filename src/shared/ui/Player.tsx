@@ -24,6 +24,36 @@ function useIsMobile(): boolean {
   return useSyncExternalStore(subscribeToViewport, getMobileSnapshot, () => false)
 }
 
+// Обнаруживает переполнение текстового элемента для marquee-прокрутки.
+// Если содержимое шире видимой области, элемент получает класс `scrolling`,
+// а расстояние «проката» записывается в CSS-переменную --marquee-distance.
+function useMarqueeOverflow(ref: { current: HTMLElement | null }, dependency: unknown): boolean {
+  const [isOverflowing, setIsOverflowing] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const update = () => {
+      const overflow = el.scrollWidth > el.clientWidth + 1
+      setIsOverflowing(overflow)
+      el.style.setProperty('--marquee-distance', `${Math.max(0, el.scrollWidth - el.clientWidth)}px`)
+    }
+    update()
+
+    // Пересчитываем при изменении размеров (окно, шрифты, раскладка), а не только при смене трека
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    window.addEventListener('resize', update)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', update)
+    }
+  }, [ref, dependency])
+
+  return isOverflowing
+}
+
 export function Player() {
   const location = useLocation()
   // Источник перехода — чтобы со страницы артиста можно было вернуться к прежней странице
@@ -60,30 +90,13 @@ export function Player() {
   // нужно запустить заново (next/previous в очереди из одного трека, повторное «Слушать»).
   const handledRevisionRef = useRef(useAudioStore.getState().playbackRevision)
 
-  // Длинное название трека: определяем, помещается ли оно в свою колонку.
-  // Если не помещается — включаем marquee-прокрутку и считаем дистанцию прокрутки.
+  // Длинные надписи — название трека и авторы: определяем, помещаются ли они в свою колонку.
+  // Если не помещаются — включаем marquee-прокрутку и считаем дистанцию прокрутки.
   const titleRef = useRef<HTMLParagraphElement | null>(null)
-  const [isTitleOverflowing, setIsTitleOverflowing] = useState(false)
+  const isTitleOverflowing = useMarqueeOverflow(titleRef, currentTrack)
 
-  useEffect(() => {
-    const el = titleRef.current
-    if (!el) return
-    const update = () => {
-      // Название считается «длинным», если его содержимое шире видимой области
-      const overflow = el.scrollWidth > el.clientWidth + 1
-      setIsTitleOverflowing(overflow)
-      el.style.setProperty('--marquee-distance', `${Math.max(0, el.scrollWidth - el.clientWidth)}px`)
-    }
-    update()
-    // Пересчитываем при изменении размеров (окно, шрифты, раскладка), а не только при смене трека
-    const ro = new ResizeObserver(update)
-    ro.observe(el)
-    window.addEventListener('resize', update)
-    return () => {
-      ro.disconnect()
-      window.removeEventListener('resize', update)
-    }
-  }, [currentTrack])
+  const authorsRef = useRef<HTMLDivElement | null>(null)
+  const isAuthorsOverflowing = useMarqueeOverflow(authorsRef, currentTrack)
 
   // Фактическая громкость: на мобильных всегда максимум, без беззвучного режима
   const effectiveVolume = isMobile ? 1 : volume
@@ -170,6 +183,7 @@ export function Player() {
   }
 
   const authors = currentTrack.authors ?? []
+  const authorNames = authors.length > 0 ? authors.map((author) => author.nickname).join(', ') : 'Неизвестный артист'
   const progressPercent = duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0
   const volumePercent = (muted ? 0 : volume) * 100
 
@@ -216,19 +230,25 @@ export function Player() {
               >
                 <span className={styles.marqueeInner}><TrackTitle title={currentTrack.title} /></span>
               </p>
-              <div className={styles.authors}>
-                {authors.length > 0 ? (
-                  authors.map((author, index) => (
-                    <span key={author.id}>
-                      <Link to={`/artists/${author.id}`} state={backState} className={styles.artistLink}>
-                        {author.nickname}
-                      </Link>
-                      {index < authors.length - 1 && ', '}
-                    </span>
-                  ))
-                ) : (
-                  <span className={styles.artistLink}>Неизвестный артист</span>
-                )}
+              <div
+                ref={authorsRef}
+                className={`${styles.authors} ${isAuthorsOverflowing ? styles.scrolling : ''}`}
+                title={authorNames}
+              >
+                <span className={styles.marqueeInner}>
+                  {authors.length > 0 ? (
+                    authors.map((author, index) => (
+                      <span key={author.id}>
+                        <Link to={`/artists/${author.id}`} state={backState} className={styles.artistLink}>
+                          {author.nickname}
+                        </Link>
+                        {index < authors.length - 1 && ', '}
+                      </span>
+                    ))
+                  ) : (
+                    <span className={styles.artistLink}>Неизвестный артист</span>
+                  )}
+                </span>
               </div>
             </div>
           </div>

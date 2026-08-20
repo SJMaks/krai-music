@@ -485,7 +485,9 @@
   font-size: 0.98rem;
   line-height: 1.3;
   font-weight: 700;
-  color: #f0eded;
+  /* Многоточие наследует цвет контейнера; серый цвет нужен, чтобы «…» не белело
+     на сером фрагменте при обрезке названия трека. */
+  color: #9a9a9a;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

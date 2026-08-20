@@ -326,7 +326,7 @@ export default function HomePage() {
                       </button>
                     </div>
                     <div className={styles.cardBody}>
-                      <h3><TrackTitle title={track.title} /></h3>
+                      <h3 className={styles.trackTitle}><TrackTitle title={track.title} /></h3>
                       <p className={styles.cardText}>
                         {track.authors.map((author, index) => (
                           <span key={author.id}>

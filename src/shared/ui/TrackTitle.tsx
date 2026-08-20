@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import styles from './TrackTitle.module.css'
 
 interface TrackTitleProps {
@@ -23,7 +22,9 @@ export function TrackTitle({ title }: TrackTitleProps) {
             {part}
           </span>
         ) : part ? (
-          <Fragment key={`text-${index}`}>{part}</Fragment>
+          <span key={`text-${index}`} className={styles.text}>
+            {part}
+          </span>
         ) : null
       )}
     </>

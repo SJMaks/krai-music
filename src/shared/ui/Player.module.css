@@ -119,7 +119,9 @@
 }
 
 .title {
-  color: #ffffff;
+  /* Цвет контейнера = цвет серого фрагмента, чтобы многоточие (наследует цвет
+     контейнера) не оставалось белым при обрезке длинного названия. */
+  color: #9a9a9a;
   font-weight: 600;
   font-size: 0.95rem;
   line-height: 1.25;
@@ -138,7 +140,7 @@
 }
 
 .scrolling .marqueeInner {
-  animation: marqueePingPong 18s linear infinite;
+  animation: marqueePingPong 12s linear infinite;
 }
 
 /* Бегущая строка с паузой ~1 сек на каждом краю:
