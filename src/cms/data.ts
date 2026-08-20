@@ -33,8 +33,32 @@ const rawEvents = Object.values(eventModules) as any[]
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rawServices = Object.values(serviceModules) as any[]
 
-const artistsMap = new Map<string, Omit<Artist, 'featuredTrack' | 'featuredAlbum'>>()
+const artistsMap = new Map<string, Artist>()
 const tracksMap = new Map<string, Track>()
+
+/**
+ * Resolve a list of reference ids against a lookup map, silently dropping any
+ * id that no longer resolves to an existing record.
+ *
+ * This makes the CMS safe to use with cascade "deletes": if a record (e.g. an
+ * artist) is removed while related records (tracks / albums / homepage) still
+ * reference it by id, the dangling reference is simply ignored instead of
+ * throwing and taking the whole site build down with it.
+ */
+function resolveOrDrop<T>(ids: string[] | undefined, map: Map<string, T>): T[] {
+  if (!Array.isArray(ids)) return []
+  const resolved: T[] = []
+  for (const id of ids) {
+    const entity = map.get(id)
+    if (entity) resolved.push(entity)
+  }
+  return resolved
+}
+
+function resolveOrDropFromList<T extends { id: string }>(ids: string[] | undefined, items: T[]): T[] {
+  const byId = new Map<string, T>(items.map(item => [item.id, item] as [string, T]))
+  return resolveOrDrop(ids, byId)
+}
 
 rawArtists.forEach(artist => {
   artistsMap.set(artist.id, {
@@ -45,33 +69,15 @@ rawArtists.forEach(artist => {
 })
 
 rawTracks.forEach(track => {
-  const authors = (track.authors || []).map((id: string) => {
-    const artist = artistsMap.get(id)
-    if (!artist) {
-      throw new Error(`Artist with id "${id}" not found for track "${track.id}"`)
-    }
-    return artist as Artist
-  })
+  const authors = resolveOrDrop(track.authors, artistsMap)
   const fullTrack: Track = { ...track, authors }
   tracksMap.set(track.id, fullTrack)
 })
 
 const albumsMap = new Map<string, Album>()
 rawAlbums.forEach(album => {
-  const authors = (album.authors || []).map((id: string) => {
-    const artist = artistsMap.get(id)
-    if (!artist) {
-      throw new Error(`Artist with id "${id}" not found for album "${album.id}"`)
-    }
-    return artist as Artist
-  })
-  const tracks = (album.tracks || []).map((id: string) => {
-    const track = tracksMap.get(id)
-    if (!track) {
-      throw new Error(`Track with id "${id}" not found for album "${album.id}"`)
-    }
-    return track as Track
-  })
+  const authors = resolveOrDrop(album.authors, artistsMap)
+  const tracks = resolveOrDrop(album.tracks, tracksMap)
   const fullAlbum: Album = { ...album, authors, tracks }
   albumsMap.set(album.id, fullAlbum)
 })
@@ -97,34 +103,13 @@ const services: Service[] = rawServices as Service[]
 
 const homepageData = homepageJson as HomepageJson
 
-const featuredArtistIds = Array.isArray(homepageData.featuredArtists) ? homepageData.featuredArtists : []
-const featuredAlbumIds = Array.isArray(homepageData.featuredAlbums) ? homepageData.featuredAlbums : []
-const featuredTrackIds = Array.isArray(homepageData.featuredTracks) ? homepageData.featuredTracks : []
-const featuredEventIds = Array.isArray(homepageData.featuredEvents) ? homepageData.featuredEvents : []
-
 const homepageContent: HomepageContent = {
   heroTitle: homepageData.heroTitle ?? '— Добро пожаловать! —',
   heroSubtitle: homepageData.heroSubtitle ?? ' — музыкальный лейбл, который открывает новые имена и задаёт тренды.',
-  featuredArtists: featuredArtistIds.map(id => {
-    const artist = artistsMapFinal.get(id)
-    if (!artist) throw new Error(`Artist with id "${id}" not found`)
-    return artist
-  }),
-  featuredAlbums: featuredAlbumIds.map(id => {
-    const album = albumsMap.get(id)
-    if (!album) throw new Error(`Album with id "${id}" not found`)
-    return album
-  }),
-  featuredTracks: featuredTrackIds.map(id => {
-    const track = tracksMap.get(id)
-    if (!track) throw new Error(`Track with id "${id}" not found`)
-    return track
-  }),
-  featuredEvents: featuredEventIds.map(id => {
-    const event = events.find(e => e.id === id)
-    if (!event) throw new Error(`Event with id "${id}" not found`)
-    return event
-  }),
+  featuredArtists: resolveOrDrop(homepageData.featuredArtists, artistsMapFinal),
+  featuredAlbums: resolveOrDrop(homepageData.featuredAlbums, albumsMap),
+  featuredTracks: resolveOrDrop(homepageData.featuredTracks, tracksMap),
+  featuredEvents: resolveOrDropFromList(homepageData.featuredEvents, events),
 }
 
 const contacts: ContactContent = {
@@ -137,11 +122,7 @@ const contacts: ContactContent = {
 const radioAlbumIds = (Array.isArray(radioJson.albums) ? radioJson.albums : []) as unknown as string[]
 
 const radioContent: RadioContent = {
-  albums: radioAlbumIds.map(id => {
-    const album = albumsMap.get(id)
-    if (!album) throw new Error(`Album with id "${id}" not found`)
-    return album
-  }),
+  albums: resolveOrDrop(radioAlbumIds, albumsMap),
 }
 
 export const artistsData = artistsWithFeatured

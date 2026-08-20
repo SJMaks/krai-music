@@ -19,6 +19,31 @@ A production-ready static website for Kray Music built with React, TypeScript, R
 
 The CMS is available at `/admin/`.
 
+### Cascading removal of related content
+
+Decap CMS commits records as plain JSON files and has no built-in "cascade
+delete": when you delete a record, its `id` stays behind in every file that
+referenced it (`featuredArtists`/`featuredAlbums`/`featuredTracks`/`featuredEvents`
+on the homepage, `albums` on the radio page, `authors` on tracks and albums,
+`tracks` on albums, and `featuredTrack`/`featuredAlbum` on artists).
+
+To keep the site healthy this repository handles it in two layers:
+
+1. **Automatic repair — `npm run sync:content`** (`scripts/sync-content.mjs`)
+   scans the whole `content/` tree, and any reference to a deleted record is
+   removed from its JSON files. This also runs automatically at the start of
+   every `npm run build`, so the deployed site is always generated from
+   consistent content even if the repo still contains dangling ids.
+2. **Defensive data loader** (`src/cms/data.ts`) never throws on a missing
+   reference — dangling ids are simply skipped, so a single leftover reference
+   can never crash the site build again.
+
+Run the repair manually anytime after deleting records:
+
+```bash
+npm run sync:content
+```
+
 ### GitHub OAuth
 
 1. Create a GitHub OAuth App in your GitHub account.
