@@ -2,18 +2,16 @@
   "heroTitle": "Добро пожаловать!",
   "heroSubtitle": " — музыкальный лейбл, который открывает новые имена и задаёт тренды.",
   "featuredAlbums": [
-    "album_2376238e-ea6b-432d-b078-947a1ebc347d",
-    "album_5e0b1c2f-0c1a-4b3d-9f6e-1a2b3c4d5e6f"
+    "album_784f3e81-259b-40e8-9301-8b78c7ce71a3"
   ],
   "featuredArtists": [
     "artist_0d22887c-9967-481d-9c99-c4e94485cced"
   ],
   "featuredTracks": [
-    "track_1c1c198d-44e3-4c77-8eda-297aaf7fe3ba",
-    "track_1d55a8a6-b60e-4b67-99a2-a217f8c091fe"
+    "track_01fdea93-958e-4a07-8311-fcc1c3427221",
+    "track_9de50263-c7c4-4007-8dcf-88f390d95e6b"
   ],
   "featuredEvents": [
-    "event_3a4658af-1d11-413a-bdf6-26bf39594f85",
     "event_15b91357-0ce8-4ffc-a955-28e50b3a052d"
   ]
 }
