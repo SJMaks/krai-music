@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useLocation } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
@@ -14,6 +14,7 @@ import { FiArrowLeft, FiPlay, FiPause, FiChevronLeft, FiChevronRight, FiDisc } f
 import type { Track, Album } from '../types/content'
 import { Media } from '../shared/ui/Media'
 import { ExpandableText } from '../shared/ui/ExpandableText'
+import { TrackTitle } from '../shared/ui/TrackTitle'
 import { SOCIAL_META } from '../shared/lib/socials'
 
 function formatDate(dateString?: string): string {
@@ -39,6 +40,13 @@ function Equalizer() {
 
 export default function ArtistDetailPage() {
   const { id } = useParams()
+  const location = useLocation()
+  // Состояние перехода со страницы артистов: сохраняем, чтобы по «К артистам»
+  // вернуться на ту же страницу и с тем же поиском.
+  const backState = useMemo(() => {
+    const state = location.state as { fromArtistsPage?: boolean; page?: number; query?: string } | null
+    return state?.fromArtistsPage ? state : null
+  }, [location.state])
   const [page, setPage] = useState(1)
   const listRef = useRef<HTMLDivElement>(null)
   const goToPage = (next: (value: number) => number) => {
@@ -119,7 +127,7 @@ export default function ArtistDetailPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: 'easeOut' }}
         >
-          <Link to="/artists" className={styles.backLink}>
+          <Link to="/artists" state={backState ? { fromArtistsPage: true, page: backState.page, query: backState.query } : undefined} className={styles.backLink}>
             <FiArrowLeft />
             <span>К артистам</span>
           </Link>
@@ -252,7 +260,7 @@ export default function ArtistDetailPage() {
                             ) : null}
                           </div>
                           <div>
-                            <h3>{track.title}</h3>
+                            <h3><TrackTitle title={track.title} /></h3>
                             <div className={styles.trackAuthors}>
                               {track.authors.map((author, authorIndex) => (
                                 <span key={author.id}>
@@ -376,7 +384,7 @@ export default function ArtistDetailPage() {
                     ) : null}
                   </button>
                   <div className={styles.featuredTrackInfo}>
-                    <h3>{featuredTrack.title}</h3>
+                    <h3><TrackTitle title={featuredTrack.title} /></h3>
                     <div className={styles.albumAuthors}>
                       {featuredTrack.authors.map((author, authorIndex) => (
                         <span key={author.id}>

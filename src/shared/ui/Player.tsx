@@ -6,6 +6,7 @@ import { useAudioStore } from '../../store/audioStore'
 import { Link } from 'react-router-dom'
 import { getMediaUrl } from '../../shared/lib/media'
 import { Media } from './Media'
+import { TrackTitle } from './TrackTitle'
 
 // Мобильная версия: ползунок громкости скрыт, звук всегда на максимуме
 function subscribeToViewport(callback: () => void): () => void {
@@ -209,7 +210,7 @@ export function Player() {
                 className={`${styles.title} ${isTitleOverflowing ? styles.scrolling : ''}`}
                 title={currentTrack.title}
               >
-                <span className={styles.marqueeInner}>{currentTrack.title}</span>
+                <span className={styles.marqueeInner}><TrackTitle title={currentTrack.title} /></span>
               </p>
               <div className={styles.authors}>
                 {authors.length > 0 ? (

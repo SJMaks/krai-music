@@ -8,6 +8,7 @@ import { Seo } from '../shared/ui/Seo'
 import { FiArrowLeft, FiPlay, FiPause, FiDisc, FiInfo, FiX } from 'react-icons/fi'
 import type { Track } from '../types/content'
 import { Media } from '../shared/ui/Media'
+import { TrackTitle } from '../shared/ui/TrackTitle'
 
 function formatDate(dateString?: string): string {
   if (!dateString) return 'Дата не указана'
@@ -207,7 +208,7 @@ return (
                     <div className={styles.trackMain}>
                       <Media src={track.cover} alt="" className={styles.trackCover} lazy />
                       <div className={styles.trackText}>
-                        <p className={styles.trackTitle}>{track.title}</p>
+                        <p className={styles.trackTitle}><TrackTitle title={track.title} /></p>
                         <p className={styles.trackAuthors}>
                           {track.authors.map((author, authorIndex) => (
                               <span key={author.id}>

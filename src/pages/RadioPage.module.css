@@ -357,34 +357,21 @@
   }
 }
 
-/* ===== Фильтры-пилюли ===== */
+/* ===== Фильтр по артистам ===== */
 .filters {
-  display: flex;
-  flex-wrap: nowrap;
+  position: relative;
+  display: inline-block;
+}
+
+.filterTrigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 0.65rem;
-  /* Одна строка без переноса: длинный список скроллится по горизонтали */
-  min-width: 0;
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
-  /* Скроллбар скрываем: он съедает место снизу и вместе с краем контейнера обрезает
-     тень активной пилюли. Пролистывание доступно трекпадом, свайпом или Shift+колесо. */
-  scrollbar-width: none;
-  padding-top: 0.5rem;
-  padding-bottom: 1.25rem;
-}
-
-.filters::-webkit-scrollbar {
-  display: none;
-}
-
-.filters button {
-  flex-shrink: 0;
+  min-width: 12rem;
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.045);
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.85);
   border-radius: 999px;
   padding: 0.55rem 1.15rem;
   font-size: 0.88rem;
@@ -393,19 +380,90 @@
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.filters button:hover {
+.filterTrigger:hover {
   border-color: rgba(242, 92, 92, 0.6);
   color: #ffffff;
   transform: translateY(-1px);
 }
 
-.filters button.active {
-  background: linear-gradient(135deg, #f25c5c, #a51614);
-  border-color: transparent;
-  color: #ffffff;
-  /* Компактное свечение, чтобы оно целиком помещалось в нижний отступ
-     скролл-области и не обрезалось её краем */
+.filterTriggerOpen {
+  border-color: rgba(242, 92, 92, 0.7);
   box-shadow: 0 4px 14px rgba(199, 29, 27, 0.48);
+}
+
+.filterDropdown {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  left: 0;
+  z-index: 30;
+  min-width: 16rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 14, 18, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 14px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.6);
+  transform-origin: top left;
+  padding: 0.6rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.filterSearch {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.filterSearch::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.filterSearch:focus {
+  border-color: rgba(242, 92, 92, 0.6);
+}
+
+.filterOptions {
+  overflow-y: auto;
+  max-height: 13rem;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.filterOptions button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: 9px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.filterOptions button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.filterOptions button.filterOptionActive {
+  background: linear-gradient(135deg, #f25c5c, #a51614);
+  color: #ffffff;
+}
+
+.filterEmpty {
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0.55rem 0.85rem;
+  font-size: 0.88rem;
 }
 
 /* ===== Заголовки секций ===== */

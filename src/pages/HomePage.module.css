@@ -648,6 +648,7 @@
 
 .chip {
   position: absolute;
+  z-index: 2;
   top: 0.9rem;
   left: 0.9rem;
   padding: 0.32rem 0.65rem;
@@ -664,6 +665,7 @@
 .coverEq {
   position: absolute;
   inset: 0;
+  z-index: 2;
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, rgba(199, 29, 27, 0.32), rgba(13, 13, 13, 0.55));
@@ -707,6 +709,7 @@
 .playOverlay,
 .openOverlay {
   position: absolute;
+  z-index: 3;
   right: 0.9rem;
   bottom: 0.9rem;
   width: 2.9rem;
@@ -749,6 +752,7 @@
 
 .dateBadge {
   position: absolute;
+  z-index: 2;
   top: 0.9rem;
   left: 0.9rem;
   display: grid;

@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { useMemo, useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
@@ -11,8 +11,9 @@ import styles from './RadioPage.module.css'
 import { Seo } from '../shared/ui/Seo'
 import { Link } from 'react-router-dom'
 import { Media } from '../shared/ui/Media'
+import { TrackTitle } from '../shared/ui/TrackTitle'
 import logo from '../assets/logo.png'
-import { FiPlay, FiPause, FiShuffle, FiRadio, FiChevronLeft, FiChevronRight, FiArrowRight } from 'react-icons/fi'
+import { FiPlay, FiPause, FiShuffle, FiRadio, FiChevronLeft, FiChevronRight, FiChevronDown, FiArrowRight } from 'react-icons/fi'
 import type { Track, Album } from '../types/content'
 
 function formatDate(dateString?: string): string {
@@ -38,8 +39,22 @@ function Equalizer() {
 export default function RadioPage() {
   const [filter, setFilter] = useState('Все')
   const [page, setPage] = useState(1)
+  const [filterOpen, setFilterOpen] = useState(false)
+  const [filterSearch, setFilterSearch] = useState('')
+  const filterRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
+
+  // Закрываем дропдаун при клике вне его области
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (!filterRef.current?.contains(event.target as Node)) {
+        setFilterOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleOutsideClick)
+    return () => document.removeEventListener('mousedown', handleOutsideClick)
+  }, [])
 
   const playTrack = useAudioStore((state) => state.playTrack)
   const currentTrack = useAudioStore((state) => state.currentTrack)
@@ -47,6 +62,13 @@ export default function RadioPage() {
   const togglePlay = useAudioStore((state) => state.togglePlay)
 
   const artistFilters = useMemo(() => ['Все', ...artistsData.map((artist) => artist.nickname)], [])
+
+  // Отфильтрованные по строке поиска варианты для дропдауна
+  const filteredArtistOptions = useMemo(() => {
+    const query = filterSearch.trim().toLowerCase()
+    if (!query) return artistFilters
+    return artistFilters.filter((name) => name.toLowerCase().includes(query))
+  }, [artistFilters, filterSearch])
 
   const filteredTracks = useMemo(() => {
     if (filter === 'Все') return tracksData
@@ -172,18 +194,66 @@ export default function RadioPage() {
           </div>
         </motion.section>
 
-        {/* ===== Фильтры по артистам ===== */}
-        <div className={styles.filters} role="group" aria-label="Фильтр по артистам">
-          {artistFilters.map((entry) => (
-            <button
-              key={entry}
-              type="button"
-              className={entry === filter ? styles.active : ''}
-              onClick={() => handleFilter(entry)}
-            >
-              {entry}
-            </button>
-          ))}
+        {/* ===== Фильтр по артистам ===== */}
+        <div className={styles.filters} ref={filterRef}>
+          <button
+            type="button"
+            className={`${styles.filterTrigger} ${filterOpen ? styles.filterTriggerOpen : ''}`}
+            onClick={() => {
+              setFilterOpen((open) => !open)
+              setFilterSearch('')
+            }}
+            aria-haspopup="listbox"
+            aria-expanded={filterOpen}
+          >
+            <span>{filter}</span>
+            <FiChevronDown size={15} />
+          </button>
+
+          <AnimatePresence>
+            {filterOpen && (
+              <motion.div
+                className={styles.filterDropdown}
+                initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                transition={{ duration: reduceMotion ? 0 : 0.18, ease: 'easeOut' }}
+              >
+              <input
+                type="search"
+                className={styles.filterSearch}
+                placeholder="Поиск артиста…"
+                value={filterSearch}
+                onChange={(event) => setFilterSearch(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape') setFilterOpen(false)
+                }}
+                autoFocus
+              />
+              <div className={styles.filterOptions} role="listbox" aria-label="Список артистов">
+                {filteredArtistOptions.length > 0 ? (
+                  filteredArtistOptions.map((entry) => (
+                    <button
+                      key={entry}
+                      type="button"
+                      className={entry === filter ? styles.filterOptionActive : ''}
+                      onClick={() => {
+                        handleFilter(entry)
+                        setFilterOpen(false)
+                      }}
+                      role="option"
+                      aria-selected={entry === filter}
+                    >
+                      {entry}
+                    </button>
+                  ))
+                ) : (
+                  <p className={styles.filterEmpty}>Никого не найдено</p>
+                )}
+              </div>
+            </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* ===== Карусель альбомов лейбла ===== */}
@@ -285,7 +355,7 @@ export default function RadioPage() {
                       <div className={styles.trackMain}>
                         <Media src={track.cover} alt="" className={styles.trackCover} lazy />
                         <div className={styles.trackText}>
-                          <p className={styles.trackTitle}>{track.title}</p>
+                          <p className={styles.trackTitle}><TrackTitle title={track.title} /></p>
                           <div className={styles.trackAuthors}>
                             {track.authors.map((author, authorIndex) => (
                               <span key={author.id}>

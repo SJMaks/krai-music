@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { artistsData } from '../cms/data'
 import styles from './ArtistsPage.module.css'
@@ -7,11 +7,40 @@ import { Seo } from '../shared/ui/Seo'
 import { Media } from '../shared/ui/Media'
 import { FiArrowRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
+// Параметры состояния, которые передаются на страницу артиста и возвращаются
+// обратно по нажатию «К артистам», чтобы восстановить просматриваемую страницу
+// и строку поиска.
+interface ArtistsBackState {
+  fromArtistsPage?: boolean
+  page?: number
+  query?: string
+}
+
+// «Широкий экран»: на десктопе сетка 3 колонки, 6 артистов = 2 ряда.
+// На узких экранах показываем 4 артиста на страницу.
+function subscribeToDesktop(callback: () => void): () => void {
+  const mql = window.matchMedia('(min-width: 1024px)')
+  mql.addEventListener('change', callback)
+  return () => mql.removeEventListener('change', callback)
+}
+
+function getDesktopSnapshot(): boolean {
+  return window.matchMedia('(min-width: 1024px)').matches
+}
+
+function useIsDesktop(): boolean {
+  return useSyncExternalStore(subscribeToDesktop, getDesktopSnapshot, () => false)
+}
+
 export default function ArtistsPage() {
   const reduceMotion = useReducedMotion()
-  const [query, setQuery] = useState('')
-  const [page, setPage] = useState(1)
-  const perPage = 4
+  const isDesktop = useIsDesktop()
+  const location = useLocation()
+  // Восстанавливаем страницу и поиск, если пришли обратно со страницы артиста
+  const backState = useMemo(() => (location.state as ArtistsBackState | null) ?? null, [location.state])
+  const [query, setQuery] = useState(backState?.query ?? '')
+  const [page, setPage] = useState(backState?.page && backState.page > 0 ? backState.page : 1)
+  const perPage = isDesktop ? 6 : 4
   const listRef = useRef<HTMLDivElement>(null)
   const goToPage = (next: (value: number) => number) => {
     setPage(next)
@@ -33,6 +62,9 @@ export default function ArtistsPage() {
   const totalPages = Math.max(1, Math.ceil(filteredArtists.length / perPage))
   const currentPage = Math.min(page, totalPages)
   const pageArtists = filteredArtists.slice((currentPage - 1) * perPage, currentPage * perPage)
+
+  // Прокидываем текущую страницу/поиск на страницу артиста, чтобы вернуться обратно
+  const backStateProp: ArtistsBackState = { fromArtistsPage: true, page: currentPage, query }
 
   return (
     <>
@@ -71,10 +103,10 @@ export default function ArtistsPage() {
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.5, delay: reduceMotion ? 0 : (index % 3) * 0.06, ease: 'easeOut' }}
           >
-            <Link to={`/artists/${artist.id}`}><Media src={artist.verticalImage} alt={artist.nickname} className={styles.image} /></Link>
+            <Link to={`/artists/${artist.id}`} state={backStateProp}><Media src={artist.verticalImage} alt={artist.nickname} className={styles.image} /></Link>
             <h2>{artist.nickname}</h2>
             <p className={styles.cardText}>{artist.biography}</p>
-            <Link to={`/artists/${artist.id}`} className={styles.cardLink}>
+            <Link to={`/artists/${artist.id}`} state={backStateProp} className={styles.cardLink}>
               Открыть профиль
               <FiArrowRight />
             </Link>
