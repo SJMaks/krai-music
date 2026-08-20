@@ -9,9 +9,10 @@ import { artistsData, tracksData, radioContentData } from '../cms/data'
 import { useAudioStore } from '../store/audioStore'
 import styles from './RadioPage.module.css'
 import { Seo } from '../shared/ui/Seo'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Media } from '../shared/ui/Media'
 import { TrackTitle } from '../shared/ui/TrackTitle'
+import { makeBackLinkState } from '../shared/lib/backNav'
 import logo from '../assets/logo.png'
 import { FiPlay, FiPause, FiShuffle, FiRadio, FiChevronLeft, FiChevronRight, FiChevronDown, FiArrowRight } from 'react-icons/fi'
 import type { Track, Album } from '../types/content'
@@ -37,6 +38,9 @@ function Equalizer() {
 }
 
 export default function RadioPage() {
+  const location = useLocation()
+  // Источник перехода — чтобы со страницы артиста/альбома можно было вернуться в радио
+  const backState = makeBackLinkState(location)
   const [filter, setFilter] = useState('Все')
   const [page, setPage] = useState(1)
   const [filterOpen, setFilterOpen] = useState(false)
@@ -288,6 +292,7 @@ export default function RadioPage() {
                       <Media src={album.cover} alt={album.title} className={styles.albumCover} lazy />
                       <Link
                         to={`/albums/${album.id}`}
+                        state={backState}
                         className={styles.albumPlay}
                         aria-label={`Открыть альбом: ${album.title}`}
                       >
@@ -295,14 +300,14 @@ export default function RadioPage() {
                       </Link>
                     </div>
                     <h3 className={styles.albumTitle}>
-                      <Link to={`/albums/${album.id}`} className={styles.albumAuthorLink}>
+                      <Link to={`/albums/${album.id}`} state={backState} className={styles.albumAuthorLink}>
                         {album.title}
                       </Link>
                     </h3>
                     <div className={styles.albumAuthors}>
                       {album.authors.map((author, authorIndex) => (
                         <span key={author.id}>
-                          <Link to={`/artists/${author.id}`} className={styles.albumAuthorLink}>
+                          <Link to={`/artists/${author.id}`} state={backState} className={styles.albumAuthorLink}>
                             {author.nickname}
                           </Link>
                           {authorIndex < album.authors.length - 1 && ', '}
@@ -361,6 +366,7 @@ export default function RadioPage() {
                               <span key={author.id}>
                                 <Link
                                   to={`/artists/${author.id}`}
+                                  state={backState}
                                   className={styles.trackAuthorLink}
                                   onClick={(e) => e.stopPropagation()}
                                 >

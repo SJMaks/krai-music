@@ -8,8 +8,9 @@ import { useAudioStore } from '../store/audioStore'
 import { homepageContentData, artistsData, albumsData, tracksData, eventsData } from '../cms/data'
 import styles from './HomePage.module.css'
 import logo from '../assets/logo.png'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Seo } from '../shared/ui/Seo'
+import { makeBackLinkState } from '../shared/lib/backNav'
 import { FiArrowRight, FiCalendar, FiMapPin, FiPlay, FiPause, FiHeadphones } from 'react-icons/fi'
 import { Media } from '../shared/ui/Media'
 import { TrackTitle } from '../shared/ui/TrackTitle'
@@ -77,6 +78,9 @@ function SectionHead({ eyebrow, title, to, linkLabel }: SectionHeadProps) {
 }
 
 export default function HomePage() {
+  const location = useLocation()
+  // Источник перехода — чтобы со страницы артиста/альбома можно было вернуться домой
+  const backState = makeBackLinkState(location)
   const playTrack = useAudioStore((state) => state.playTrack)
   const currentTrack = useAudioStore((state) => state.currentTrack)
   const isPlaying = useAudioStore((state) => state.isPlaying)
@@ -225,14 +229,14 @@ export default function HomePage() {
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                 >
                   <div className={styles.cardMedia}>
-                    <Link to={`/artists/${artist.id}`} className={styles.cardImageLink}>
+                    <Link to={`/artists/${artist.id}`} state={backState} className={styles.cardImageLink}>
                       <Media src={artist.verticalImage} alt={artist.nickname} className={styles.artistImage} lazy />
                     </Link>
                   </div>
                   <div className={styles.cardBody}>
                     <h3>{artist.nickname}</h3>
                     <p className={styles.cardText}>{artist.biography}</p>
-                    <Link to={`/artists/${artist.id}`} className={styles.cardLink}>
+                    <Link to={`/artists/${artist.id}`} state={backState} className={styles.cardLink}>
                       Открыть профиль
                       <FiArrowRight />
                     </Link>
@@ -264,13 +268,13 @@ export default function HomePage() {
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                 >
                   <div className={styles.cardMedia}>
-                    <Link to={`/albums/${album.id}`} state={{ fromHome: true }} className={styles.cardImageLink}>
+                    <Link to={`/albums/${album.id}`} state={backState} className={styles.cardImageLink}>
                       <Media src={album.cover} alt={album.title} className={styles.trackImage} lazy />
                     </Link>
                     <span className={styles.chip}>Альбом</span>
                     <Link
                       to={`/albums/${album.id}`}
-                      state={{ fromHome: true }}
+                      state={backState}
                       className={styles.openOverlay}
                       aria-label={`Открыть альбом: ${album.title}`}
                     >
@@ -282,7 +286,7 @@ export default function HomePage() {
                     <p className={styles.cardText}>
                       {album.authors.map((author, index) => (
                         <span key={author.id}>
-                          <Link to={`/artists/${author.id}`} className={styles.authorLink}>
+                          <Link to={`/artists/${author.id}`} state={backState} className={styles.authorLink}>
                             {author.nickname}
                           </Link>
                           {index < album.authors.length - 1 ? ', ' : ''}
@@ -326,7 +330,7 @@ export default function HomePage() {
                       <p className={styles.cardText}>
                         {track.authors.map((author, index) => (
                           <span key={author.id}>
-                            <Link to={`/artists/${author.id}`} className={styles.authorLink}>
+                            <Link to={`/artists/${author.id}`} state={backState} className={styles.authorLink}>
                               {author.nickname}
                             </Link>
                             {index < track.authors.length - 1 ? ', ' : ''}

@@ -3,8 +3,9 @@ import type { CSSProperties } from 'react'
 import { FiPause, FiPlay, FiSkipBack, FiSkipForward, FiVolume2, FiVolumeX, FiRepeat, FiShuffle, FiX } from 'react-icons/fi'
 import styles from './Player.module.css'
 import { useAudioStore } from '../../store/audioStore'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { getMediaUrl } from '../../shared/lib/media'
+import { makeBackLinkState } from '../../shared/lib/backNav'
 import { Media } from './Media'
 import { TrackTitle } from './TrackTitle'
 
@@ -24,6 +25,9 @@ function useIsMobile(): boolean {
 }
 
 export function Player() {
+  const location = useLocation()
+  // Источник перехода — чтобы со страницы артиста можно было вернуться к прежней странице
+  const backState = makeBackLinkState(location)
   const {
     currentTrack,
     isPlaying,
@@ -198,7 +202,7 @@ export function Player() {
           <span className={styles.timeText}>{formatTime(currentTime)}</span>
           <div className={styles.trackInfo}>
             {authors.length > 0 ? (
-              <Link to={`/artists/${authors[0].id}`} className={styles.coverLink} aria-label={`Открыть страницу ${authors[0].nickname}`}>
+              <Link to={`/artists/${authors[0].id}`} state={backState} className={styles.coverLink} aria-label={`Открыть страницу ${authors[0].nickname}`}>
                 <Media src={currentTrack.cover} alt={currentTrack.title} className={styles.cover} />
               </Link>
             ) : (
@@ -216,7 +220,7 @@ export function Player() {
                 {authors.length > 0 ? (
                   authors.map((author, index) => (
                     <span key={author.id}>
-                      <Link to={`/artists/${author.id}`} className={styles.artistLink}>
+                      <Link to={`/artists/${author.id}`} state={backState} className={styles.artistLink}>
                         {author.nickname}
                       </Link>
                       {index < authors.length - 1 && ', '}

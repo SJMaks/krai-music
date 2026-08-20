@@ -9,6 +9,7 @@ import { FiArrowLeft, FiPlay, FiPause, FiDisc, FiInfo, FiX } from 'react-icons/f
 import type { Track } from '../types/content'
 import { Media } from '../shared/ui/Media'
 import { TrackTitle } from '../shared/ui/TrackTitle'
+import { makeDeeperState, makeBackTargetState, backLinkLabel, type BackLinkState } from '../shared/lib/backNav'
 
 function formatDate(dateString?: string): string {
   if (!dateString) return 'Дата не указана'
@@ -63,8 +64,14 @@ export default function AlbumDetailPage() {
     }
   }, [infoOpen])
 
-  const fromArtist = (location.state as { fromArtist?: string } | null)?.fromArtist
-  const fromHome = (location.state as { fromHome?: boolean } | null)?.fromHome
+  // Навигационная цепочка: читаем откуда пришли и куда нужно вернуться
+  const navState = useMemo(() => (location.state as BackLinkState | null) ?? null, [location.state])
+  // Куда ведёт кнопка «назад» — ближайшая предыдущая страница
+  const backTo = navState?.from
+  // Состояние, которое передаём этой странице при возврате (её кнопка «назад» пойдёт дальше, к origin)
+  const backState = makeBackTargetState(navState)
+  // Состояние для переходов вглубь (к артистам) — сохраняем origin цепочки
+  const deepState = makeDeeperState(location, navState)
 
   const playTrack = useAudioStore((state) => state.playTrack)
   const currentTrack = useAudioStore((state) => state.currentTrack)
@@ -117,9 +124,9 @@ return (
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: 'easeOut' }}
         >
-          <Link to={fromArtist ? `/artists/${fromArtist}` : fromHome ? '/' : '/radio'} className={styles.backLink}>
+          <Link to={backTo ?? '/radio'} state={backState} className={styles.backLink}>
             <FiArrowLeft />
-            <span>{fromArtist ? 'К артисту' : fromHome ? 'На главную' : 'К радио'}</span>
+            <span>{backTo ? backLinkLabel(backTo) : 'К радио'}</span>
           </Link>
         </motion.div>
 
@@ -155,7 +162,7 @@ return (
             <p className={styles.authors}>
               {album.authors.map((author, index) => (
                 <span key={author.id}>
-                  <Link to={`/artists/${author.id}`} className={styles.authorLink}>
+                  <Link to={`/artists/${author.id}`} state={deepState} className={styles.authorLink}>
                     {author.nickname}
                   </Link>
                   {index < album.authors.length - 1 ? ' · ' : ''}
@@ -214,6 +221,7 @@ return (
                               <span key={author.id}>
                                 <Link
                                   to={`/artists/${author.id}`}
+                                  state={deepState}
                                   className={styles.trackAuthorLink}
                                   onClick={(e) => e.stopPropagation()}
                                 >

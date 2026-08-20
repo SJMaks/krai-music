@@ -11,6 +11,8 @@ import { FiArrowRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 // обратно по нажатию «К артистам», чтобы восстановить просматриваемую страницу
 // и строку поиска.
 interface ArtistsBackState {
+  from?: string
+  origin?: string
   fromArtistsPage?: boolean
   page?: number
   query?: string
@@ -64,7 +66,8 @@ export default function ArtistsPage() {
   const pageArtists = filteredArtists.slice((currentPage - 1) * perPage, currentPage * perPage)
 
   // Прокидываем текущую страницу/поиск на страницу артиста, чтобы вернуться обратно
-  const backStateProp: ArtistsBackState = { fromArtistsPage: true, page: currentPage, query }
+  const path = location.pathname + location.search
+  const backStateProp: ArtistsBackState = { from: path, origin: path, fromArtistsPage: true, page: currentPage, query }
 
   return (
     <>

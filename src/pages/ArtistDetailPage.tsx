@@ -15,6 +15,7 @@ import type { Track, Album } from '../types/content'
 import { Media } from '../shared/ui/Media'
 import { ExpandableText } from '../shared/ui/ExpandableText'
 import { TrackTitle } from '../shared/ui/TrackTitle'
+import { makeDeeperState, makeBackTargetState, backLinkLabel, type BackLinkState } from '../shared/lib/backNav'
 import { SOCIAL_META } from '../shared/lib/socials'
 
 function formatDate(dateString?: string): string {
@@ -41,12 +42,18 @@ function Equalizer() {
 export default function ArtistDetailPage() {
   const { id } = useParams()
   const location = useLocation()
-  // Состояние перехода со страницы артистов: сохраняем, чтобы по «К артистам»
-  // вернуться на ту же страницу и с тем же поиском.
-  const backState = useMemo(() => {
-    const state = location.state as { fromArtistsPage?: boolean; page?: number; query?: string } | null
-    return state?.fromArtistsPage ? state : null
-  }, [location.state])
+  // Навигационная цепочка: откуда пришли, куда вернуться и как восстановить
+  // исходный список артистов (страница/поиск).
+  const navState = useMemo(
+    () => (location.state as BackLinkState | null) ?? null,
+    [location.state, location.search],
+  )
+  // Куда ведёт кнопка «назад» — ближайшая предыдущая страница
+  const backTo = navState?.from
+  // Состояние, которое передаём этой странице при возврате (её кнопка «назад» пойдёт дальше, к origin)
+  const backState = makeBackTargetState(navState)
+  // Состояние для переходов вглубь (к альбомам и артистам-соисполнителям)
+  const deepState = makeDeeperState(location, navState)
   const [page, setPage] = useState(1)
   const listRef = useRef<HTMLDivElement>(null)
   const goToPage = (next: (value: number) => number) => {
@@ -127,9 +134,13 @@ export default function ArtistDetailPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: 'easeOut' }}
         >
-          <Link to="/artists" state={backState ? { fromArtistsPage: true, page: backState.page, query: backState.query } : undefined} className={styles.backLink}>
+          <Link
+            to={backTo ?? '/artists'}
+            state={backState}
+            className={styles.backLink}
+          >
             <FiArrowLeft />
-            <span>К артистам</span>
+            <span>{backLinkLabel(backTo ?? '/artists')}</span>
           </Link>
         </motion.div>
         <motion.section
@@ -266,6 +277,7 @@ export default function ArtistDetailPage() {
                                 <span key={author.id}>
                                   <Link
                                     to={`/artists/${author.id}`}
+                                    state={deepState}
                                     className={styles.trackAuthorLink}
                                     onClick={(e) => e.stopPropagation()}
                                   >
@@ -331,7 +343,7 @@ export default function ArtistDetailPage() {
                 <>
                   <Link
                     to={`/albums/${featuredAlbum.id}`}
-                    state={{ fromArtist: artist.id }}
+                    state={deepState}
                     className={styles.featuredTrackCoverButton}
                     aria-label={`Открыть альбом: ${featuredAlbum.title}`}
                   >
@@ -343,14 +355,14 @@ export default function ArtistDetailPage() {
                   </Link>
                   <div className={styles.featuredTrackInfo}>
                     <h3>
-                      <Link to={`/albums/${featuredAlbum.id}`} state={{ fromArtist: artist.id }} className={styles.albumTitleLink}>
+                      <Link to={`/albums/${featuredAlbum.id}`} state={deepState} className={styles.albumTitleLink}>
                         {featuredAlbum.title}
                       </Link>
                     </h3>
                     <div className={styles.albumAuthors}>
                       {featuredAlbum.authors.map((author, authorIndex) => (
                         <span key={author.id}>
-                          <Link to={`/artists/${author.id}`} className={styles.albumAuthorLink}>
+                          <Link to={`/artists/${author.id}`} state={deepState} className={styles.albumAuthorLink}>
                             {author.nickname}
                           </Link>
                           {authorIndex < featuredAlbum.authors.length - 1 && ', '}
@@ -359,7 +371,7 @@ export default function ArtistDetailPage() {
                     </div>
                     <p>Дата релиза: {formatDate(featuredAlbum.releaseDate)}</p>
                     <ExpandableText text={featuredAlbum.description} lines={5} />
-                    <Link to={`/albums/${featuredAlbum.id}`} state={{ fromArtist: artist.id }}  className={styles.albumOpenLink}>
+                    <Link to={`/albums/${featuredAlbum.id}`} state={deepState} className={styles.albumOpenLink}>
                       Открыть альбом
                     </Link>
                   </div>
@@ -388,7 +400,7 @@ export default function ArtistDetailPage() {
                     <div className={styles.albumAuthors}>
                       {featuredTrack.authors.map((author, authorIndex) => (
                         <span key={author.id}>
-                          <Link to={`/artists/${author.id}`} className={styles.albumAuthorLink}>
+                          <Link to={`/artists/${author.id}`} state={deepState} className={styles.albumAuthorLink}>
                             {author.nickname}
                           </Link>
                           {authorIndex < featuredTrack.authors.length - 1 && ', '}
@@ -434,12 +446,12 @@ export default function ArtistDetailPage() {
                   viewport={{ once: true, margin: '-30px' }}
                   transition={{ duration: 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.05, ease: 'easeOut' }}
                 >
-                  <Link to={`/albums/${album.id}`} state={{ fromArtist: artist.id }} className={styles.albumCoverLink}>
+                  <Link to={`/albums/${album.id}`} state={deepState} className={styles.albumCoverLink}>
                     <Media src={album.cover} alt={album.title} className={styles.albumCover} lazy />
                   </Link>
                   <div className={styles.albumBody}>
                     <h3>
-                      <Link to={`/albums/${album.id}`} state={{ fromArtist: artist.id }} className={styles.albumTitleLink}>
+                      <Link to={`/albums/${album.id}`} state={deepState} className={styles.albumTitleLink}>
                         {album.title}
                       </Link>
                     </h3>
@@ -447,7 +459,7 @@ export default function ArtistDetailPage() {
                       {album.tracks.length} {album.tracks.length === 1 ? 'трек' : album.tracks.length < 5 ? 'трека' : 'треков'} ·{' '}
                       {formatDate(album.releaseDate)}
                     </p>
-                    <Link to={`/albums/${album.id}`} state={{ fromArtist: artist.id }} className={styles.albumOpenLink}>
+                    <Link to={`/albums/${album.id}`} state={deepState} className={styles.albumOpenLink}>
                       Открыть альбом
                     </Link>
                   </div>
