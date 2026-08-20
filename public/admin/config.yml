@@ -212,3 +212,18 @@ collections:
             display_fields: [title]
             multiple: true
             required: false
+  - name: legal
+    label: Правовые документы
+    files:
+      - name: privacy_policy
+        label: Политика конфиденциальности
+        file: content/legal/privacy_policy.json
+        format: json
+        fields:
+          - { label: Политика конфиденциальности, name: body, widget: richtext, hint: 'Текст в формате Markdown: ## заголовки, - списки, **жирный**, [ссылки](url), > цитаты.' }
+      - name: use_rules
+        label: Условия использования
+        file: content/legal/use_rules.json
+        format: json
+        fields:
+          - { label: Условия использования, name: body, widget: richtext, hint: 'Текст в формате Markdown: ## заголовки, - списки, **жирный**, [ссылки](url), > цитаты.' }

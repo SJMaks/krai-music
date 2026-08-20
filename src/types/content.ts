@@ -95,3 +95,8 @@ export interface RadioPlaylist {
   orderedTracks: string[]
   artistFilters: string[]
 }
+
+/** Файл правового документа из CMS (поле richtext). */
+export interface LegalContent {
+  body: string
+}

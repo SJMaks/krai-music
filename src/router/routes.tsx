@@ -8,8 +8,10 @@ import {
   EventsPage,
   HomePage,
   NotFoundPage,
+  PrivacyPolicyPage,
   RadioPage,
   ServicesPage,
+  UseRulesPage,
 } from './pageComponents'
 import { PageSkeleton } from './PageSkeleton'
 import ErrorPage from '../pages/ErrorPage'
@@ -27,6 +29,8 @@ export const router = createBrowserRouter([
       { path: 'events', element: <Suspense fallback={<PageSkeleton />}><EventsPage /></Suspense> },
       { path: 'services', element: <Suspense fallback={<PageSkeleton />}><ServicesPage /></Suspense> },
       { path: 'radio', element: <Suspense fallback={<PageSkeleton />}><RadioPage /></Suspense> },
+      { path: 'privacy_policy', element: <Suspense fallback={<PageSkeleton />}><PrivacyPolicyPage /></Suspense> },
+      { path: 'use_rules', element: <Suspense fallback={<PageSkeleton />}><UseRulesPage /></Suspense> },
       { path: '404', element: <Suspense fallback={<PageSkeleton />}><NotFoundPage /></Suspense> },
       { path: '*', element: <Navigate to="/404" replace /> },
     ],

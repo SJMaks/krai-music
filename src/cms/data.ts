@@ -1,7 +1,9 @@
-import type { Album, Artist, Event, HomepageContent, RadioContent, Service, Track, ContactContent, SocialLink } from '../types/content'
+import type { Album, Artist, Event, HomepageContent, RadioContent, Service, Track, ContactContent, SocialLink, LegalContent } from '../types/content'
 import homepageJson from '../../content/homepage.json'
 import contactsJson from '../../content/contacts.json'
 import radioJson from '../../content/radio.json'
+import privacyPolicyJson from '../../content/legal/privacy_policy.json'
+import useRulesJson from '../../content/legal/use_rules.json'
 
 const artistModules = import.meta.glob('../../content/artists/*.json', { eager: true, import: 'default' })
 const trackModules = import.meta.glob('../../content/tracks/*.json', { eager: true, import: 'default' })
@@ -133,3 +135,5 @@ export const servicesData = services
 export const homepageContentData = homepageContent
 export const contactData = contacts
 export const radioContentData = radioContent
+export const privacyPolicyContent = (privacyPolicyJson as LegalContent).body ?? ''
+export const useRulesContent = (useRulesJson as LegalContent).body ?? ''

@@ -386,15 +386,14 @@ export default function HomePage() {
                         <FiMapPin />
                         <span>{event.location}</span>
                       </div>
-                      {event.links && event.links.length > 0 && (
-                        <div className={styles.eventLinks}>
-                          {event.links.map((link) => (
-                            <a key={link.label} href={link.url} target="_blank" rel="noreferrer">
-                              {link.label}
-                            </a>
-                          ))}
-                        </div>
-                      )}
+                      <Link
+                        to={{ pathname: '/events', hash: event.id }}
+                        className={styles.eventDetailsBtn}
+                        aria-label={`Подробнее о мероприятии: ${event.title}`}
+                      >
+                        Подробнее
+                        <FiArrowRight />
+                      </Link>
                     </div>
                   </motion.article>
                 </SwiperSlide>

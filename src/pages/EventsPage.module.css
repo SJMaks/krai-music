@@ -59,6 +59,7 @@
   border: 1px solid rgba(207, 203, 203, 0.12);
   background: linear-gradient(180deg, #171717, #121212);
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  scroll-margin-top: 6.5rem;
 }
 
 .card:hover {
@@ -86,6 +87,7 @@
 
 .dateBadge {
   position: absolute;
+  z-index: 2;
   top: 0.9rem;
   left: 0.9rem;
   display: grid;

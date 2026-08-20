@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
+import { useLocation } from 'react-router-dom'
 import { eventsData } from '../cms/data'
 import styles from './EventsPage.module.css'
 import { Seo } from '../shared/ui/Seo'
@@ -32,6 +34,25 @@ function formatBadge(dateString?: string): { day: string; month: string } {
 
 export default function EventsPage() {
   const reduceMotion = useReducedMotion()
+  const location = useLocation()
+
+  // Автопрокрутка к конкретному мероприятию при переходе с главной страницы
+  // (кнопка «Подробнее» ведёт на /events#<id>).
+  useEffect(() => {
+    const id = location.hash.replace(/^#/, '')
+    if (!id) return
+    const timer = window.setTimeout(() => {
+      const el = document.getElementById(id)
+      if (!el) return
+      // Учитываем scroll-margin-top карточки (отступ под липкую шапку) и
+      // дополнительно приподнимаем страницу на 20px для отступа сверху.
+      const scrollMargin = parseFloat(getComputedStyle(el).scrollMarginTop) || 0
+      const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - scrollMargin - 20)
+      window.scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' })
+    }, 80)
+    return () => window.clearTimeout(timer)
+  }, [location.hash, reduceMotion])
+
   return (
     <>
       <Seo title="Мероприятия" description="Актуальные события и показы лейбла Kray Music." />
@@ -50,6 +71,7 @@ export default function EventsPage() {
           {eventsData.map((event, index) => (
             <motion.article
               key={event.id}
+              id={event.id}
               className={`${styles.card} ${index % 2 === 1 ? styles.reverse : ''}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
